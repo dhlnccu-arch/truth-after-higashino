@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>完整書單｜真相之後</title>
+<style>
+:root{
+  --ink:#2b241f;--muted:#756b62;--red:#9e2f2a;
+  --line:rgba(92,73,59,.18);--shadow:0 16px 45px rgba(72,52,38,.12)
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;min-height:100%;
+  background:linear-gradient(135deg,#efe5d8,#f8f2e9 45%,#eee1d2);
+  color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif
+}
+body{overflow-x:hidden}
+button,input{font:inherit}
+.page{min-height:100vh;padding:34px 48px 48px}
+
+.topbar{
+  position:sticky;top:0;z-index:30;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:18px 22px;margin:-8px -8px 26px;
+  background:rgba(247,241,232,.92);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.55);
+  border-radius:24px;
+  box-shadow:0 10px 30px rgba(70,50,35,.08)
+}
+.back-btn{
+  border:0;background:var(--red);color:#fff;border-radius:999px;
+  padding:15px 24px;font-weight:800;cursor:pointer
+}
+.brand{text-align:center;flex:1}
+.brand .eyebrow{font-size:14px;letter-spacing:.18em;color:var(--red);font-weight:800}
+.brand h1{
+  font-family:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU",serif;
+  margin:5px 0 0;font-size:clamp(34px,3.2vw,60px);line-height:1
+}
+.count{min-width:150px;text-align:right;color:var(--muted);font-weight:700}
+
+.controls{
+  display:grid;grid-template-columns:minmax(260px,1.1fr) 2fr;
+  gap:18px;align-items:center;margin-bottom:24px
+}
+.search{
+  width:100%;border:1px solid var(--line);border-radius:18px;
+  background:rgba(255,250,243,.9);padding:16px 18px;outline:none;font-size:18px
+}
+.filters{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+.filter{
+  border:1px solid var(--line);background:rgba(255,250,243,.86);
+  border-radius:16px;padding:14px 8px;cursor:pointer;font-weight:800
+}
+.filter.active{background:var(--red);color:#fff;border-color:var(--red);transform:translateY(-2px)}
+
+.section{animation:fadeUp .38s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.section-head{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:20px;
+  margin:32px 0 20px;padding:0 4px
+}
+.case-label{font-size:14px;font-weight:900;letter-spacing:.12em;color:var(--red);margin-bottom:8px}
+.section-head h2{
+  font-family:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU",serif;
+  font-size:clamp(28px,2.3vw,44px);margin:0 0 6px
+}
+.section-head p{margin:0;color:var(--muted);font-size:18px}
+.section-total{color:var(--muted);font-weight:800;white-space:nowrap}
+
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}
+.book{
+  background:rgba(255,250,243,.92);
+  border:1px solid var(--line);border-radius:22px;padding:14px;
+  box-shadow:var(--shadow);display:flex;flex-direction:column;
+  min-height:410px;transition:.2s ease
+}
+.book:hover{transform:translateY(-4px)}
+
+/* 正方形書封展示框，完整顯示，不裁切 */
+.cover-wrap{
+  width:100%;
+  aspect-ratio:1 / 1;
+  border-radius:16px;
+  background:#fff;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px;
+  border:1px solid rgba(92,73,59,.10);
+}
+.cover{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  border-radius:10px;
+}
+
+.book h3{
+  font-family:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU",serif;
+  font-size:21px;line-height:1.35;margin:14px 2px 8px
+}
+.meta{display:flex;gap:6px;flex-wrap:wrap}
+.tag{
+  display:inline-flex;border-radius:999px;padding:5px 9px;
+  font-size:13px;font-weight:800;background:#eee4d7;color:#6a5d53
+}
+.jp-note{
+  display:inline-flex;border-radius:999px;padding:5px 9px;
+  font-size:13px;font-weight:800;background:#f1e5e1;color:#8d5149
+}
+.pending-note{
+  display:inline-flex;border-radius:999px;padding:5px 9px;
+  font-size:13px;font-weight:800;background:#ece9e4;color:#77716a
+}
+
+.book-actions{
+  margin-top:auto;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:9px;
+  padding-top:14px
+}
+.book-actions.two{grid-template-columns:1fr 1fr}
+.book-actions button{
+  border:1px solid var(--line);border-radius:14px;padding:12px 8px;
+  background:#fffaf4;cursor:pointer;font-weight:800
+}
+.book-actions .primary{
+  background:var(--red);color:#fff;border-color:var(--red)
+}
+.book-actions .jp{
+  background:#f3ebe5;color:#76483f;border-color:#d9c4ba
+}
+.book-actions .pending{
+  background:#ece8e2;color:#817971;border-color:#d8d1c8;cursor:default
+}
+
+.empty{display:none;text-align:center;padding:80px 20px;color:var(--muted);font-size:20px}
+.empty.show{display:block}
+
+.modal{
+  position:fixed;inset:0;z-index:100;background:rgba(31,23,18,.68);
+  display:none;align-items:center;justify-content:center;padding:24px
+}
+.modal.show{display:flex}
+.modal-card{
+  width:min(780px,92vw);background:#fffaf3;border-radius:28px;
+  padding:26px;box-shadow:0 28px 90px rgba(0,0,0,.28)
+}
+.modal-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.modal-top h2{
+  font-family:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU",serif;
+  margin:0;font-size:34px
+}
+.close{
+  border:0;border-radius:999px;background:#eee3d8;
+  padding:10px 16px;cursor:pointer;font-weight:800
+}
+.qr-box{
+  display:grid;grid-template-columns:280px 1fr;gap:26px;
+  align-items:center;margin-top:24px
+}
+.qr-box img{
+  width:100%;aspect-ratio:1/1;object-fit:contain;
+  border-radius:18px;background:#fff;border:12px solid #fff;
+  box-shadow:0 10px 30px rgba(0,0,0,.09)
+}
+.qr-copy h3{margin:0 0 8px;font-size:24px}
+.qr-copy p{color:var(--muted);line-height:1.7;margin:6px 0}
+.url{
+  word-break:break-all;background:#f2e9df;border-radius:14px;
+  padding:12px;font-size:13px;color:#6d6259;margin-top:12px
+}
+
+@media(max-width:1500px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:1100px){
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .controls{grid-template-columns:1fr}
+  .filters{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:760px){
+  .page{padding:18px}.count{display:none}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .filters{grid-template-columns:repeat(2,1fr)}
+  .qr-box{grid-template-columns:1fr}
+  .book-actions.two{grid-template-columns:1fr}
+}
+</style>
+<script src="./js/common.js"></script>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <button class="back-btn" id="backBtn">← 返回首頁</button>
+  <div class="brand">
+    <div class="eyebrow">真相之後｜東野圭吾的人性推理</div>
+    <h1>完整書單</h1>
+  </div>
+  <div class="count">共 <span id="totalCount">59</span> 部作品</div>
+</header>
+
+<div class="controls">
+  <input id="search" class="search" type="search"
+         placeholder="搜尋書名，例如：白夜行、伽利略、解憂…" autocomplete="off">
+  <div class="filters">
+    <button class="filter active" data-filter="all">全部</button>
+    <button class="filter" data-filter="理性">理性</button>
+    <button class="filter" data-filter="餘波">餘波</button>
+    <button class="filter" data-filter="愛">愛</button>
+    <button class="filter" data-filter="正義">正義</button>
+    <button class="filter" data-filter="青春">青春</button>
+    <button class="filter" data-filter="希望">希望</button>
+  </div>
+</div>
+
+<main id="content"></main>
+<div id="empty" class="empty">找不到符合條件的作品。</div>
+</div>
+
+<div id="modal" class="modal">
+  <div class="modal-card">
+    <div class="modal-top">
+      <div>
+        <div class="case-label" id="modalEdition">政大圖書館館藏</div>
+        <h2 id="modalTitle"></h2>
+      </div>
+      <button class="close" id="modalCloseBtn">關閉 ×</button>
+    </div>
+    <div class="qr-box">
+      <img id="qrImage" alt="館藏 QR Code">
+      <div class="qr-copy">
+        <h3>使用手機掃描查看館藏</h3>
+        <p>請用手機掃瞄 QR Code，以開啟政大圖書館 Primo 館藏紀錄頁面。</p>
+        <div id="catalogUrl" class="url"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const sections = [{"key": "reason", "case": "CASE 01｜理性", "title": "理性可以解開一切嗎？", "subtitle": "偵探伽利略系列", "label": "理性", "books": [{"title": "偵探伽利略", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/392122240.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021451180705721", "labelZh": "偵探伽利略", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013926969705721", "labelJp": "探偵ガリレオ", "section": "理性", "qrZh": "qr/s01_b01_zh.png", "qrJp": "qr/s01_b01_jp.png", "status": ""}, {"title": "預知夢", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/812305589.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021084596705721", "labelZh": "預知夢", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013925299705721", "labelJp": "予知夢", "section": "理性", "qrZh": "qr/s01_b02_zh.png", "qrJp": "qr/s01_b02_jp.png", "status": ""}, {"title": "嫌疑犯X的獻身", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/688554237.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021451180605721", "labelZh": "嫌疑犯X的獻身", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013926669705721", "labelJp": "容疑者Xの献身", "section": "理性", "qrZh": "qr/s01_b03_zh.png", "qrJp": "qr/s01_b03_jp.png", "status": ""}, {"title": "聖女的救贖", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/905321415.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021451180305721", "labelZh": "聖女的救贖", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991019967239705721", "labelJp": "聖女の救済", "section": "理性", "qrZh": "qr/s01_b04_zh.png", "qrJp": "qr/s01_b04_jp.png", "status": ""}, {"title": "伽利略的苦惱", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/401060779.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021451180405721", "labelZh": "伽利略的苦惱", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991019967149705721", "labelJp": "ガリレオの苦悩", "section": "理性", "qrZh": "qr/s01_b05_zh.png", "qrJp": "qr/s01_b05_jp.png", "status": ""}, {"title": "真夏方程式", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/114799452.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991011159649705721", "labelZh": "真夏方程式", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013927889705721", "labelJp": "真夏の方程式", "section": "理性", "qrZh": "qr/s01_b06_zh.png", "qrJp": "qr/s01_b06_jp.png", "status": ""}, {"title": "虛像的丑角", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/273947317.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991002362589705721", "labelZh": "虛像的丑角", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013928699705721", "labelJp": "虚像の道化師", "section": "理性", "qrZh": "qr/s01_b07_zh.png", "qrJp": "qr/s01_b07_jp.png", "status": ""}, {"title": "禁忌的魔術", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/431916123.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991004709399705721", "labelZh": "禁忌的魔術", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013927999705721", "labelJp": "禁断の魔術", "section": "理性", "qrZh": "qr/s01_b08_zh.png", "qrJp": "qr/s01_b08_jp.png", "status": ""}, {"title": "沉默的遊行", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/479416368.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021192171805721", "labelZh": "沉默的遊行", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991006198019705721", "labelJp": "沈黙のパレード", "section": "理性", "qrZh": "qr/s01_b09_zh.png", "qrJp": "qr/s01_b09_jp.png", "status": ""}, {"title": "透明的螺旋", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/351987898.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021279066005721", "labelZh": "透明的螺旋", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/1fo7ms3/alma991021599548705721", "labelJp": "透明な螺旋", "section": "理性", "qrZh": "qr/s01_b10_zh.png", "qrJp": "qr/s01_b10_jp.png", "status": ""}]}, {"key": "after", "case": "CASE 02｜餘波", "title": "死亡之後，留下來的是誰？", "subtitle": "加賀恭一郎系列", "label": "餘波", "books": [{"title": "畢業 : 雪月花殺人遊戲", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/100057858.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991006991519705721", "labelZh": "畢業 : 雪月花殺人遊戲", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991003207019705721", "labelJp": "卒業", "section": "餘波", "qrZh": "qr/s02_b01_zh.png", "qrJp": "qr/s02_b01_jp.png", "status": ""}, {"title": "沉睡的森林", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/238072988.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991006991469705721", "labelZh": "沉睡的森林", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991003207019705721", "labelJp": "眠りの森", "section": "餘波", "qrZh": "qr/s02_b02_zh.png", "qrJp": "qr/s02_b02_jp.png", "status": ""}, {"title": "誰殺了她", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/700534163.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991011827259705721", "labelZh": "誰殺了她", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013924399705721", "labelJp": "どちらかが彼女を殺した", "section": "餘波", "qrZh": "qr/s02_b03_zh.png", "qrJp": "qr/s02_b03_jp.png", "status": ""}, {"title": "惡意", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/257351431.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021827766005721", "labelZh": "惡意", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013926869705721", "labelJp": "悪意", "section": "餘波", "qrZh": "qr/s02_b04_zh.png", "qrJp": "qr/s02_b04_jp.png", "status": ""}, {"title": "我殺了他", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/191817379.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991013746999705721", "labelZh": "我殺了他", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013928119705721", "labelJp": "私が彼を殺した", "section": "餘波", "qrZh": "qr/s02_b05_zh.png", "qrJp": "qr/s02_b05_jp.png", "status": ""}, {"title": "再一個謊言", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/333302752.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991015794049705721", "labelZh": "再一個謊言", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013926109705721", "labelJp": "嘘をもうひとつだけ", "section": "餘波", "qrZh": "qr/s02_b06_zh.png", "qrJp": "qr/s02_b06_jp.png", "status": ""}, {"title": "紅色手指", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/393866576.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991006872299705721", "labelZh": "紅色手指", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991001194679705721", "labelJp": "赤い指", "section": "餘波", "qrZh": "qr/s02_b07_zh.png", "qrJp": "qr/s02_b07_jp.png", "status": ""}, {"title": "新參者", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/768659278.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991010700549705721", "labelZh": "新參者", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991001193259705721", "labelJp": "新参者", "section": "餘波", "qrZh": "qr/s02_b08_zh.png", "qrJp": "qr/s02_b08_jp.png", "status": ""}, {"title": "麒麟之翼", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/282897362.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991012293809705721", "labelZh": "麒麟之翼", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013929049705721", "labelJp": "麒麟の翼", "section": "餘波", "qrZh": "qr/s02_b09_zh.png", "qrJp": "qr/s02_b09_jp.png", "status": ""}, {"title": "當祈禱落幕時", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/918848853.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991002487269705721", "labelZh": "當祈禱落幕時", "catalogJp": "", "labelJp": "", "section": "餘波", "qrZh": "qr/s02_b10_zh.png", "qrJp": "", "status": ""}, {"title": "希望之線", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/806963217.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021094298605721", "labelZh": "希望之線", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991021242763205721", "labelJp": "希望の糸", "section": "餘波", "qrZh": "qr/s02_b11_zh.png", "qrJp": "qr/s02_b11_jp.png", "status": ""}, {"title": "你殺了誰", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/501764975.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021583483105721", "labelZh": "你殺了誰", "catalogJp": "", "labelJp": "", "section": "餘波", "qrZh": "qr/s02_b12_zh.png", "qrJp": "", "status": ""}]}, {"key": "love", "case": "CASE 03｜愛", "title": "愛，能不能成為犯罪的理由？", "subtitle": "人性與情感的邊界", "label": "愛", "books": [{"title": "白夜行", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/463386440.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991013650489705721", "labelZh": "白夜行", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013927809705721", "labelJp": "白夜行", "section": "愛", "qrZh": "qr/s03_b01_zh.png", "qrJp": "qr/s03_b01_jp.png", "status": ""}, {"title": "幻夜", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/720772041.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991019733539705721", "labelZh": "幻夜", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991012706259705721", "labelJp": "幻夜", "section": "愛", "qrZh": "qr/s03_b02_zh.png", "qrJp": "qr/s03_b02_jp.png", "status": ""}, {"title": "秘密", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/139810838.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202629705721", "labelZh": "秘密", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013636179705721", "labelJp": "秘密", "section": "愛", "qrZh": "qr/s03_b03_zh.png", "qrJp": "qr/s03_b03_jp.png", "status": ""}, {"title": "平行世界的愛情故事", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/294777055.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991020494499705721", "labelZh": "平行世界的愛情故事", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013925039705721", "labelJp": "パラレルワールド.ラブストーリー", "section": "愛", "qrZh": "qr/s03_b04_zh.png", "qrJp": "qr/s03_b04_jp.png", "status": ""}, {"title": "黎明破曉的街道", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/861163126.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991007156419705721", "labelZh": "黎明破曉的街道", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013926349705721", "labelJp": "夜明けの街で", "section": "愛", "qrZh": "qr/s03_b05_zh.png", "qrJp": "qr/s03_b05_jp.png", "status": ""}, {"title": "危險維納斯", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/310355683.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991005766859705721", "labelZh": "危險維納斯", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991021065181105721", "labelJp": "危険なビーナス", "section": "愛", "qrZh": "qr/s03_b06_zh.png", "qrJp": "qr/s03_b06_jp.png", "status": ""}, {"title": "瀕死的凝視", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/874068235.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021737844805721", "labelZh": "瀕死的凝視", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013924909705721", "labelJp": "ダイイング.アイ", "section": "愛", "qrZh": "qr/s03_b07_zh.png", "qrJp": "qr/s03_b07_jp.png", "status": ""}, {"title": "人魚沉睡的家", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/214019083.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991001240689705721", "labelZh": "人魚沉睡的家", "catalogJp": "", "labelJp": "", "section": "愛", "qrZh": "qr/s03_b08_zh.png", "qrJp": "", "status": ""}, {"title": "徬徨之刃", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/748730942.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991014915419705721", "labelZh": "徬徨之刃", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991019967099705721", "labelJp": "さまよう刃", "section": "愛", "qrZh": "qr/s03_b09_zh.png", "qrJp": "qr/s03_b09_jp.png", "status": ""}, {"title": "流星之絆", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/886055477.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991003400579705721", "labelZh": "流星之絆", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991019967199705721", "labelJp": "流星の絆", "section": "愛", "qrZh": "qr/s03_b10_zh.png", "qrJp": "qr/s03_b10_jp.png", "status": ""}, {"title": "湖畔的謊言", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/733190767.webp", "catalogZh": "", "labelZh": "湖畔的謊言", "catalogJp": "", "labelJp": "", "section": "愛", "qrZh": "", "qrJp": "", "status": "採購中"}]}, {"key": "justice", "case": "CASE 04｜正義", "title": "當社會製造了罪犯", "subtitle": "司法、公共議題與社會省思", "label": "正義", "books": [{"title": "空洞的十字架", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/595646608.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991017375569705721", "labelZh": "空洞的十字架", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991002553019705721", "labelJp": "虚ろな十字架", "section": "正義", "qrZh": "qr/s04_b01_zh.png", "qrJp": "qr/s04_b01_jp.png", "status": ""}, {"title": "天空之蜂", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/346067591.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991013004419705721", "labelZh": "天空之蜂", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013926609705721", "labelJp": "天空の蜂", "section": "正義", "qrZh": "qr/s04_b02_zh.png", "qrJp": "qr/s04_b02_jp.png", "status": ""}, {"title": "白金數據", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/197386334.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991002682659705721", "labelZh": "白金數據", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013925199705721", "labelJp": "プラチナデータ", "section": "正義", "qrZh": "qr/s04_b03_zh.png", "qrJp": "qr/s04_b03_jp.png", "status": ""}, {"title": "異變13秒", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/106006370.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991005501129705721", "labelZh": "異變13秒", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991001192389705721", "labelJp": "パラドックス13", "section": "正義", "qrZh": "qr/s04_b04_zh.png", "qrJp": "qr/s04_b04_jp.png", "status": ""}, {"title": "拉普拉斯的魔女", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/389585967.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991020724719705721", "labelZh": "拉普拉斯的魔女", "catalogJp": "", "labelJp": "", "section": "正義", "qrZh": "qr/s04_b05_zh.png", "qrJp": "", "status": ""}, {"title": "魔力的胎動", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/473945786.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021190573805721", "labelZh": "魔力的胎動", "catalogJp": "", "labelJp": "", "section": "正義", "qrZh": "qr/s04_b06_zh.png", "qrJp": "", "status": ""}, {"title": "天鵝與蝙蝠", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/851160928.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021207478805721", "labelZh": "天鵝與蝙蝠", "catalogJp": "", "labelJp": "", "section": "正義", "qrZh": "qr/s04_b07_zh.png", "qrJp": "", "status": ""}, {"title": "架空犯", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/714461073.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021725039205721", "labelZh": "架空犯", "catalogJp": "", "labelJp": "", "section": "正義", "qrZh": "qr/s04_b08_zh.png", "qrJp": "", "status": ""}, {"title": "夢幻花", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/470684308.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991015784079705721", "labelZh": "夢幻花", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013926489705721", "labelJp": "夢幻花", "section": "正義", "qrZh": "qr/s04_b09_zh.png", "qrJp": "qr/s04_b09_jp.png", "status": ""}]}, {"key": "youth", "case": "CASE 05｜青春", "title": "青春從來不只是青春", "subtitle": "校園、同儕與成長的代價", "label": "青春", "books": [{"title": "放學後", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/506129928.png", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202259705721", "labelZh": "放學後", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013927069705721", "labelJp": "放課後", "section": "青春", "qrZh": "qr/s05_b01_zh.png", "qrJp": "qr/s05_b01_jp.png", "status": ""}, {"title": "同級生", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/848763254.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202459705721", "labelZh": "同級生", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013925919705721", "labelJp": "同級生", "section": "青春", "qrZh": "qr/s05_b02_zh.png", "qrJp": "qr/s05_b02_jp.png", "status": ""}, {"title": "學生街殺人", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/698943469.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991015393129705721", "labelZh": "學生街殺人", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013926649705721", "labelJp": "学生街の殺人", "section": "青春", "qrZh": "qr/s05_b03_zh.png", "qrJp": "qr/s05_b03_jp.png", "status": ""}, {"title": "十一字殺人", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/388647720.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991016222849705721", "labelZh": "十一字殺人", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013920869705721", "labelJp": "11文字の殺人", "section": "青春", "qrZh": "qr/s05_b04_zh.png", "qrJp": "qr/s05_b04_jp.png", "status": ""}, {"title": "鳥人計畫", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/128880885.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991010434999705721", "labelZh": "鳥人計畫", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013929009705721", "labelJp": "鳥人計画", "section": "青春", "qrZh": "qr/s05_b05_zh.png", "qrJp": "qr/s05_b05_jp.png", "status": ""}, {"title": "操縱彩虹的少年", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/701161766.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991019679069705721", "labelZh": "操縱彩虹的少年", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013928729705721", "labelJp": "虹を操る少年", "section": "青春", "qrZh": "qr/s05_b06_zh.png", "qrJp": "qr/s05_b06_jp.png", "status": ""}, {"title": "美麗的凶器", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/605271306.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991002032889705721", "labelZh": "美麗的凶器", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013928619705721", "labelJp": "美しき凶器", "section": "青春", "qrZh": "qr/s05_b07_zh.png", "qrJp": "qr/s05_b07_jp.png", "status": ""}, {"title": "假面山莊殺人事件", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/304533510.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/18n1a3l/alma991013517649705721", "labelZh": "假面山莊殺人事件", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013925489705721", "labelJp": "仮面山荘殺人事件", "section": "青春", "qrZh": "qr/s05_b08_zh.png", "qrJp": "qr/s05_b08_jp.png", "status": ""}, {"title": "在大雪封閉的山莊裡", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/697656773.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991014482439705721", "labelZh": "在大雪封閉的山莊裡", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013924199705721", "labelJp": "ある閉ざされた雪の山荘で", "section": "青春", "qrZh": "qr/s05_b09_zh.png", "qrJp": "qr/s05_b09_jp.png", "status": ""}]}, {"key": "hope", "case": "CASE 06｜希望", "title": "沒有命案，也可以是東野圭吾", "subtitle": "溫暖、希望與非典型解謎", "label": "希望", "books": [{"title": "解憂雜貨店", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/540257217.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991013917119705721", "labelZh": "解憂雜貨店", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013924999705721", "labelJp": "ナミヤ雑貨店の奇蹟", "section": "希望", "qrZh": "qr/s06_b01_zh.png", "qrJp": "qr/s06_b01_jp.png", "status": ""}, {"title": "祈念之樹", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/714929601.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021192068705721", "labelZh": "祈念之樹", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/ug3plp/alma991021558475105721", "labelJp": "クスノキの番人", "section": "希望", "qrZh": "qr/s06_b02_zh.png", "qrJp": "qr/s06_b02_jp.png", "status": ""}, {"title": "祈念之樹：守護之心", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/122609266.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021564084105721", "labelZh": "祈念之樹：守護之心", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991021558475305721", "labelJp": "クスノキの女神", "section": "希望", "qrZh": "qr/s06_b03_zh.png", "qrJp": "qr/s06_b03_jp.png", "status": ""}, {"title": "時生", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/179406506.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991009666239705721", "labelZh": "時生", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013924949705721", "labelJp": "トキオ", "section": "希望", "qrZh": "qr/s06_b04_zh.png", "qrJp": "qr/s06_b04_jp.png", "status": ""}, {"title": "信", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/438583323.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991012721769705721", "labelZh": "信", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013926929705721", "labelJp": "手紙", "section": "希望", "qrZh": "qr/s06_b05_zh.png", "qrJp": "qr/s06_b05_jp.png", "status": ""}, {"title": "分身", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/401068824.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991000564979705721", "labelZh": "分身", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013925809705721", "labelJp": "分身", "section": "希望", "qrZh": "qr/s06_b06_zh.png", "qrJp": "qr/s06_b06_jp.png", "status": ""}, {"title": "變身", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/225149216.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202199705721", "labelZh": "變身", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013926259705721", "labelJp": "変身", "section": "希望", "qrZh": "qr/s06_b07_zh.png", "qrJp": "qr/s06_b07_jp.png", "status": ""}, {"title": "宿命", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/642090994.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003192069705721", "labelZh": "宿命", "catalogJp": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991013926709705721", "labelJp": "宿命", "section": "希望", "qrZh": "qr/s06_b08_zh.png", "qrJp": "qr/s06_b08_jp.png", "status": ""}, {"title": "戀愛纜車", "img": "https://dhl.lib.nccu.edu.tw/var/file/1/1001/img/68/565271270.webp", "catalogZh": "https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003967449705721", "labelZh": "戀愛纜車", "catalogJp": "", "labelJp": "", "section": "希望", "qrZh": "qr/s06_b09_zh.png", "qrJp": "", "status": ""}]}];
+let currentFilter="all", query="";
+
+const content=document.getElementById("content");
+const empty=document.getElementById("empty");
+const totalCount=document.getElementById("totalCount");
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g,m=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[m]));
+}
+
+function render(){
+  const q=query.trim().toLowerCase();
+  let out="",visible=0;
+
+  sections.forEach(sec=>{
+    if(currentFilter!=="all" && sec.label!==currentFilter) return;
+
+    const books=sec.books.filter(b=>{
+      if(!q) return true;
+      return (
+        b.title+" "+b.labelZh+" "+b.labelJp+" "+sec.title+" "+sec.subtitle
+      ).toLowerCase().includes(q);
+    });
+
+    if(!books.length) return;
+    visible+=books.length;
+
+    out+=`
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="case-label">${esc(sec.case)}</div>
+            <h2>${esc(sec.title)}</h2>
+            <p>${esc(sec.subtitle)}</p>
+          </div>
+          <div class="section-total">${books.length} 部作品</div>
+        </div>
+
+        <div class="grid">
+          ${books.map(b=>`
+            <article class="book">
+              <div class="cover-wrap">
+                <img class="cover"
+                     src="${esc(b.img)}"
+                     alt="${esc(b.title)}"
+                     loading="lazy"
+                     onerror="this.style.display='none';this.parentElement.textContent='書封載入中';">
+              </div>
+
+              <h3>《${esc(b.title)}》</h3>
+
+              <div class="meta">
+                <span class="tag">${esc(sec.label)}</span>
+                ${b.status==="採購中" ? `<span class="pending-note">採購中</span>` : ``}
+              </div>
+
+              ${b.status==="採購中" ? `
+              <div class="book-actions">
+                <button class="pending" disabled>採購中</button>
+              </div>
+              ` : `
+              <div class="book-actions ${b.catalogJp ? "two" : ""}">
+                <button class="primary"
+                  data-catalog-title="${esc(b.title)}"
+                  data-catalog-qr="${esc(b.qrZh)}"
+                  data-catalog-url="${esc(b.catalogZh)}"
+                  data-catalog-edition="中文版館藏">
+                  中文版館藏
+                </button>
+
+                ${b.catalogJp ? `
+                  <button class="jp"
+                    data-catalog-title="${esc(b.labelJp || b.title)}"
+                    data-catalog-qr="${esc(b.qrJp)}"
+                    data-catalog-url="${esc(b.catalogJp)}"
+                    data-catalog-edition="日文版館藏">
+                    日文版館藏
+                  </button>
+                ` : ``}
+              </div>
+              `}
+            </article>
+          `).join("")}
+        </div>
+      </section>
+    `;
+  });
+
+  content.innerHTML=out;
+  totalCount.textContent=visible;
+  empty.classList.toggle("show",visible===0);
+}
+
+document.querySelectorAll(".filter").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    currentFilter=btn.dataset.filter;
+    document.querySelectorAll(".filter")
+      .forEach(b=>b.classList.toggle("active",b===btn));
+    render();
+  });
+});
+
+document.getElementById("search").addEventListener("input",e=>{
+  query=e.target.value;
+  render();
+});
+
+const catalogModal=initCatalogModal({
+  modalId:"modal",
+  titleId:"modalTitle",
+  editionId:"modalEdition",
+  qrImgId:"qrImage",
+  urlId:"catalogUrl",
+  closeId:"modalCloseBtn"
+});
+
+// 事件委派：書卡是動態產生的，統一在 #content 上監聽點擊，
+// 不需要每次 render() 之後重新綁定，也不需要在 HTML 屬性裡塞資料。
+content.addEventListener("click",e=>{
+  const btn=e.target.closest("[data-catalog-title]");
+  if(!btn || !catalogModal) return;
+  catalogModal.show({
+    title:btn.dataset.catalogTitle,
+    qr:btn.dataset.catalogQr,
+    url:btn.dataset.catalogUrl,
+    edition:btn.dataset.catalogEdition
+  });
+});
+
+document.getElementById("backBtn").addEventListener("click",()=>{
+  window.location.href="index.html";
+});
+
+render();
+createIdleTimer(()=>{ if(catalogModal) catalogModal.hide(); });
+</script>
+</body>
+</html>

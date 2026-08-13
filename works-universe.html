@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>作品宇宙｜真相之後</title>
+<style>
+:root{
+  --ink:#211d19;--muted:#6b635c;--paper:rgba(249,245,238,.96);--line:rgba(92,73,59,.24);--red:#9e2f2a;
+  /* 六大主題色統一定義在 css/theme.css，這裡不再重複 */
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#1e1814;color:var(--ink);font-family:"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif}
+button{font:inherit}
+.stage{
+  width:100vw;height:100vh;position:relative;overflow:hidden;
+  /* 底圖由 css/theme.css 的 body.page-universe .stage 統一管理 */
+}
+.stage:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 77% 17%,rgba(255,255,255,.38),transparent 26%)}
+.app{position:relative;z-index:2;height:100%;padding:2.8vh 2.8vw;display:grid;grid-template-rows:auto auto 1fr auto;gap:1.5vh}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:22px}
+.kicker{color:var(--red);letter-spacing:.12em;font-weight:700;font-size:clamp(16px,1vw,24px)}
+h1{font-size:clamp(46px,4.2vw,88px);margin:.12em 0 .06em;line-height:1}
+.subtitle{font-size:clamp(20px,1.3vw,30px);color:#3f3934}
+.top-actions{display:flex;gap:12px}
+.top-actions button,.footer button{
+  border:1px solid var(--line);background:rgba(255,255,255,.8);border-radius:14px;min-height:54px;padding:12px 20px;cursor:pointer;
+}
+.filters{display:grid;grid-template-columns:repeat(6,1fr);gap:.8vw}
+.filter{
+  min-height:72px;border:1px solid var(--line);border-radius:16px;background:rgba(250,247,241,.9);cursor:pointer;
+  font-size:clamp(16px,1.1vw,24px);font-weight:700;position:relative;overflow:hidden
+}
+.filter:before{content:"";position:absolute;left:0;top:0;right:0;height:5px;background:var(--accent)}
+.filter.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.filter.active:before{background:#fff}
+
+.content{min-height:0;display:grid;grid-template-columns:1.42fr .58fr;gap:1.2vw}
+.map-panel,.detail-panel{
+  min-height:0;border:1px solid var(--line);border-radius:24px;background:rgba(249,245,238,.94);overflow:hidden;
+  box-shadow:0 18px 50px rgba(48,36,28,.12)
+}
+.map-panel{padding:1.6vh 1.2vw;display:flex;flex-direction:column}
+.map-title{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:1vh}
+.map-title h2{font-size:clamp(24px,1.7vw,34px);margin:0}
+.map-title span{font-size:clamp(14px,.9vw,19px);color:var(--muted)}
+.universe{flex:1;position:relative;min-height:0}
+.universe svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.nodes{position:absolute;inset:0}
+.theme-node{
+  position:absolute;transform:translate(-50%,-50%);width:11.5%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;
+  border:4px solid var(--accent);background:rgba(255,255,255,.95);font-weight:700;font-size:clamp(17px,1.25vw,27px);box-shadow:0 8px 24px rgba(33,26,21,.1)
+}
+.book-node{
+  position:absolute;transform:translate(-50%,-50%);width:16%;min-height:9.5%;border:1px solid var(--line);border-radius:15px;background:#fff;
+  padding:10px 12px;text-align:center;cursor:pointer;font-size:clamp(14px,.92vw,20px);box-shadow:0 6px 18px rgba(33,26,21,.08);transition:.15s ease
+}
+.book-node:hover,.book-node:focus-visible{transform:translate(-50%,-50%) scale(1.04);outline:3px solid rgba(158,47,42,.12)}
+.book-node.dim{opacity:.18}
+.book-node.selected{outline:4px solid var(--red);z-index:3}
+.book-node small{display:block;color:var(--muted);margin-top:4px;font-size:.78em}
+
+.detail-panel{padding:2vh 1.4vw;overflow:auto}
+.detail-panel .label{color:var(--red);font-size:clamp(15px,.95vw,20px);font-weight:700;letter-spacing:.08em}
+.detail-panel h2{font-size:clamp(30px,2.3vw,48px);margin:.3em 0 .35em}
+.detail-panel p{font-size:clamp(17px,1.08vw,23px);line-height:1.7;color:#443d37}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}
+.tag{border-radius:999px;padding:8px 12px;color:#fff;font-size:clamp(14px,.88vw,18px)}
+.question{border-left:5px solid var(--red);padding:8px 0 8px 16px;font-size:clamp(19px,1.25vw,26px);line-height:1.55;margin:18px 0}
+.detail-actions{display:grid;gap:10px;margin-top:18px}
+.detail-actions button{border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px 16px;min-height:54px;cursor:pointer}
+.detail-actions .primary{background:var(--red);color:#fff;border-color:var(--red)}
+
+.footer{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.footer-note{color:#544c45;font-size:clamp(14px,.9vw,19px)}
+@media(max-width:1000px){
+  .filters{grid-template-columns:repeat(3,1fr)}
+  .content{grid-template-columns:1fr}
+  .detail-panel{display:none}
+}
+
+/* ===== 作品宇宙 v2：防重疊 + 動態聚合 + 作品專屬導讀 ===== */
+.universe line{
+  transition:opacity .45s ease, stroke-width .45s ease, stroke-dashoffset .8s ease;
+  stroke-linecap:round;
+}
+.theme-node{
+  transition:left .65s cubic-bezier(.22,.61,.36,1), top .65s cubic-bezier(.22,.61,.36,1), transform .28s ease, opacity .35s ease, box-shadow .28s ease;
+  z-index:2;
+}
+.theme-node.active-theme{
+  transform:translate(-50%,-50%) scale(1.09);
+  box-shadow:0 14px 34px rgba(33,26,21,.18);
+  z-index:8;
+}
+.theme-node.connected-theme{
+  transform:translate(-50%,-50%) scale(1.06);
+  box-shadow:0 12px 30px rgba(33,26,21,.16);
+}
+.book-node{
+  width:13.5%;
+  min-height:8.8%;
+  padding:9px 10px;
+  font-size:clamp(13px,.84vw,18px);
+  transition:
+    left .68s cubic-bezier(.22,.61,.36,1),
+    top .68s cubic-bezier(.22,.61,.36,1),
+    opacity .35s ease,
+    transform .28s ease,
+    box-shadow .28s ease,
+    border-color .28s ease;
+  will-change:left,top,transform,opacity;
+}
+.book-node:hover,.book-node:focus-visible{
+  transform:translate(-50%,-50%) scale(1.06);
+  z-index:20;
+}
+.book-node.dim{
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,-50%) scale(.82);
+}
+.book-node.selected{
+  outline:4px solid var(--red);
+  border-color:var(--red);
+  transform:translate(-50%,-50%) scale(1.12);
+  z-index:30;
+  box-shadow:0 18px 38px rgba(80,45,35,.24);
+}
+.book-node.related{
+  border-color:rgba(158,47,42,.35);
+  box-shadow:0 10px 26px rgba(33,26,21,.13);
+}
+.detail-panel{scroll-behavior:smooth}
+.tag-reasons{display:grid;gap:10px;margin:14px 0 20px}
+.tag-reason{border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:14px;background:rgba(255,255,255,.78);padding:12px 14px}
+.tag-reason b{display:block;margin-bottom:4px;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+.tag-reason span{display:block;color:var(--muted);font-size:clamp(14px,.9vw,19px);line-height:1.55}
+.intro-content{
+  margin-top:14px;padding:16px 18px;border-radius:16px;background:rgba(158,47,42,.06);border:1px solid rgba(158,47,42,.20);
+  font-size:clamp(16px,1vw,21px);line-height:1.75;color:#403933;
+  max-height:0;opacity:0;overflow:hidden;padding-top:0;padding-bottom:0;border-width:0;
+  transition:max-height .45s ease, opacity .3s ease, padding .35s ease, border-width .1s ease;
+}
+.intro-content.open{max-height:420px;opacity:1;padding:16px 18px;border-width:1px}
+.catalog-note{font-size:clamp(13px,.82vw,17px);color:var(--muted);line-height:1.5;margin-top:8px}
+.detail-actions button[disabled]{opacity:.48;cursor:not-allowed}
+.map-title .mode-note{font-size:clamp(13px,.82vw,17px);color:var(--red);font-weight:700}
+@media(max-width:1400px){.book-node{width:14.2%;font-size:13px}}
+
+
+/* ===== 館藏 QR Code 彈出視窗 ===== */
+.catalog-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:28px;
+  background:rgba(31,23,18,.70);
+  backdrop-filter:blur(4px);
+}
+.catalog-modal.show{display:flex}
+.catalog-modal-card{
+  width:min(760px,90vw);
+  background:#fffaf3;
+  border:1px solid rgba(92,73,59,.18);
+  border-radius:28px;
+  padding:28px;
+  box-shadow:0 28px 90px rgba(0,0,0,.28);
+}
+.catalog-modal-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+}
+.catalog-modal-kicker{
+  color:var(--red);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.12em;
+  margin-bottom:8px;
+}
+.catalog-modal-card h2{
+  margin:0;
+  font-size:clamp(28px,2vw,38px);
+}
+.catalog-modal-close{
+  border:0;
+  border-radius:999px;
+  padding:11px 18px;
+  background:#eee3d8;
+  color:var(--ink);
+  font-weight:800;
+  cursor:pointer;
+}
+.catalog-qr-box{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:26px;
+  align-items:center;
+  margin-top:24px;
+}
+.catalog-qr-box img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:contain;
+  background:#fff;
+  border:12px solid #fff;
+  border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.09);
+}
+.catalog-qr-copy h3{
+  margin:0 0 10px;
+  font-size:24px;
+}
+.catalog-qr-copy p{
+  margin:6px 0;
+  color:var(--muted);
+  line-height:1.7;
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+.catalog-url{
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  background:#f2e9df;
+  color:#6d6259;
+  font-size:12px;
+  word-break:break-all;
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+@media(max-width:900px){
+  .catalog-qr-box{grid-template-columns:1fr}
+  .catalog-qr-box img{max-width:280px;margin:auto}
+}
+
+</style>
+<link rel="stylesheet" href="./css/theme.css">
+<script src="./js/common.js"></script>
+</head>
+<body class="page-universe">
+<main class="stage">
+<div class="app">
+  <header class="topbar">
+    <div>
+      <div class="kicker">《真相之後──東野圭吾的人性推理》</div>
+      <h1>作品宇宙</h1>
+      <div class="subtitle">一本書，可能同時屬於不只一種人性命題。</div>
+    </div>
+    <div class="top-actions">
+      <button id="resetBtn">顯示全部</button>
+      <button id="homeBtn">⌂ 回首頁</button>
+    </div>
+  </header>
+
+  <nav class="filters" aria-label="六大主題">
+    <button class="filter" data-filter="理性" style="--accent:var(--reason)">理性</button>
+    <button class="filter" data-filter="餘波" style="--accent:var(--after)">餘波</button>
+    <button class="filter" data-filter="愛" style="--accent:var(--love)">愛</button>
+    <button class="filter" data-filter="正義" style="--accent:var(--justice)">正義</button>
+    <button class="filter" data-filter="青春" style="--accent:var(--youth)">青春</button>
+    <button class="filter" data-filter="希望" style="--accent:var(--hope)">希望</button>
+  </nav>
+
+  <section class="content">
+    <div class="map-panel">
+      <div class="map-title">
+        <h2>點選主題，看看哪些作品會亮起</h2>
+        <span class="mode-note">點主題：作品聚集｜點作品：紅線與關聯主題亮起</span>
+      </div>
+      <div class="universe" id="universe">
+        <svg viewBox="0 0 1000 700" preserveAspectRatio="none" id="lines"></svg>
+        <div class="nodes" id="nodes"></div>
+      </div>
+    </div>
+
+    <aside class="detail-panel" id="detail">
+      <div class="label">作品探索</div>
+      <h2>請點選一本作品</h2>
+      <p>你可以先從上方六大主題切入，也可以直接點選作品，看看它同時跨越哪些人性命題。</p>
+      <div class="question">東野圭吾的作品很少只屬於單一類型；真正有趣的，往往是不同命題交會的地方。</div>
+    </aside>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-note">觸控螢幕模式：60 秒未操作會回復到「顯示全部」。</div>
+    <button id="quizBtn">前往讀者測驗 →</button>
+  </footer>
+</div>
+</main>
+
+
+<div id="catalogModal" class="catalog-modal" aria-hidden="true">
+  <div class="catalog-modal-card">
+    <div class="catalog-modal-top">
+      <div>
+        <div class="catalog-modal-kicker">政大圖書館館藏</div>
+        <h2 id="catalogModalTitle"></h2>
+      </div>
+      <button id="catalogModalClose" class="catalog-modal-close">關閉 ×</button>
+    </div>
+    <div class="catalog-qr-box">
+      <img id="catalogQrImage" alt="館藏 QR Code">
+      <div class="catalog-qr-copy">
+        <h3>使用手機掃描查看館藏</h3>
+        <p>請用手機掃瞄 QR Code，以開啟政大圖書館 Primo 館藏紀錄頁面。</p>
+        <div id="catalogUrl" class="catalog-url"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const colors={
+  "理性":"#6f6051","餘波":"#88664a","愛":"#995b68","正義":"#7b6648","青春":"#66765f","希望":"#5f7489"
+};
+
+const themes=[
+  {name:"理性",x:9,y:13},{name:"餘波",x:50,y:12},{name:"愛",x:91,y:13},
+  {name:"正義",x:9,y:87},{name:"青春",x:50,y:88},{name:"希望",x:91,y:87}
+];
+
+/*
+  每一本作品都可以獨立修改：
+  intro   = 策展導讀
+  q       = 人性提問
+  catalog = 館藏網址（目前先留空；貼上網址即可啟用「查看館藏」）
+  tagReasons = 為什麼這本書會連到各主題
+*/
+const books=[
+  {
+    title:"嫌疑犯X的獻身", tags:["理性","愛"],
+    intro:"石神以近乎完美的邏輯設計出一場看似無法破解的犯罪。然而，當湯川一步步逼近真相，真正令人震撼的已經不是詭計本身，而是一個人究竟願意為另一個人犧牲到什麼程度。",
+    q:"當邏輯抵達完美，愛是否仍能被計算？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021451180605721", qr:"qr/s01_b03_zh.png",
+    tagReasons:{"理性":"以數學般精密的設計挑戰推理極限。","愛":"犯罪背後最核心的力量，是一場極端的守護與犧牲。"}
+  },
+  {
+    title:"聖女的救贖", tags:["理性","愛"],
+    intro:"一場近乎不可能的毒殺案，讓科學推理與長年累積的情感正面碰撞。真正值得追問的，不只是手法如何成立，而是一段關係如何在時間裡變成復仇的條件。",
+    q:"如果犯罪源自一段長久的情感，真相會比較容易被接受嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021451180305721", qr:"qr/s01_b04_zh.png",
+    tagReasons:{"理性":"不可能犯罪的結構，需要科學與邏輯拆解。","愛":"婚姻、期待與失望逐步轉化為複雜的情感動機。"}
+  },
+  {
+    title:"盛夏方程式", tags:["理性","餘波"],
+    intro:"湯川學在海邊小鎮面對的不只是科學謎題，也是一段被隱藏多年的往事。真相一旦揭開，影響的並非只有案件本身，而是仍在成長中的人如何承受答案。",
+    q:"科學能解釋現象，但能否承擔揭開真相之後的代價？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991011159649705721", qr:"qr/s01_b06_zh.png",
+    tagReasons:{"理性":"科學觀察與推理仍是破解案件的重要工具。","餘波":"多年以前的選擇持續影響下一代與仍活著的人。"}
+  },
+  {
+    title:"新參者", tags:["餘波","希望"],
+    intro:"加賀恭一郎走進日本橋的人情街區，破案同時也逐一理解與案件擦身而過的人們。每一段小小的祕密，都指向傷害之後仍可能存在的修補與善意。",
+    q:"找出犯人之後，刑警還能替留下來的人做什麼？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991010700549705721", qr:"qr/s02_b08_zh.png",
+    tagReasons:{"餘波":"焦點落在案件如何改變周遭普通人的生活。","希望":"理解與體貼讓受傷的人仍有重新前進的可能。"}
+  },
+  {
+    title:"紅色手指", tags:["餘波","愛"],
+    intro:"當家庭以保護之名選擇沉默，愛就可能變成遮蔽真相的力量。這部作品讓家庭倫理與犯罪責任緊緊纏在一起。",
+    q:"家人之間的沉默，究竟是保護還是傷害？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991006872299705721", qr:"qr/s02_b07_zh.png",
+    tagReasons:{"餘波":"犯罪之後，家庭必須長期承受祕密與罪責。","愛":"父母對孩子的保護，在極端情況下跨越了倫理界線。"}
+  },
+  {
+    title:"麒麟之翼", tags:["餘波","希望"],
+    intro:"死亡留下的線索，不只指向犯人，也指向一個父親未能說出口的心意。加賀追查的是案件，同時也是家人之間錯過的理解。",
+    q:"死亡留下的最後訊息，能不能讓活著的人重新理解彼此？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991012293809705721", qr:"qr/s02_b09_zh.png",
+    tagReasons:{"餘波":"失去親人之後，家屬仍要重新拼湊對彼此的認識。","希望":"真相讓遺憾有機會被理解，也讓關係重新連結。"}
+  },
+  {
+    title:"白夜行", tags:["愛","青春","餘波"],
+    intro:"一場童年時期的犯罪，讓兩個人的人生從此只能在彼此的陰影中前進。《白夜行》不是單純的犯罪小說，而是一段關於創傷、依存與無法走進陽光的人生。",
+    q:"兩個人彼此守護，也彼此困住，這仍然是愛嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991013650489705721", qr:"qr/s03_b01_zh.png",
+    tagReasons:{"愛":"兩人的關係以極端守護與依存維繫。","青春":"童年與青少年時期的創傷塑造了往後的人生。","餘波":"早年的案件像影子一樣持續延伸多年。"}
+  },
+  {
+    title:"秘密", tags:["愛","希望"],
+    intro:"當熟悉的身體與熟悉的靈魂不再重合，一段婚姻被迫重新定義。這是一個超越推理框架、直接追問愛與身份的故事。",
+    q:"當身體、記憶與身份改變，愛要如何辨認對方？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202629705721", qr:"qr/s03_b03_zh.png",
+    tagReasons:{"愛":"婚姻與親密關係面臨身份錯位的考驗。","希望":"面對無法逆轉的失去，人仍必須尋找繼續生活的方法。"}
+  },
+  {
+    title:"幻夜", tags:["愛","正義"],
+    intro:"當情感被用來操控他人，愛便與慾望、利用和權力糾纏。《幻夜》把讀者帶進一個難以用單一道德標準判斷的世界。",
+    q:"如果愛變成利用與控制，理解還有意義嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991019733539705721", qr:"qr/s03_b02_zh.png",
+    tagReasons:{"愛":"親密關係在操控與依存中逐漸變形。","正義":"角色的選擇逼迫讀者思考責任、代價與公平。"}
+  },
+  {
+    title:"徬徨之刃", tags:["正義","餘波"],
+    intro:"面對女兒遭害、法律卻未必能給出令人接受的答案，一位父親選擇自行追索正義。作品將讀者推進法律與復仇之間最尖銳的灰色地帶。",
+    q:"當法律無法平息被害者家屬的痛苦，復仇會變成正義嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991014915419705721", qr:"qr/s03_b09_zh.png",
+    tagReasons:{"正義":"少年司法與私人復仇形成直接衝突。","餘波":"受害者家屬的痛苦並不會隨案件結束而消失。"}
+  },
+  {
+    title:"空洞的十字架", tags:["正義","餘波"],
+    intro:"死刑是否等於贖罪？懲罰是否真的能讓被害者家屬得到答案？這部作品把犯罪之後漫長的生命拉到判決之外重新檢視。",
+    q:"懲罰完成之後，罪真的消失了嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991017375569705721", qr:"qr/s04_b01_zh.png",
+    tagReasons:{"正義":"直接辯證死刑、懲罰與贖罪的意義。","餘波":"受害與加害雙方都長期活在事件留下的後果裡。"}
+  },
+  {
+    title:"白金數據", tags:["正義","理性"],
+    intro:"當國家以DNA與大數據追蹤犯罪，效率與安全似乎達到新的高度；但當科技開始決定誰值得被懷疑，自由與隱私又該放在哪裡？",
+    q:"更安全的社會，是否必然要犧牲隱私與自由？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991002682659705721", qr:"qr/s04_b03_zh.png",
+    tagReasons:{"正義":"科技治理引出權力、隱私與公平的問題。","理性":"數據與科學模型被視為近乎客觀的真相工具。"}
+  },
+  {
+    title:"放學後", tags:["青春","正義"],
+    intro:"看似平靜的校園，藏著競爭、壓力與不能說出口的祕密。東野圭吾從早期作品開始，就已經在追問青春如何一步步走向不可逆的選擇。",
+    q:"青春中的壓力與秘密，會在什麼時候跨過不可逆的界線？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202259705721", qr:"qr/s05_b01_zh.png",
+    tagReasons:{"青春":"校園生活與年輕人的壓力構成故事核心。","正義":"犯罪責任與動機讓讀者重新判斷誰應被責怪。"}
+  },
+  {
+    title:"同級生", tags:["青春","餘波"],
+    intro:"同儕關係、誤解與沉默，在青春裡往往比成人想像得更沉重。作品透過案件追問：那些沒說出口的事情，最後會留下什麼？",
+    q:"同儕之間的沉默與誤解，會留下多長的影子？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202459705721", qr:"qr/s05_b02_zh.png",
+    tagReasons:{"青春":"聚焦學生之間的友情、誤解與脆弱。","餘波":"一個事件持續影響同儕關係與後續選擇。"}
+  },
+  {
+    title:"畢業", tags:["青春","理性"],
+    intro:"畢業前夕，本應走向未來的年輕人，卻因案件被迫重新檢視彼此。友情、競爭與理性推理在校園裡交錯。",
+    q:"校園裡看似單純的關係，藏著多少難以說出口的競爭與情感？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991006991519705721", qr:"qr/graduation_zh.png",
+    tagReasons:{"青春":"畢業與友情構成角色最重要的人生節點。","理性":"案件設計與推理解謎仍保有鮮明本格色彩。"}
+  },
+  {
+    title:"流星之絆", tags:["青春","愛","餘波"],
+    intro:"父母遭害之後，三兄妹共同長大，也共同背負一樁未解的創傷。手足之愛既是支撐，也是讓他們無法輕易放下過去的力量。",
+    q:"手足共同背負的創傷，會把彼此拉得更近，還是困得更深？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991003400579705721", qr:"qr/s03_b10_zh.png",
+    tagReasons:{"青春":"童年失去父母的經驗塑造三兄妹的成長。","愛":"手足間的守護成為彼此最深的連結。","餘波":"父母死亡後的案件持續決定他們的人生方向。"}
+  },
+  {
+    title:"解憂雜貨店", tags:["希望","青春"],
+    intro:"一間跨越時間回信的雜貨店，讓不同人生在意想不到的地方相遇。沒有傳統命案，卻依然透過選擇與祕密完成另一種解謎。",
+    q:"一個陌生人的善意，真的能改變另一個人的人生嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991013917119705721", qr:"qr/s06_b01_zh.png",
+    tagReasons:{"希望":"陌生人的回應與善意成為改變人生的契機。","青春":"許多關鍵選擇都發生在人生尚未定型的年輕階段。"}
+  },
+  {
+    title:"祈念之樹", tags:["希望","餘波"],
+    intro:"人們把不能說出口的祕密交給一棵樹，也把理解彼此的可能留在那裡。這部作品讓「解謎」變成傾聽與理解的過程。",
+    q:"如果祕密不是為了隱瞞，而是為了理解呢？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021192068705721", qr:"qr/s06_b02_zh.png",
+    tagReasons:{"希望":"理解祕密讓人重新與他人建立連結。","餘波":"過去未完成的情感仍持續影響現在的人。"}
+  },
+  {
+    title:"時生", tags:["希望","愛"],
+    intro:"如果能提前知道人生的失去，我們是否還願意走向同一段相遇？《時生》以奇想包裹親情與人生選擇，留下溫柔而沉重的答案。",
+    q:"知道結局之後，我們還會選擇同樣的人生嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991009666239705721", qr:"qr/s06_b04_zh.png",
+    tagReasons:{"希望":"即使知道失去，人仍可以選擇珍惜與前進。","愛":"親情與陪伴構成故事真正的情感核心。"}
+  }
+];
+
+const nodes=document.getElementById("nodes");
+const lines=document.getElementById("lines");
+const detail=document.getElementById("detail");
+let currentFilter=null;
+let currentBookIndex=null;
+
+/* 顯示全部時使用固定、碰撞安全的 4×5 排列。 */
+const allSlots=[
+  [27,23],[42,23],[58,23],[73,23],
+  [27,37],[42,37],[58,37],[73,37],
+  [27,51],[42,51],[58,51],[73,51],
+  [27,65],[42,65],[58,65],[73,65],
+  [32,79],[47,79],[62,79]
+];
+
+/* 主題篩選後，相關作品聚集在中央；最多可容納 9 本而不重疊。 */
+const focusSlots=[
+  [34,35],[50,35],[66,35],
+  [34,52],[50,52],[66,52],
+  [34,69],[50,69],[66,69]
+];
+
+function getBookPosition(idx){
+  if(!currentFilter) return allSlots[idx] || [50,50];
+  const related=books.map((b,i)=>({b,i})).filter(x=>x.b.tags.includes(currentFilter));
+  const focusIndex=related.findIndex(x=>x.i===idx);
+  if(focusIndex>=0) return focusSlots[focusIndex] || [50,52];
+  return [50,52];
+}
+
+function draw(){
+  nodes.innerHTML="";
+  lines.innerHTML="";
+
+  themes.forEach(t=>{
+    const d=document.createElement("div");
+    d.className="theme-node";
+    if(currentFilter===t.name) d.classList.add("active-theme");
+    d.dataset.theme=t.name;
+    d.style.left=t.x+"%"; d.style.top=t.y+"%"; d.style.setProperty("--accent",colors[t.name]);
+    d.textContent=t.name;
+    nodes.appendChild(d);
+  });
+
+  books.forEach((b,idx)=>{
+    const pos=getBookPosition(idx);
+    const isRelated=!currentFilter || b.tags.includes(currentFilter);
+
+    b.tags.forEach(tag=>{
+      const t=themes.find(x=>x.name===tag);
+      const line=document.createElementNS("http://www.w3.org/2000/svg","line");
+      line.dataset.book=String(idx);
+      line.dataset.theme=tag;
+      line.setAttribute("x1",pos[0]*10); line.setAttribute("y1",pos[1]*7);
+      line.setAttribute("x2",t.x*10); line.setAttribute("y2",t.y*7);
+      line.setAttribute("stroke",colors[tag]);
+      const active=currentFilter ? tag===currentFilter && isRelated : true;
+      line.setAttribute("stroke-width",active ? "3" : "1.2");
+      line.setAttribute("opacity",active ? (currentFilter ? "0.72" : "0.20") : "0.03");
+      if(currentFilter && tag===currentFilter){
+        line.setAttribute("stroke-dasharray","9 7");
+        line.style.strokeDashoffset="24";
+        requestAnimationFrame(()=>{line.style.strokeDashoffset="0";});
+      }
+      lines.appendChild(line);
+    });
+
+    const d=document.createElement("button");
+    d.type="button"; d.className="book-node";
+    d.dataset.book=String(idx);
+    d.style.left=pos[0]+"%"; d.style.top=pos[1]+"%";
+    if(currentFilter && !isRelated) d.classList.add("dim");
+    if(currentFilter && isRelated) d.classList.add("related");
+    if(currentBookIndex===idx) d.classList.add("selected");
+    d.innerHTML=`《${b.title}》<small>${b.tags.join(" × ")}</small>`;
+    d.addEventListener("click",()=>selectBook(idx,d));
+    nodes.appendChild(d);
+  });
+
+  if(currentBookIndex!==null) highlightBookConnections(currentBookIndex);
+}
+
+function highlightBookConnections(idx){
+  const b=books[idx];
+  document.querySelectorAll(".theme-node").forEach(n=>n.classList.toggle("connected-theme",b.tags.includes(n.dataset.theme)));
+  lines.querySelectorAll("line").forEach(line=>{
+    const sameBook=line.dataset.book===String(idx);
+    line.setAttribute("opacity",sameBook ? "0.92" : (currentFilter ? "0.025" : "0.07"));
+    line.setAttribute("stroke-width",sameBook ? "4.5" : "1.2");
+  });
+}
+
+function selectBook(idx,el){
+  currentBookIndex=idx;
+  document.querySelectorAll(".book-node").forEach(n=>n.classList.remove("selected"));
+  el.classList.add("selected");
+  highlightBookConnections(idx);
+  const b=books[idx];
+  detail.innerHTML=`
+    <div class="label">作品探索</div>
+    <h2>《${b.title}》</h2>
+    <div class="tags">${b.tags.map(t=>`<span class="tag" style="background:${colors[t]}">${t}</span>`).join("")}</div>
+    <p>這本作品同時連結 <b>${b.tags.join("、")}</b> 等命題。下方可看到它為什麼會跨越這些主題。</p>
+    <div class="tag-reasons">
+      ${b.tags.map(t=>`<div class="tag-reason" style="--accent:${colors[t]}"><b>${t}</b><span>${b.tagReasons[t] || ""}</span></div>`).join("")}
+    </div>
+    <div class="question">${b.q}</div>
+    <div class="detail-actions">
+      <button class="primary" id="introBtn">查看策展導讀</button>
+      <button id="catalogBtn" ${b.catalog ? "" : "disabled"}>查看館藏</button>
+    </div>
+    <div id="introContent" class="intro-content">${b.intro}</div>
+    ${b.catalog ? "" : `<div class="catalog-note">此作品尚未設定館藏網址。請在程式碼 books 資料中的 catalog 欄位貼上該書館藏連結。</div>`}
+  `;
+  const introBtn=document.getElementById("introBtn");
+  const introContent=document.getElementById("introContent");
+  introBtn.addEventListener("click",()=>{
+    introContent.classList.toggle("open");
+    introBtn.textContent=introContent.classList.contains("open") ? "收合策展導讀" : "查看策展導讀";
+    if(introContent.classList.contains("open")) setTimeout(()=>introContent.scrollIntoView({behavior:"smooth",block:"nearest"}),120);
+  });
+  const catalogBtn=document.getElementById("catalogBtn");
+  if(b.catalog){
+    catalogBtn.addEventListener("click",()=>showCatalogModal(b));
+  }
+}
+
+
+const catalogModal=initCatalogModal({
+  modalId:"catalogModal",
+  titleId:"catalogModalTitle",
+  qrImgId:"catalogQrImage",
+  urlId:"catalogUrl",
+  closeId:"catalogModalClose"
+});
+
+function showCatalogModal(book){
+  if(!book.catalog || !catalogModal) return;
+  catalogModal.show({title:book.title, qr:book.qr, url:book.catalog});
+}
+
+function closeCatalogModal(){
+  if(catalogModal) catalogModal.hide();
+}
+
+
+function setFilter(name){
+  currentFilter=name;
+  currentBookIndex=null;
+  document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter===name));
+  draw();
+  detail.innerHTML=`
+    <div class="label">主題探索</div>
+    <h2>${name}</h2>
+    <p>與「${name}」相關的作品已自動聚集到中央，其他作品暫時淡出。點任一本書，即可查看它與其他主題的交會。</p>
+    <div class="question">作品不是被固定在單一分類裡，而是隨著你的選擇重新形成一張人性關係圖。</div>
+  `;
+}
+
+function resetUniverse(){
+  currentFilter=null;
+  currentBookIndex=null;
+  document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));
+  draw();
+  detail.innerHTML=`
+    <div class="label">作品探索</div>
+    <h2>請點選一本作品</h2>
+    <p>你可以先從上方六大主題切入，也可以直接點選作品，看看它同時跨越哪些人性命題。</p>
+    <div class="question">點主題時，相關作品會自動聚集；點作品時，與它相連的主題與紅線會被強調。</div>
+  `;
+}
+
+document.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>setFilter(b.dataset.filter)));
+document.getElementById("resetBtn").addEventListener("click",resetUniverse);
+document.getElementById("homeBtn").addEventListener("click",()=>window.location.href="./index.html");
+document.getElementById("quizBtn").addEventListener("click",()=>window.location.href="./reader-quiz.html");
+
+createIdleTimer(()=>{closeCatalogModal();resetUniverse();});
+draw();
+</script>
+</body>
+</html>

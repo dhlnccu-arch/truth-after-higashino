@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>真相之後｜東野圭吾的人性推理</title>
+<style>
+:root {
+  --ink:#1f1b18;
+  --muted:#665e56;
+  --red:#9e2f2a;
+  --paper:rgba(250,246,239,.92);
+  --paper-strong:rgba(250,246,239,.97);
+  --line:rgba(91,72,58,.24);
+  --shadow:0 18px 50px rgba(48,36,28,.16);
+  /* 六大主題色（--reason/--after/--love/--justice/--youth/--hope）
+     統一定義在 css/theme.css，這裡不再重複，避免以後改色只改到一半。 */
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f3eadf;color:var(--ink);font-family:"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif}
+button{font:inherit}
+.stage{
+  width:100vw;height:100vh;min-height:720px;position:relative;overflow:hidden;
+  /* 底圖由 css/theme.css 的 body.page-home .stage 統一管理 */
+}
+
+.red-thread{position:absolute;inset:0;pointer-events:none;opacity:.46}
+.red-thread svg{width:100%;height:100%}
+.app{position:relative;z-index:2;height:100%;padding:3.2vh 3.2vw 2.4vh;display:grid;grid-template-rows:auto 1fr auto;gap:2vh}
+
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+.hero{max-width:48vw}
+.eyebrow{font-size:clamp(18px,1.15vw,28px);letter-spacing:.14em;color:#7a2721;font-weight:700}
+.title{font-size:clamp(72px,7vw,150px);line-height:.96;margin:.1em 0 .08em;letter-spacing:.04em}
+.subtitle{font-size:clamp(31px,2.65vw,56px);letter-spacing:.14em;margin-bottom:.35em}
+.tagline{font-size:clamp(21px,1.35vw,31px);line-height:1.55;color:#3d3732;max-width:980px}
+
+.top-actions{display:flex;gap:12px}
+.top-btn{
+  min-height:64px;padding:12px 22px;border-radius:16px;border:1px solid rgba(255,255,255,.6);
+  color:#fff;background:rgba(38,31,27,.62);backdrop-filter:blur(8px);cursor:pointer;
+  font-size:clamp(18px,1.1vw,26px)
+}
+
+.case-wrap{align-self:end}
+.case-title{font-size:clamp(20px,1.3vw,29px);font-weight:700;margin-bottom:1vh}
+.case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5vh 1.2vw}
+.case{
+  position:relative;min-height:15.3vh;padding:1.8vh 1.4vw 1.7vh;border-radius:22px;border:1px solid var(--line);
+  background:var(--paper);box-shadow:var(--shadow);text-align:left;cursor:pointer;transition:.16s ease;overflow:hidden
+}
+.case::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+.case:hover,.case:focus-visible{transform:translateY(-4px);border-color:var(--accent);outline:3px solid rgba(158,47,42,.12)}
+.case small{display:block;color:var(--accent);font-size:clamp(16px,1.05vw,24px);letter-spacing:.06em;margin-bottom:.75vh}
+.case strong{display:block;font-size:clamp(24px,1.85vw,40px);line-height:1.22;margin-bottom:.65vh}
+.case span{display:block;color:var(--muted);font-size:clamp(15px,.95vw,22px)}
+
+.footer{display:grid;grid-template-columns:repeat(4,1fr);gap:1vw}
+.footer button{
+  min-height:8vh;border-radius:18px;border:1px solid var(--line);background:var(--paper-strong);cursor:pointer;
+  box-shadow:0 8px 24px rgba(31,25,20,.09);font-size:clamp(19px,1.2vw,27px);font-weight:700
+}
+.footer button:hover,.footer button:focus-visible{border-color:var(--red);outline:3px solid rgba(158,47,42,.12)}
+
+.panel{
+  position:absolute;z-index:10;inset:4vh 4vw;background:rgba(248,244,236,.985);border-radius:28px;border:1px solid var(--line);
+  box-shadow:0 30px 90px rgba(0,0,0,.28);padding:4vh 4vw;display:none;overflow:auto
+}
+.panel.open{display:block}
+.close{
+  position:sticky;top:0;float:right;border:0;background:#2c2722;color:#fff;border-radius:14px;
+  min-height:58px;padding:12px 22px;font-size:22px;cursor:pointer
+}
+.panel-kicker{color:var(--red);font-weight:700;letter-spacing:.08em;font-size:22px}
+.panel h2{font-size:clamp(46px,4vw,84px);margin:.2em 0 .25em}
+.panel p{font-size:clamp(22px,1.45vw,31px);line-height:1.75;max-width:1100px;color:#403933}
+.panel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+.book{border:1px solid var(--line);border-radius:18px;background:#fff;padding:22px}
+.book b{font-size:clamp(22px,1.35vw,30px)}
+.book p{font-size:18px;line-height:1.55;margin-bottom:0;color:var(--muted)}
+
+.status{position:absolute;left:50%;bottom:1.1vh;transform:translateX(-50%);z-index:3;color:#fff;font-size:clamp(15px,.9vw,20px);text-shadow:0 1px 3px rgba(0,0,0,.55)}
+
+@media (max-width:1000px){
+  .hero{max-width:60vw}
+  .case-grid{grid-template-columns:repeat(2,1fr)}
+  .footer{grid-template-columns:repeat(2,1fr)}
+  .panel-grid{grid-template-columns:1fr}
+}
+
+/* ===== 首頁打字機開場效果 ===== */
+.case-title{
+  min-height:1.55em; /* 避免文字逐字出現時版面跳動 */
+}
+
+.typing-cursor{
+  display:inline-block;
+  margin-left:4px;
+  color:var(--red, #9e2f2a);
+  animation:cursorBlink .75s steps(1,end) infinite;
+}
+
+@keyframes cursorBlink{
+  0%,45%{opacity:1}
+  46%,100%{opacity:0}
+}
+
+/* 六大 CASE 初始隱藏，等打字完成後依序進場 */
+.case-grid .case{
+  opacity:0;
+  transform:translateY(18px);
+  pointer-events:none;
+}
+
+.case-grid .case.case-reveal{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+  transition:
+    opacity .5s ease,
+    transform .55s cubic-bezier(.22,.61,.36,1),
+    border-color .16s ease,
+    box-shadow .16s ease;
+}
+
+
+/* ===== 六大 CASE｜調查模式 ===== */
+.panel.case-mode{padding:3.1vh 3.2vw 3.6vh;overflow:auto}
+.case-shell{max-width:1720px;margin:0 auto;padding-bottom:3vh}
+.case-head{padding-right:130px}
+.case-head-row{display:flex;align-items:center;justify-content:space-between;gap:22px}
+.case-progress{display:flex;align-items:center;gap:12px;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--muted);font-size:16px;font-weight:700}
+.progress-dots{display:flex;gap:8px}
+.progress-dot{width:12px;height:12px;border-radius:999px;border:1px solid rgba(158,47,42,.38);background:rgba(158,47,42,.08)}
+.progress-dot.done{background:var(--red);border-color:var(--red)}
+.progress-dot.current{box-shadow:0 0 0 4px rgba(158,47,42,.12)}
+.case-head h2{font-size:clamp(44px,3.8vw,76px);margin:.16em 0 .16em;line-height:1.12}
+.panel .case-scene{font-size:clamp(21px,1.3vw,29px);line-height:1.65;max-width:1320px;margin:.35em 0 0}
+.investigate-title{margin:24px 0 12px;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:clamp(18px,1.15vw,25px);font-weight:800;color:#3d342e}
+.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.choice-btn{min-height:130px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.9);padding:20px 22px;text-align:left;cursor:pointer;box-shadow:0 10px 28px rgba(55,42,33,.08);transition:.2s ease;position:relative;overflow:hidden}
+.choice-btn::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:.24s ease}
+.choice-btn:hover,.choice-btn.selected{transform:translateY(-3px);border-color:rgba(158,47,42,.55);box-shadow:0 14px 34px rgba(55,42,33,.13)}
+.choice-btn.selected::after{transform:scaleX(1)}
+.choice-title{display:block;font-size:clamp(22px,1.35vw,30px);font-weight:800;margin-bottom:6px}
+.choice-code{display:block;color:var(--red);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:12px;letter-spacing:.18em;font-weight:900;margin-bottom:6px}
+.choice-hint{display:block;color:var(--muted);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:15px;line-height:1.45}
+.choice-feedback{display:none;margin:18px 0 6px;padding:17px 20px;border-left:4px solid var(--red);border-radius:0 16px 16px 0;background:rgba(158,47,42,.055);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:17px;line-height:1.7;color:#453a33}
+.choice-feedback.show{display:block;animation:fadeInUp .35s ease both}
+.clue-zone{display:none;margin-top:22px;position:relative}
+.clue-zone.show{display:block}
+.clue-thread{height:2px;background:linear-gradient(90deg,var(--red),rgba(158,47,42,.12));transform:scaleX(0);transform-origin:left;animation:threadDraw .85s ease forwards;margin:0 4% 16px}
+@keyframes threadDraw{to{transform:scaleX(1)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.clue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.clue-card{opacity:0;transform:translateY(18px);border:1px solid var(--line);border-radius:20px;background:#fff;padding:20px;box-shadow:0 10px 28px rgba(55,42,33,.07)}
+.clue-card.reveal{animation:fadeInUp .5s ease forwards}
+.clue-no{color:var(--red);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:12px;letter-spacing:.16em;font-weight:900}
+.clue-card h3{font-size:clamp(22px,1.35vw,30px);margin:7px 0 14px}
+.clue-label{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--muted);font-size:12px;letter-spacing:.12em;font-weight:800;margin-top:10px}
+.clue-question{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:16px;line-height:1.55;color:#342e2a;margin-top:4px}
+.clue-real{color:#7d2b25;font-weight:700}
+.clue-more{display:none;margin-top:12px;padding-top:12px;border-top:1px dashed rgba(91,72,58,.22);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:15px;line-height:1.65;color:#5a5048}
+.clue-more.show{display:block}
+.clue-expand{margin-top:14px;border:1px solid rgba(158,47,42,.28);background:#fff8f4;color:#7c2a25;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
+.case-closeout{display:none;margin-top:28px;padding:22px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.72)}
+.case-closeout.show{display:block;animation:fadeInUp .35s ease both}
+.case-closeout .closeout-kicker{color:var(--red);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:13px;letter-spacing:.16em;font-weight:900}
+.case-closeout h3{font-size:clamp(24px,1.55vw,34px);margin:8px 0 14px}
+.verdict-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.verdict-btn{border:1px solid var(--line);background:#fff;border-radius:16px;padding:15px 18px;text-align:left;cursor:pointer;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:16px;font-weight:700;line-height:1.5}
+.verdict-btn:hover,.verdict-btn.selected{border-color:var(--red);background:#fff5f1}
+.verdict-response{display:none;margin-top:14px;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:16px;line-height:1.7;color:#4b413a}
+.verdict-response.show{display:block}
+.case-nav{display:none;margin-top:18px;grid-template-columns:1fr 1fr;gap:12px}
+.case-nav.show{display:grid}
+.case-nav button{min-height:56px;border-radius:15px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer;font-size:16px}
+.case-nav .next{background:#2d2925;color:#fff;border-color:#2d2925}
+.report-card{margin-top:18px;padding:24px;border-radius:22px;background:linear-gradient(135deg,#2d2824,#4a3f37);color:#fff;box-shadow:0 16px 40px rgba(32,25,20,.18)}
+.report-card .report-kicker{color:#e8b6ab;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:13px;letter-spacing:.18em;font-weight:900}
+.report-card h3{margin:8px 0 10px;font-size:clamp(28px,2vw,42px)}
+.panel .report-card p{color:rgba(255,255,255,.84);font-size:17px;line-height:1.7;margin:0;max-width:1000px}
+@media(max-width:1050px){.choice-grid,.clue-grid{grid-template-columns:1fr}.verdict-grid{grid-template-columns:1fr}.case-head{padding-right:90px}}
+
+</style>
+<link rel="stylesheet" href="./css/theme.css">
+<script src="./js/common.js"></script>
+</head>
+<body class="page-home">
+<main class="stage">
+  <div class="red-thread" aria-hidden="true">
+    <svg viewBox="0 0 1920 1080" preserveAspectRatio="none">
+      <path d="M80 115 C390 35 560 205 885 128 S1390 85 1800 220" fill="none" stroke="#9e2f2a" stroke-width="2"/>
+      <path d="M180 390 C470 300 760 420 1085 315 S1510 275 1840 470" fill="none" stroke="#9e2f2a" stroke-width="2"/>
+    </svg>
+  </div>
+
+  <div class="app">
+    <header class="top">
+      <section class="hero">
+        <div class="eyebrow">2026年9-10月主題書展暨影展</div>
+        <div class="title">真相之後</div>
+        <div class="subtitle">東野圭吾的人性推理</div>
+        <div class="tagline">解開謎題的瞬間不是結束，而是對人性的拷問開始。</div>
+      </section>
+    </header>
+
+    <section class="case-wrap">
+      <div class="case-title"><span id="typewriter-title"></span><span class="typing-cursor">▋</span></div>
+      <div class="case-grid">
+        <button class="case" style="--accent:var(--reason)" data-case="reason">
+          <small>CASE 01｜理性</small>
+          <strong>理性可以解開一切嗎？</strong>
+          <span>偵探伽利略系列</span>
+        </button>
+        <button class="case" style="--accent:var(--after)" data-case="after">
+          <small>CASE 02｜餘波</small>
+          <strong>死亡之後，留下來的是誰？</strong>
+          <span>加賀恭一郎系列</span>
+        </button>
+        <button class="case" style="--accent:var(--love)" data-case="love">
+          <small>CASE 03｜愛</small>
+          <strong>愛，能不能成為犯罪的理由？</strong>
+          <span>人性與情感的邊界</span>
+        </button>
+        <button class="case" style="--accent:var(--justice)" data-case="justice">
+          <small>CASE 04｜正義</small>
+          <strong>當社會製造了罪犯</strong>
+          <span>司法、公共議題與社會省思</span>
+        </button>
+        <button class="case" style="--accent:var(--youth)" data-case="youth">
+          <small>CASE 05｜青春</small>
+          <strong>青春從來不只是青春</strong>
+          <span>校園、同儕與成長的代價</span>
+        </button>
+        <button class="case" style="--accent:var(--hope)" data-case="hope">
+          <small>CASE 06｜希望</small>
+          <strong>沒有命案，也可以是東野圭吾</strong>
+          <span>溫暖、希望與非典型解謎</span>
+        </button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <button id="universeBtn">作品宇宙</button>
+      <button id="quizBtn">讀者測驗</button>
+      <button data-action="film">影展專區</button>
+      <button data-action="books">完整書單</button>
+    </footer>
+  </div>
+
+  <section class="panel" id="panel" aria-live="polite">
+    <button class="close" id="closeBtn">關閉</button>
+    <div id="panelContent"></div>
+  </section>
+
+  <div class="status">觸控螢幕模式：60 秒未操作將自動回到首頁</div>
+</main>
+
+<script>
+
+const caseOrder=["reason","after","love","justice","youth","hope"];
+const caseData={
+  reason:{
+    case:"CASE 01｜理性", title:"理性可以解開一切嗎？",
+    scene:"所有證據都指向同一個答案。但如果真相本身，比謊言更殘酷呢？湯川學相信公式、實驗與邏輯；而東野圭吾總在答案出現後，再把問題推回人的身上。",
+    prompt:"你會先追查哪一條線索？",
+    choices:[
+      {id:"how",title:"犯罪手法",code:"HOW",hint:"事情是怎麼發生的？",reply:"你選擇從「怎麼做到」開始。湯川學也會從這裡開始；只是科學能證明發生了什麼，卻未必能回答一個人為什麼願意付出那樣的代價。"},
+      {id:"why",title:"利益與恩怨",code:"WHY",hint:"他為什麼這麼做？",reply:"你先追查人的理由。動機讓案件變得可以理解，但「可以理解」和「可以原諒」從來不是同一件事。"},
+      {id:"after",title:"背後的代價",code:"AFTER",hint:"真相之後，誰承擔後果？",reply:"你把目光放到答案之後。這正是本展想追問的地方：當謎題解開，真正困難的往往才剛開始。"}
+    ],
+    books:[
+      {title:"嫌疑犯X的獻身",surface:"完美的不在場證明，是如何成立的？",real:"如果犧牲出於愛，它還能被單純稱為犯罪嗎？",more:"石神的計算幾乎無懈可擊，但小說真正留下的不是公式，而是一個人究竟可以為另一個人做到什麼程度。"},
+      {title:"聖女的救贖",surface:"幾乎不可能完成的犯罪，是怎麼發生的？",real:"當等待與怨恨累積多年，愛與報復還能清楚分開嗎？",more:"科學可以還原手法，卻無法縮短一段漫長關係裡的沉默。東野把「不可能犯罪」轉成情感時間的證據。"},
+      {title:"盛夏方程式",surface:"一場死亡背後，究竟藏著什麼因果？",real:"如果揭開真相會傷害一個孩子，知道答案仍然是最好的選擇嗎？",more:"湯川逼近真相的同時，也必須面對知識的責任：知道與說出，並不是完全相同的選擇。"}
+    ],
+    closeQ:"理性可以解開犯罪的方法，但它能解開人的選擇嗎？",
+    verdicts:["可以，人的選擇終究有其原因。","不一定，人並不是公式。"],
+    closeText:"真相被證明的那一刻，或許才是人性問題真正開始的地方。"
+  },
+  after:{
+    case:"CASE 02｜餘波", title:"死亡之後，留下來的是誰？",
+    scene:"案件可以結案，失去卻不會跟著結束。加賀恭一郎追查的，不只有兇手，也有被一場死亡改變的人：遺族、親人，以及那些沒有說出口的秘密。",
+    prompt:"面對一場已經發生的死亡，你會先看哪裡？",
+    choices:[
+      {id:"trace",title:"最後行蹤",code:"TRACE",hint:"死者最後經歷了什麼？",reply:"你先重建事情發生的軌跡。線索可以帶你接近死亡的瞬間，但加賀更常停下來看：那個瞬間之後，誰的人生被迫改變。"},
+      {id:"secret",title:"未說出口的秘密",code:"SECRET",hint:"誰在保護，又在隱瞞？",reply:"你注意到沉默。家庭裡的秘密常不是為了欺騙陌生人，而是為了保護最親近的人；也因此，保護有時會悄悄變成傷害。"},
+      {id:"remain",title:"留下來的人",code:"AFTER",hint:"真相之後，誰必須繼續生活？",reply:"你直接看向案件的餘波。對留下來的人而言，破案不是句點，而是重新學習如何生活的起點。"}
+    ],
+    books:[
+      {title:"新參者",surface:"日本橋的人際關係裡，哪一條線索通往真相？",real:"比找到兇手更重要的，會不會是讓被案件改變的人重新理解彼此？",more:"加賀像「新參者」一樣進入街區，也一步步看見每個普通人的祕密。破案之外，他更在乎那些仍要生活下去的人。"},
+      {title:"紅色手指",surface:"一個家庭為什麼共同掩蓋犯罪？",real:"當守護家人變成掩蓋傷害，愛與共犯之間還剩多少距離？",more:"最令人窒息的不是案件本身，而是家庭如何用沉默延續錯誤。東野把責任推回每一個選擇不說的人。"},
+      {title:"麒麟之翼",surface:"死者留下的最後行動，究竟想指向什麼？",real:"一場死亡能不能成為家人重新理解彼此的最後機會？",more:"追查線索的過程，也是一段遲來的理解。死亡無法逆轉，但真相有時能改變留下來的人如何記住彼此。"}
+    ],
+    closeQ:"破案能結束案件，卻能結束失去嗎？",
+    verdicts:["能，知道真相才能真正往前走。","不能，有些餘波會留得比真相更久。"],
+    closeText:"案件有結案日期，失去沒有。真相的價值，也許不是消除痛苦，而是讓人知道該如何與它共處。"
+  },
+  love:{
+    case:"CASE 03｜愛", title:"愛，能不能成為犯罪的理由？",
+    scene:"守護、犧牲、佔有、控制——它們有時都以「愛」為名。當一個人說自己是為了所愛之人而跨越界線，我們究竟是在理解他的理由，還是在替他的行為尋找藉口？",
+    prompt:"當愛與犯罪糾纏在一起，你會先追查什麼？",
+    choices:[
+      {id:"act",title:"越界的行為",code:"ACT",hint:"他究竟做了什麼？",reply:"你先把行為和情感分開。這是一條重要界線：再強烈的感情，也不能讓傷害自動失去責任。"},
+      {id:"why",title:"愛的理由",code:"WHY",hint:"他說自己是為了誰？",reply:"你願意先理解動機。理解能讓人物變得立體，但也會逼我們面對更難的問題：理解之後，我們還能否清楚判斷對錯？"},
+      {id:"boundary",title:"守護的界線",code:"BOUNDARY",hint:"愛從哪裡開始變成傷害？",reply:"你在尋找界線。東野最擅長讓守護與佔有只隔一步，讓讀者看見「為你好」如何可能成為另一種控制。"}
+    ],
+    books:[
+      {title:"白夜行",surface:"兩個人的命運為何長年被同一樁案件牽引？",real:"彼此守護，也彼此困住；當愛只能存在於黑暗中，它還能走向光嗎？",more:"小說沒有把情感說破，反而讓沉默成為最大的線索。讀者必須自己判斷：這份關係究竟是救贖，還是共同沉淪。"},
+      {title:"秘密",surface:"當身體與靈魂不再重合，家人該如何面對？",real:"當熟悉的身體裡住著另一個熟悉的人，愛究竟是在愛誰？",more:"《秘密》把推理轉向身分與關係。最難回答的不是超自然現象，而是人在失去與重新選擇之間，如何定義愛。"},
+      {title:"幻夜",surface:"一段關係裡，誰在利用誰？",real:"如果愛逐漸變成操控與依附，我們還能從中看見真正的感情嗎？",more:"人物彼此靠近，也彼此成為工具。《幻夜》讓「愛」不再天然純潔，而是一股可能救人、也可能吞沒人的力量。"}
+    ],
+    closeQ:"理解一個人「因愛而犯罪」的理由，是否會改變你對他的判斷？",
+    verdicts:["會，動機讓責任有了不同重量。","不會，理解不等於原諒。"],
+    closeText:"愛可以解釋行為，卻未必能替行為辯護。真正困難的，是我們願意理解到哪裡，又願意原諒到哪裡。"
+  },
+  justice:{
+    case:"CASE 04｜正義", title:"當社會製造了罪犯",
+    scene:"法律會判決有罪或無罪，但正義不一定在宣判那一刻完成。少年法、死刑、科技監控、受害者創傷與社會偏見，都讓「誰該負責」變得比案件本身更複雜。",
+    prompt:"當制度與個人的痛苦衝突，你會先相信什麼？",
+    choices:[
+      {id:"law",title:"法律判決",code:"LAW",hint:"制度如何定義罪與罰？",reply:"你先守住制度。法律必須可被共同遵循，但它的尺度也可能讓某些痛苦無法被完整看見。"},
+      {id:"hurt",title:"受害者的痛苦",code:"HURT",hint:"判決真的回應了誰？",reply:"你先看受傷的人。當程序完成而痛苦仍然存在，「正義已經完成」這句話就會變得格外困難。"},
+      {id:"system",title:"社會的責任",code:"SYSTEM",hint:"誰創造了走向犯罪的條件？",reply:"你把鏡頭拉遠。個人必須為行為負責，但制度、環境與科技也可能默默決定一個人有哪些選擇。"}
+    ],
+    books:[
+      {title:"徬徨之刃",surface:"當法律無法阻止悲劇，父親還能做什麼？",real:"當制度無法平息被害者家屬的痛苦，復仇是否可能被理解？",more:"小說讓讀者同時看見法律的必要與不足。越靠近受害者的痛苦，越難用單一答案處理「正義」。"},
+      {title:"空洞的十字架",surface:"刑罰究竟能不能阻止下一次犯罪？",real:"判決與懲罰完成之後，罪真的消失了嗎？",more:"東野把死刑爭議從抽象立場拉回具體人生：懲罰、悔悟、補償與失去之間，沒有哪一個詞可以獨自完成正義。"},
+      {title:"白金數據",surface:"DNA 與大型資料庫能不能讓犯罪無所遁形？",real:"當科技以安全之名掌握每個人的資料，自由與隱私還剩多少空間？",more:"最可靠的系統也由人設計。當科技被賦予判斷人的權力，真正需要被監督的也許不只是犯罪者。"}
+    ],
+    closeQ:"如果法律給出的答案無法撫平傷害，個人是否有權尋找自己的正義？",
+    verdicts:["有時可以，制度也可能失靈。","不可以，正義不能靠每個人自行定義。"],
+    closeText:"正義之所以困難，正因為它必須同時面對規則與人的痛苦。答案越簡單，往往越容易遺漏某個人。"
+  },
+  youth:{
+    case:"CASE 05｜青春", title:"青春從來不只是青春",
+    scene:"考試、競爭、友情、嫉妒、喜歡與害怕被排除——大人眼中的小事，對年輕人可能就是整個世界。東野早期校園推理把犯罪放進青春裡，也讓我們看見成長最脆弱的一面。",
+    prompt:"面對一樁校園裡的祕密，你會先看什麼？",
+    choices:[
+      {id:"event",title:"表面的衝突",code:"EVENT",hint:"校園裡到底發生了什麼？",reply:"你先確認事件本身。只是校園裡的衝突很少突然出現，它常由許多沒被重視的小事逐步累積。"},
+      {id:"pressure",title:"同儕與壓力",code:"PRESSURE",hint:"誰在沉默中被推向角落？",reply:"你注意到群體的力量。青春裡最重的壓力，常不是來自敵人，而是來自最想被接納的那群人。"},
+      {id:"after",title:"長大後的代價",code:"AFTER",hint:"青春的選擇會留下多久？",reply:"你已經看向未來。當時只是一個選擇、一句話或一次沉默，卻可能成為多年後仍然無法放下的記憶。"}
+    ],
+    books:[
+      {title:"放學後",surface:"看似平靜的校園為什麼接連出現危險？",real:"被忽略的壓力與秘密，如何一步步把人推過不可逆的界線？",more:"校園不是犯罪故事的背景板，而是壓力生成的現場。越熟悉的日常，越容易讓真正的求救被當成小事。"},
+      {title:"同級生",surface:"同學之間的死亡與祕密有什麼關聯？",real:"友情、誤解與沉默，會在青春裡留下多長的影子？",more:"少年少女不一定有成熟的語言說明自己，因此誤解往往比真相更快擴散。小說追查的也是一群人如何錯過彼此。"},
+      {title:"畢業",surface:"友情與競爭交錯的校園裡，誰藏著不能說的事？",real:"當共同青春走到分岔路口，我們真的了解最熟悉的朋友嗎？",more:"畢業象徵往前走，也意味著某段關係即將結束。案件因此不只是誰做了什麼，更是每個人如何面對即將失去的共同世界。"}
+    ],
+    closeQ:"青春時犯下的錯，應該被時間沖淡，還是一直被記得？",
+    verdicts:["應該給人成長與重新開始的機會。","有些傷害不會因為年輕就變得比較輕。"],
+    closeText:"成長不是把過去刪掉，而是學會帶著曾經的選擇繼續生活。青春之所以重要，正因為它會留下痕跡。"
+  },
+  hope:{
+    case:"CASE 06｜希望", title:"沒有命案，也可以是東野圭吾",
+    scene:"有些謎題沒有兇手，也不需要逮捕任何人。錯過、遺憾、善意與一句沒有送達的話，同樣可以成為需要被解開的秘密。最後一案，我們把推理從犯罪帶回人與人的連結。",
+    prompt:"如果沒有犯罪，你還會追查什麼？",
+    choices:[
+      {id:"mystery",title:"眼前的謎題",code:"MYSTERY",hint:"事情究竟出了什麼差錯？",reply:"你仍然從謎題開始。推理的樂趣沒有消失，只是答案不再指向兇手，而是指向一段人生裡被忽略的連結。"},
+      {id:"wish",title:"沒說出口的願望",code:"WISH",hint:"他真正想得到的是什麼？",reply:"你想理解人的願望。很多時候，人問出的問題只是表面；真正需要被回答的，是他不敢直接說出口的那一句。"},
+      {id:"hope",title:"重新連結的可能",code:"HOPE",hint:"人與人還能不能走回彼此？",reply:"你選擇把推理帶向希望。理解不能改寫已經發生的事，卻可能改變一個人接下來如何走。"}
+    ],
+    books:[
+      {title:"解憂雜貨店",surface:"跨越時間的信件，為什麼會抵達陌生人手中？",real:"一句認真回覆，真的可能改變另一個人的人生嗎？",more:"故事的謎題最後都回到「有人願意聽」。解答不一定替人做決定，卻能讓一個孤單的人知道自己不是完全無人理解。"},
+      {title:"祈念之樹",surface:"人們為什麼把不能說的事交給一棵樹？",real:"當祕密不再只是隱瞞，它能不能成為理解彼此的入口？",more:"願望與祕密被保留下來，也等待另一個人有一天讀懂。推理因此變成一種靠近他人的方式。"},
+      {title:"時生",surface:"一場跨越時間的相遇，究竟想改變什麼？",real:"如果知道人生終點，我們是否仍會選擇同樣的愛與相遇？",more:"知道未來不一定能改變命運，但理解過去可能改變我們看待自己的人生。《時生》把答案留在選擇如何活下去。"}
+    ],
+    closeQ:"推理真正重要的，是找到答案，還是因此更理解一個人？",
+    verdicts:["找到答案，理解才有可靠的起點。","理解一個人，有時比答案本身更重要。"],
+    closeText:"六個 CASE 走到最後，真相沒有消失；只是我們開始知道，答案之外還有人。這就是「真相之後」。"
+  }
+};
+
+const panel=document.getElementById("panel");
+const content=document.getElementById("panelContent");
+let currentCaseKey=null;
+const progress=JSON.parse(localStorage.getItem("truthAfterProgress")||"{}");
+
+function saveProgress(){localStorage.setItem("truthAfterProgress",JSON.stringify(progress));}
+function resetProgress(){Object.keys(progress).forEach(k=>delete progress[k]);localStorage.removeItem("truthAfterProgress");}
+function openPanel(html){content.innerHTML=html;panel.classList.add("open","case-mode");panel.scrollTop=0;}
+function closePanel(){panel.classList.remove("open","case-mode");currentCaseKey=null;}
+function dotsFor(key){
+  const idx=caseOrder.indexOf(key);
+  return `<div class="case-progress"><span>調查進度</span><div class="progress-dots">${caseOrder.map((k,i)=>`<i class="progress-dot ${progress[k]?.done?'done':''} ${i===idx?'current':''}"></i>`).join("")}</div><span>${idx+1} / 6</span></div>`;
+}
+function openCaseByKey(key){
+  const c=caseData[key]; if(!c) return; currentCaseKey=key;
+  openPanel(`
+    <div class="case-shell">
+      <div class="case-head">
+        <div class="case-head-row"><div class="panel-kicker">${c.case}</div>${dotsFor(key)}</div>
+        <h2>${c.title}</h2>
+        <p class="case-scene">${c.scene}</p>
+      </div>
+      <div class="investigate-title">${c.prompt}</div>
+      <div class="choice-grid">
+        ${c.choices.map(ch=>`<button class="choice-btn" data-choice="${ch.id}"><span class="choice-title">${ch.title}</span><span class="choice-code">${ch.code}</span><span class="choice-hint">${ch.hint}</span></button>`).join("")}
+      </div>
+      <div class="choice-feedback" id="choiceFeedback"></div>
+      <div class="clue-zone" id="clueZone">
+        <div class="clue-thread"></div>
+        <div class="clue-grid">
+          ${c.books.map((b,i)=>`<article class="clue-card" data-clue="${i}"><div class="clue-no">LINE 0${i+1}｜證物</div><h3>《${b.title}》</h3><div class="clue-label">表面問題</div><div class="clue-question">${b.surface}</div><div class="clue-label">真正的問題</div><div class="clue-question clue-real">${b.real}</div><button class="clue-expand" data-expand="${i}">展開線索</button><div class="clue-more" id="clueMore${i}">${b.more}</div></article>`).join("")}
+        </div>
+      </div>
+      <section class="case-closeout" id="caseCloseout">
+        <div class="closeout-kicker">CASE REVIEW｜結案判斷</div><h3>${c.closeQ}</h3>
+        <div class="verdict-grid">${c.verdicts.map((v,i)=>`<button class="verdict-btn" data-verdict="${i}">${v}</button>`).join("")}</div>
+        <div class="verdict-response" id="verdictResponse"></div>
+        <div class="case-nav" id="caseNav"><button data-return-cases>返回六大案件</button><button class="next" data-next-case></button></div>
+        <div id="finalReport"></div>
+      </section>
+    </div>`);
+
+  document.querySelectorAll(".choice-btn").forEach(btn=>btn.addEventListener("click",()=>choosePerspective(btn.dataset.choice)));
+  document.querySelectorAll(".clue-expand").forEach(btn=>btn.addEventListener("click",()=>toggleClue(+btn.dataset.expand,btn)));
+  document.querySelectorAll(".verdict-btn").forEach(btn=>btn.addEventListener("click",()=>chooseVerdict(+btn.dataset.verdict,btn)));
+  const returnBtn=document.querySelector("[data-return-cases]"); if(returnBtn) returnBtn.addEventListener("click",closePanel);
+  const nextBtn=document.querySelector("[data-next-case]"); if(nextBtn) nextBtn.addEventListener("click",goNextCase);
+}
+function choosePerspective(choiceId){
+  const c=caseData[currentCaseKey], ch=c.choices.find(x=>x.id===choiceId); if(!ch) return;
+  progress[currentCaseKey]=progress[currentCaseKey]||{}; progress[currentCaseKey].choice=choiceId; saveProgress();
+  document.querySelectorAll(".choice-btn").forEach(b=>b.classList.toggle("selected",b.dataset.choice===choiceId));
+  const feedback=document.getElementById("choiceFeedback"); feedback.innerHTML=`<strong>你選擇從「${ch.title}」開始。</strong><br>${ch.reply}`; feedback.classList.add("show");
+  const zone=document.getElementById("clueZone"); zone.classList.add("show");
+  document.querySelectorAll(".clue-card").forEach((card,i)=>setTimeout(()=>card.classList.add("reveal"),260+i*260));
+  setTimeout(()=>document.getElementById("caseCloseout").classList.add("show"),1150);
+}
+function toggleClue(i,btn){const el=document.getElementById(`clueMore${i}`); const open=el.classList.toggle("show"); btn.textContent=open?"收起線索":"展開線索";}
+function chooseVerdict(i,btn){
+  const c=caseData[currentCaseKey]; progress[currentCaseKey]=progress[currentCaseKey]||{}; progress[currentCaseKey].verdict=i; progress[currentCaseKey].done=true; saveProgress();
+  document.querySelectorAll(".verdict-btn").forEach(b=>b.classList.toggle("selected",b===btn));
+  const res=document.getElementById("verdictResponse"); res.innerHTML=`<strong>你的判斷已記錄。</strong><br>${c.closeText}`; res.classList.add("show");
+  const nav=document.getElementById("caseNav"); nav.classList.add("show"); const idx=caseOrder.indexOf(currentCaseKey); const next=document.querySelector("[data-next-case]");
+  if(idx<caseOrder.length-1){next.textContent=`繼續追查 ${caseData[caseOrder[idx+1]].case} →`;}
+  else{next.textContent="查看調查報告";}
+  if(caseOrder.every(k=>progress[k]?.done)) renderReport();
+}
+function goNextCase(){const idx=caseOrder.indexOf(currentCaseKey); if(idx<caseOrder.length-1) openCaseByKey(caseOrder[idx+1]); else renderReport();}
+function renderReport(){
+  const el=document.getElementById("finalReport"); if(!el) return;
+  const choiceIds=caseOrder.map(k=>progress[k]?.choice).filter(Boolean); const afterCount=choiceIds.filter(x=>["after","remain","boundary","system","hope"].includes(x)).length;
+  const profile=afterCount>=3?"真相之後的觀測者":"線索與人性的追查者";
+  const desc=afterCount>=3?"你總會把目光留在答案之後：誰受傷、誰留下、誰還必須繼續生活。對你而言，推理不是把謎題關上，而是打開理解人的另一扇門。":"你既想知道事情如何發生，也不願把人物簡化成答案。你在證據與情感之間來回確認，習慣讓推理最後回到人的選擇。";
+  el.innerHTML=`<div class="report-card"><div class="report-kicker">INVESTIGATION REPORT｜調查報告</div><h3>${profile}</h3><p>${desc}</p></div>`;
+  el.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+document.querySelectorAll("[data-case]").forEach(btn=>btn.addEventListener("click",()=>openCaseByKey(btn.dataset.case)));
+document.querySelectorAll("[data-action]").forEach(btn=>btn.addEventListener("click",()=>{const action=btn.dataset.action;if(action==="books"){window.location.href="book-list.html";return;}if(action==="film"){openPanel(`<h2>影展專區</h2><p>正式版可放映片單、日期、原著作品、預告與映後提問。</p>`);}}));
+document.getElementById("universeBtn").addEventListener("click",()=>window.location.href="./works-universe.html");
+document.getElementById("quizBtn").addEventListener("click",()=>window.location.href="./reader-quiz.html");
+document.getElementById("closeBtn").addEventListener("click",closePanel);
+
+const params=new URLSearchParams(window.location.search); const requestedCase=params.get("case"); if(requestedCase)setTimeout(()=>openCaseByKey(requestedCase),120);
+createIdleTimer(()=>closePanel());
+// 展場情境：60 秒閒置只收起面板（Tier 1，門檻低，避免中斷還在思考的訪客）；
+// 完全沒有任何操作達 3 分鐘，才視為訪客已離開，清空調查進度讓下一位訪客從頭開始（Tier 2）。
+createIdleTimer(()=>resetProgress(), 180000);
+
+
+// ===== 首頁打字機 + CASE 依序淡入 =====
+const typewriterText = "你想先追查哪一種真相？";
+const typewriterTarget = document.getElementById("typewriter-title");
+const typingCursor = document.querySelector(".typing-cursor");
+const caseCards = [...document.querySelectorAll(".case-grid .case")];
+
+let typewriterIndex = 0;
+
+function revealCaseCards(){
+  caseCards.forEach((card, i)=>{
+    setTimeout(()=>{
+      card.classList.add("case-reveal");
+    }, i * 120);
+  });
+}
+
+function typeWriter(){
+  if(!typewriterTarget) return;
+
+  if(typewriterIndex < typewriterText.length){
+    typewriterTarget.textContent += typewriterText.charAt(typewriterIndex);
+    typewriterIndex++;
+    setTimeout(typeWriter, 130);
+  }else{
+    // 文字打完後先停一下，再讓六張 CASE 依序出現
+    setTimeout(revealCaseCards, 250);
+
+    // 游標再閃一下後消失
+    setTimeout(()=>{
+      if(typingCursor){
+        typingCursor.style.animation = "none";
+        typingCursor.style.opacity = "0";
+        typingCursor.style.transition = "opacity .35s ease";
+      }
+    }, 1400);
+  }
+}
+
+// 頁面開啟後稍微停頓再開始打字
+window.addEventListener("DOMContentLoaded", ()=>{
+  setTimeout(typeWriter, 650);
+});
+
+</script>
+</body>
+</html>

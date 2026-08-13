@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>你是哪一種東野圭吾讀者？</title>
+<style>
+:root{--bg:#efe9df;--paper:#f8f4ec;--ink:#1f1b18;--muted:#6b625b;--red:#9e2f2a;--line:#c9b9aa}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif;background:#171310;color:var(--ink)}body{overflow:hidden}
+button{font:inherit}
+.stage{width:100vw;height:100vh;min-height:720px;position:relative;overflow:hidden;background:linear-gradient(90deg,rgba(247,242,234,.96) 0 64%,rgba(239,230,218,.83) 100%),radial-gradient(circle at 82% 20%,rgba(255,240,211,.55),transparent 26%)}
+.app{position:relative;z-index:2;height:100%;padding:3.2vh 3.2vw;display:flex;flex-direction:column}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:20px}.brand small{display:block;color:var(--red);font-size:clamp(15px,1vw,24px);letter-spacing:.12em;margin-bottom:.35em}.brand h1{margin:0;font-size:clamp(30px,2.4vw,52px);font-weight:700}.top-actions{display:flex;gap:12px}.ghost{border:1px solid var(--line);background:rgba(255,255,255,.56);border-radius:14px;padding:13px 20px;cursor:pointer;min-height:52px}
+.screen{flex:1;display:none;align-items:center;justify-content:center}.screen.active{display:flex}
+.intro-card,.question-card,.result-card{width:min(1400px,92vw);max-height:78vh;overflow:auto;background:rgba(248,244,236,.94);border:1px solid rgba(115,91,72,.23);border-radius:28px;padding:clamp(30px,3.4vw,68px);box-shadow:0 24px 70px rgba(48,36,28,.15)}
+.intro-card{text-align:center}.kicker{color:var(--red);font-size:clamp(18px,1.2vw,26px);letter-spacing:.1em;font-weight:700}.big-title{font-size:clamp(50px,5vw,105px);line-height:1.05;margin:.22em 0 .18em}.lead{font-size:clamp(24px,1.8vw,38px);line-height:1.6;color:#39322d;max-width:980px;margin:0 auto 1.2em}.start-btn,.primary{border:0;background:var(--red);color:#fff;border-radius:18px;padding:20px 42px;font-size:clamp(24px,1.6vw,34px);font-weight:700;cursor:pointer;min-width:240px;min-height:76px;box-shadow:0 8px 22px rgba(158,47,42,.2)}
+.progress-wrap{margin-bottom:28px}.progress-label{display:flex;justify-content:space-between;color:var(--muted);font-size:clamp(16px,1vw,22px);margin-bottom:8px}.progress{height:10px;background:#ded4c8;border-radius:999px;overflow:hidden}.progress>div{height:100%;width:0;background:var(--red);transition:width .25s}.question{font-size:clamp(34px,3vw,62px);line-height:1.28;margin:.25em 0 .7em}
+.options{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.option{border:1px solid var(--line);background:rgba(255,255,255,.72);border-radius:18px;padding:20px 24px;min-height:108px;text-align:left;cursor:pointer;font-size:clamp(20px,1.35vw,29px);transition:.16s ease;display:flex;gap:16px;align-items:flex-start}.option:hover,.option:focus-visible{transform:translateY(-2px);border-color:var(--red);outline:3px solid rgba(158,47,42,.12)}.letter{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#eee4d8;color:var(--red);font-weight:700}
+.result-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:34px;align-items:start}.type-badge{display:inline-block;border-radius:999px;padding:9px 16px;color:#fff;background:var(--tone);font-size:20px;margin-bottom:16px}.result-name{font-size:clamp(48px,4vw,88px);line-height:1.1;margin:.1em 0 .3em}.result-copy{font-size:clamp(21px,1.35vw,30px);line-height:1.75;color:#403933}.quote{font-size:clamp(24px,1.7vw,36px);line-height:1.6;border-left:5px solid var(--tone);padding-left:22px;margin:25px 0}.recommend{border:1px solid var(--line);border-radius:22px;background:#fff;padding:26px}.recommend h3{margin:0 0 14px;font-size:28px}.book-list{display:grid;gap:12px}.book{padding:15px 17px;border-radius:14px;background:#f2ece3;font-size:23px}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.secondary{border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 22px;min-height:56px;cursor:pointer}.home-hint{text-align:center;color:#695f57;font-size:18px;margin-top:10px}
+@media (max-width:900px){.options,.result-grid{grid-template-columns:1fr}.app{padding:20px}.intro-card,.question-card,.result-card{max-height:82vh;padding:28px}}
+</style>
+<link rel="stylesheet" href="./css/theme.css">
+<script src="./js/common.js"></script>
+</head>
+<body class="page-quiz">
+<main class="stage"><div class="app">
+<header class="topbar">
+  <div class="brand"><small>《真相之後──東野圭吾的人性推理》</small><h1>讀者測驗</h1></div>
+  <div class="top-actions"><button class="ghost" id="restartTop">重新開始</button><button class="ghost" id="homeTop">回首頁</button></div>
+</header>
+
+<section class="screen active" id="intro">
+  <div class="intro-card">
+    <div class="kicker">6 QUESTIONS · 6 READING TYPES</div>
+    <div class="big-title">你是哪一種<br>東野圭吾讀者？</div>
+    <p class="lead">在真相揭曉之後，你最在意的是什麼？回答 6 題，找出最接近你的閱讀人格，也找到最適合你的展區與作品。</p>
+    <button class="start-btn" id="startBtn">開始測驗</button>
+  </div>
+</section>
+
+<section class="screen" id="quiz">
+  <div class="question-card">
+    <div class="progress-wrap">
+      <div class="progress-label"><span id="qCounter">第 1 / 6 題</span><span>選擇最接近你的答案</span></div>
+      <div class="progress"><div id="progressBar"></div></div>
+    </div>
+    <div class="question" id="questionText"></div>
+    <div class="options" id="options"></div>
+  </div>
+</section>
+
+<section class="screen" id="result">
+  <div class="result-card">
+    <div class="result-grid">
+      <div>
+        <div class="type-badge" id="resultCase">CASE 01</div>
+        <div class="result-name" id="resultName"></div>
+        <div class="quote" id="resultQuote"></div>
+        <div class="actions"><button class="primary" id="goCaseBtn">前往對應展區</button><button class="secondary" id="restartBtn">重新測驗</button></div>
+      </div>
+      <div>
+        <div class="result-copy" id="resultCopy"></div>
+        <div class="recommend">
+          <h3>推薦閱讀</h3>
+          <div class="book-list" id="books"></div>
+          <h3 style="margin-top:22px">最適合你的展區</h3>
+          <div class="book" id="zone"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="home-hint">觸控螢幕模式：60 秒未操作將自動回到測驗首頁</div>
+</div></main>
+
+<script>
+const questions=[
+{q:"你讀推理小說時，最先被什麼吸引？",a:["精密的犯案手法與推理過程","案件之後，留下來的人如何生活","人物之間難以割捨的感情","故事背後牽涉的社會與制度問題","青春時期那些微小卻劇烈的情緒","故事最後帶來的溫暖與希望"]},
+{q:"如果你知道了案件真相，你最想繼續追問的是：",a:["這個詭計究竟是怎麼完成的？","真相公開後，家人會怎麼辦？","他為什麼願意為另一個人做到這一步？","這件事是否反映了制度的問題？","如果這件事發生在年少時，我會怎麼選擇？","有沒有可能在傷害之後，仍然重新開始？"]},
+{q:"你比較喜歡哪一種故事氣氛？",a:["冷靜、理性、步步逼近答案","低調、沉穩、帶著餘韻","壓抑、濃烈、充滿情感拉扯","尖銳、辯證、讓人不安思考","青澀、敏感、帶著成長陣痛","溫柔、療癒、仍然保有光亮"]},
+{q:"如果公開真相會傷害一位無辜的人，你比較傾向：",a:["還是要公開，因為真相不能被模糊","先想想留下來的人能不能承受","視那份感情有多深而定","應該交由法律與制度判斷","我會想到人在年輕時其實很容易犯錯","希望找到一個能減少傷害的方式"]},
+{q:"你最容易被哪一種角色打動？",a:["聰明到近乎冷靜的解謎者","看似平靜卻承受巨大失落的人","因愛而痛苦、矛盾、掙扎的人","在不公平體制中努力尋求答案的人","在成長中受傷、迷惘的少年少女","在困境中仍願意相信善意的人"]},
+{q:"如果要你現在立刻選一本來讀，你最希望這本書帶給你：",a:["「原來還能這樣推理！」的驚嘆","「案件結束後的人生更難」的理解","「愛與罪真的很難分開」的震撼","「真正該被審判的是誰？」的思辨","「原來青春裡的痛會留下這麼久」的共鳴","「即使世界不完美，仍然可以溫柔活下去」的安慰"]}
+];
+
+const types=[
+{name:"理性追跡者",case:"CASE 01｜理性",tone:"#6f6051",zone:"理性可以解開一切嗎？",books:["《嫌疑犯X的獻身》","《聖女的救贖》","《盛夏方程式》"],quote:"你想知道答案，也想知道答案無法解釋的部分。",copy:"你最在意的是「事情究竟是如何發生的」。你享受邏輯被一步步推進、線索逐漸拼合的過程，也相信真相應該被清楚證明。但你真正會被打動的，不只是完美解答，而是當理性走到盡頭時，人性開始浮現的那一刻。"},
+{name:"餘波觀察者",case:"CASE 02｜餘波",tone:"#88664a",zone:"死亡之後，留下來的是誰？",books:["《新參者》","《紅色手指》","《麒麟之翼》"],quote:"你看見的，不只是案件，而是案件之後的人生。",copy:"比起找出兇手，你更在意案件結束之後留下來的人。你會去看那些表面平靜的人，如何在悲傷、祕密與失落之中繼續生活。對你來說，真相不是終點，而是一連串情感餘波的開始。"},
+{name:"情感探索者",case:"CASE 03｜愛",tone:"#995b68",zone:"愛，能不能成為犯罪的理由？",books:["《白夜行》","《秘密》","《幻夜》"],quote:"你想理解的，不只是罪，而是罪裡面那份無法切開的情感。",copy:"你最容易被愛、犧牲、佔有與守護這些情感命題吸引。你會一直追問：一個人究竟可以為另一個人做到什麼地步？你知道愛不一定能拯救人，有時反而讓人走向更深的黑暗，而你願意直視那份複雜。"},
+{name:"正義辯證者",case:"CASE 04｜正義",tone:"#7b6648",zone:"當社會製造了罪犯",books:["《徬徨之刃》","《空洞的十字架》","《白金數據》"],quote:"你在意的不只是誰犯了罪，而是這個社會如何共同完成了它。",copy:"你在閱讀時不會只停留在個人命運，你會去思考法律、制度、科技與社會結構如何影響一場悲劇。你常常讀完之後還停不下來，因為你知道：有時該被質問的，不只是一個兇手。"},
+{name:"青春回望者",case:"CASE 05｜青春",tone:"#66765f",zone:"青春從來不只是青春",books:["《放學後》","《同級生》","《畢業》"],quote:"你知道，青春裡那些看似微小的事，往往最能改變一個人。",copy:"你特別容易被校園、友情、競爭、嫉妒與成長中的脆弱打動。因為你知道，青春從來不是輕飄飄的，而是會留下很深痕跡的人生時期。你讀這類故事時，常常像是在重新看見自己曾經走過的某段年少時光。"},
+{name:"溫柔解謎者",case:"CASE 06｜希望",tone:"#5f7489",zone:"沒有命案，也可以是東野圭吾",books:["《解憂雜貨店》","《祈念之樹》","《時生》"],quote:"你願意走進故事，不只是為了答案，也是為了帶走一點光。",copy:"你相信故事除了揭露黑暗，也可以帶來理解與安慰。你不一定最在意誰是兇手，而更在意人與人之間是否還有重新連結的可能。對你來說，有些謎題真正的答案，不是破解，而是理解。"}
+];
+
+let qi=0,scores=[0,0,0,0,0,0],lastChoice=0,currentResultIndex=0;
+const intro=document.getElementById("intro"),quiz=document.getElementById("quiz"),result=document.getElementById("result"),qText=document.getElementById("questionText"),opts=document.getElementById("options"),qCounter=document.getElementById("qCounter"),bar=document.getElementById("progressBar");
+function show(s){[intro,quiz,result].forEach(x=>x.classList.remove("active"));s.classList.add("active")}
+function renderQ(){const item=questions[qi];qText.textContent=item.q;qCounter.textContent=`第 ${qi+1} / ${questions.length} 題`;bar.style.width=`${(qi/questions.length)*100}%`;opts.innerHTML="";item.a.forEach((text,i)=>{const b=document.createElement("button");b.className="option";b.type="button";b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span><span>${text}</span>`;b.addEventListener("click",()=>{scores[i]++;lastChoice=i;qi++;if(qi<questions.length){renderQ()}else{renderResult()}});opts.appendChild(b)})}
+function renderResult(){const max=Math.max(...scores);const tied=scores.map((s,i)=>s===max?i:-1).filter(i=>i>=0);const idx=tied.includes(lastChoice)?lastChoice:tied[0];currentResultIndex=idx;const t=types[idx];document.getElementById("resultCase").textContent=t.case;document.getElementById("resultCase").style.background=t.tone;document.getElementById("resultName").textContent=t.name;document.getElementById("resultQuote").textContent=t.quote;document.getElementById("resultQuote").style.borderColor=t.tone;document.getElementById("resultCopy").textContent=t.copy;document.getElementById("zone").textContent=t.zone;document.getElementById("books").innerHTML=t.books.map(b=>`<div class="book">${b}</div>`).join("");document.querySelector(".result-card").style.setProperty("--tone",t.tone);bar.style.width="100%";show(result)}
+function reset(){qi=0;scores=[0,0,0,0,0,0];lastChoice=0;show(intro)}
+document.getElementById("startBtn").addEventListener("click",()=>{qi=0;scores=[0,0,0,0,0,0];lastChoice=0;show(quiz);renderQ()});
+document.getElementById("restartBtn").addEventListener("click",reset);
+document.getElementById("restartTop").addEventListener("click",reset);
+document.getElementById("homeTop").addEventListener("click",()=>window.location.href="./index.html");
+document.getElementById("goCaseBtn").addEventListener("click",()=>{
+  const caseKeys=["reason","after","love","justice","youth","hope"];
+  const key=caseKeys[currentResultIndex] || "reason";
+  window.location.href=`./index.html?case=${key}`;
+});
+createIdleTimer(reset);
+</script>
+</body></html>
