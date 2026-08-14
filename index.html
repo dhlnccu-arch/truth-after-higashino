@@ -554,6 +554,78 @@ button{font:inherit;color:inherit}
   transition:opacity .35s ease, transform .35s ease;
 }
 
+
+/* ===== 三語架構｜Language Switcher ===== */
+.language-switcher{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.lang-btn{
+  min-height:44px;
+  padding:9px 13px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.55);
+  background:rgba(38,31,27,.48);
+  color:#fff;
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  backdrop-filter:blur(8px);
+}
+
+.lang-btn[aria-pressed="true"]{
+  background:#fff;
+  color:#2c2722;
+  border-color:#fff;
+}
+
+@media (max-width:768px){
+  .top-actions{
+    width:100%;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .language-switcher{
+    order:1;
+  }
+
+  #restartInvestigationBtn{
+    order:2;
+  }
+
+  .lang-btn{
+    min-height:42px;
+    padding:8px 11px;
+    font-size:13px;
+  }
+}
+
+/* 英文版字級預留：第二階段翻譯完成後會直接生效 */
+html[lang="en"] .case strong{
+  letter-spacing:0;
+}
+
+@media (max-width:768px){
+  html[lang="en"] .case strong{
+    font-size:19px;
+    line-height:1.28;
+    word-break:normal;
+    overflow-wrap:anywhere;
+  }
+
+  html[lang="ja"] .case strong{
+    font-size:20px;
+    line-height:1.3;
+  }
+}
+
 </style>
 <link rel="stylesheet" href="./css/theme.css">
 
@@ -583,13 +655,18 @@ button{font:inherit;color:inherit}
   <div class="app">
     <header class="top">
       <section class="hero">
-        <div class="eyebrow">2026年9-10月主題書展暨影展</div>
-        <div class="title">真相之後</div>
-        <div class="subtitle">東野圭吾的人性推理</div>
-        <div class="tagline">解開謎題的瞬間不是結束，而是對人性拷問的開始。</div>
+        <div class="eyebrow" data-i18n="hero.eyebrow">2026年9-10月主題書展暨影展</div>
+        <div class="title" data-i18n="hero.title">真相之後</div>
+        <div class="subtitle" data-i18n="hero.subtitle">東野圭吾的人性推理</div>
+        <div class="tagline" data-i18n="hero.tagline">解開謎題的瞬間不是結束，而是對人性的拷問開始。</div>
       </section>
       <div class="top-actions">
-        <button class="top-btn" id="restartInvestigationBtn">↺ 重新展開調查</button>
+        <div class="language-switcher" role="group" aria-label="Language">
+          <button class="lang-btn" type="button" data-lang="zh-Hant" aria-pressed="true">繁中</button>
+          <button class="lang-btn" type="button" data-lang="ja" aria-pressed="false">日本語</button>
+          <button class="lang-btn" type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <button class="top-btn" id="restartInvestigationBtn" data-i18n="common.restart">↺ 重新展開調查</button>
       </div>
     </header>
 
@@ -631,15 +708,15 @@ button{font:inherit;color:inherit}
     </section>
 
     <footer class="footer">
-      <button id="universeBtn">作品宇宙</button>
-      <button id="quizBtn">讀者測驗</button>
-      <button data-action="film">影展專區</button>
-      <button data-action="books">完整書單</button>
+      <button id="universeBtn" data-i18n="nav.universe">作品宇宙</button>
+      <button id="quizBtn" data-i18n="nav.quiz">讀者測驗</button>
+      <button data-action="film" data-i18n="nav.film">影展專區</button>
+      <button data-action="books" data-i18n="nav.books">完整書單</button>
     </footer>
   </div>
 
   <section class="panel" id="panel" aria-live="polite">
-    <button class="close" id="closeBtn">關閉</button>
+    <button class="close" id="closeBtn" data-i18n="common.close">關閉</button>
     <div id="panelContent"></div>
   </section>
 
@@ -661,6 +738,154 @@ button{font:inherit;color:inherit}
 </main>
 
 <script>
+
+
+/* ============================================================
+   三語架構 v1
+   優先順序：
+   1. URL ?lang=zh / ja / en
+   2. localStorage truthAfterLang
+   3. 預設繁體中文
+   第二階段會把六大 CASE 與最終報告全文移入這個翻譯架構。
+   ============================================================ */
+const LANGUAGE_CONFIG={
+  "zh-Hant":{query:"zh",label:"繁中"},
+  "ja":{query:"ja",label:"日本語"},
+  "en":{query:"en",label:"EN"}
+};
+
+const i18n={
+  "zh-Hant":{
+    hero:{
+      eyebrow:"2026年9-10月主題書展暨影展",
+      title:"真相之後",
+      subtitle:"東野圭吾的人性推理",
+      tagline:"解開謎題的瞬間不是結束，而是對人性的拷問開始。",
+      prompt:"你想先追查哪一種真相？"
+    },
+    nav:{
+      universe:"作品宇宙",
+      quiz:"讀者測驗",
+      film:"影展專區",
+      books:"完整書單"
+    },
+    common:{
+      close:"關閉",
+      restart:"↺ 重新展開調查",
+      progressPrefix:"調查進度：已完成",
+      progressSuffix:"/ 6"
+    }
+  },
+
+  /* 第一階段先建立可切換架構。
+     第二階段會補上完整日文文案，目前未翻譯欄位會自動 fallback 到繁中。 */
+  "ja":{
+    hero:{
+      title:"真実のその先",
+      subtitle:"東野圭吾が描く人間性とミステリー",
+      prompt:"あなたは、どの真実から追いますか？"
+    },
+    nav:{
+      universe:"作品世界",
+      quiz:"読者診断",
+      film:"映画特集",
+      books:"全作品リスト"
+    },
+    common:{
+      close:"閉じる",
+      restart:"↺ 調査をやり直す",
+      progressPrefix:"調査進捗：完了",
+      progressSuffix:"/ 6"
+    }
+  },
+
+  /* 第一階段先建立可切換架構。
+     第二階段會補上完整英文文案，目前未翻譯欄位會自動 fallback 到繁中。 */
+  "en":{
+    hero:{
+      title:"Beyond the Truth",
+      subtitle:"Keigo Higashino: Mystery and Human Nature",
+      prompt:"Which truth will you investigate first?"
+    },
+    nav:{
+      universe:"Works Universe",
+      quiz:"Reader Quiz",
+      film:"Film Program",
+      books:"Full Book List"
+    },
+    common:{
+      close:"Close",
+      restart:"↺ Restart Investigation",
+      progressPrefix:"Investigation progress:",
+      progressSuffix:"of 6 completed"
+    }
+  }
+};
+
+function normalizeLang(value){
+  if(!value) return null;
+  const v=value.toLowerCase();
+  if(v==="zh" || v==="zh-tw" || v==="zh-hant") return "zh-Hant";
+  if(v==="ja" || v==="jp") return "ja";
+  if(v==="en" || v.startsWith("en-")) return "en";
+  return null;
+}
+
+function getNested(obj,path){
+  return path.split(".").reduce((cur,key)=>cur && cur[key]!==undefined ? cur[key] : undefined,obj);
+}
+
+function t(path,lang=currentLang){
+  return getNested(i18n[lang],path) ?? getNested(i18n["zh-Hant"],path) ?? path;
+}
+
+function resolveInitialLanguage(){
+  const params=new URLSearchParams(window.location.search);
+  return normalizeLang(params.get("lang"))
+    || normalizeLang(localStorage.getItem("truthAfterLang"))
+    || "zh-Hant";
+}
+
+let currentLang=resolveInitialLanguage();
+
+function updateLanguageButtons(){
+  document.querySelectorAll("[data-lang]").forEach(btn=>{
+    btn.setAttribute("aria-pressed",String(btn.dataset.lang===currentLang));
+  });
+}
+
+function applyStaticTranslations(){
+  document.documentElement.lang=currentLang;
+
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    el.textContent=t(el.dataset.i18n);
+  });
+
+  updateLanguageButtons();
+  updateHomeProgress();
+}
+
+function setLanguage(lang,{updateUrl=true}={}){
+  const normalized=normalizeLang(lang);
+  if(!normalized) return;
+
+  currentLang=normalized;
+  localStorage.setItem("truthAfterLang",currentLang);
+
+  if(updateUrl){
+    const url=new URL(window.location.href);
+    url.searchParams.set("lang",LANGUAGE_CONFIG[currentLang].query);
+    history.replaceState(null,"",url);
+  }
+
+  applyStaticTranslations();
+  resetTypewriterForLanguage();
+}
+
+document.querySelectorAll("[data-lang]").forEach(btn=>{
+  btn.addEventListener("click",()=>setLanguage(btn.dataset.lang));
+});
+
 
 const caseOrder=["reason","after","love","justice","youth","hope"];
 const caseData={
@@ -786,7 +1011,13 @@ function closePanel(){panel.classList.remove("open","case-mode");document.body.c
 function updateHomeProgress(){
   const doneCount=caseOrder.filter(k=>progress[k]?.done).length;
   const progressEl=document.getElementById("homeProgress");
-  if(progressEl) progressEl.textContent=`調查進度：已完成 ${doneCount} / 6`;
+  if(progressEl){
+    if(currentLang==="en"){
+      progressEl.textContent=`${t("common.progressPrefix")} ${doneCount} ${t("common.progressSuffix")}`;
+    }else{
+      progressEl.textContent=`${t("common.progressPrefix")} ${doneCount} ${t("common.progressSuffix")}`;
+    }
+  }
 
   document.querySelectorAll("[data-case]").forEach(btn=>{
     const key=btn.dataset.case;
@@ -1161,10 +1392,17 @@ document.getElementById("restartConfirmBtn").addEventListener("click",()=>{
 restartConfirm.addEventListener("click",e=>{if(e.target===restartConfirm) closeRestartConfirm();});
 
 
+
+function withCurrentLang(path){
+  const url=new URL(path,window.location.href);
+  url.searchParams.set("lang",LANGUAGE_CONFIG[currentLang].query);
+  return `${url.pathname.split("/").pop()}${url.search}`;
+}
+
 document.querySelectorAll("[data-case]").forEach(btn=>btn.addEventListener("click",()=>openCaseByKey(btn.dataset.case)));
-document.querySelectorAll("[data-action]").forEach(btn=>btn.addEventListener("click",()=>{const action=btn.dataset.action;if(action==="books"){window.location.href="book-list.html";return;}if(action==="film"){openPanel(`<h2>影展專區</h2><p>正式版可放映片單、日期、原著作品、預告與映後提問。</p>`);}}));
-document.getElementById("universeBtn").addEventListener("click",()=>window.location.href="./works-universe.html");
-document.getElementById("quizBtn").addEventListener("click",()=>window.location.href="./reader-quiz.html");
+document.querySelectorAll("[data-action]").forEach(btn=>btn.addEventListener("click",()=>{const action=btn.dataset.action;if(action==="books"){window.location.href=withCurrentLang("book-list.html");return;}if(action==="film"){openPanel(`<h2>影展專區</h2><p>正式版可放映片單、日期、原著作品、預告與映後提問。</p>`);}}));
+document.getElementById("universeBtn").addEventListener("click",()=>window.location.href=withCurrentLang("works-universe.html"));
+document.getElementById("quizBtn").addEventListener("click",()=>window.location.href=withCurrentLang("reader-quiz.html"));
 document.getElementById("closeBtn").addEventListener("click",closePanel);
 
 const params=new URLSearchParams(window.location.search); const requestedCase=params.get("case"); if(requestedCase)setTimeout(()=>openCaseByKey(requestedCase),120);
@@ -1180,7 +1418,7 @@ if(!isMobileDevice){
 
 
 // ===== 首頁打字機 + CASE 依序淡入 =====
-const typewriterText = "你想先追查哪一種真相？";
+let typewriterText = t("hero.prompt");
 const typewriterTarget = document.getElementById("typewriter-title");
 const typingCursor = document.querySelector(".typing-cursor");
 const caseCards = [...document.querySelectorAll(".case-grid .case")];
@@ -1203,6 +1441,31 @@ function revealCaseCards(){
       card.classList.add("case-reveal");
     }, 180 + i * 120);
   });
+}
+
+
+function resetTypewriterForLanguage(){
+  typewriterText=t("hero.prompt");
+  typewriterIndex=0;
+
+  if(typewriterTarget){
+    typewriterTarget.textContent="";
+  }
+
+  if(typingCursor){
+    typingCursor.style.animation="cursorBlink .75s steps(1,end) infinite";
+    typingCursor.style.opacity="1";
+    typingCursor.style.transition="";
+  }
+
+  document.body.classList.remove("home-intro-finished");
+
+  const progressEl=document.getElementById("homeProgress");
+  if(progressEl) progressEl.classList.remove("progress-reveal");
+
+  caseCards.forEach(card=>card.classList.remove("case-reveal"));
+
+  setTimeout(typeWriter,180);
 }
 
 function typeWriter(){
@@ -1229,8 +1492,9 @@ function typeWriter(){
 
 // 頁面開啟後稍微停頓再開始打字
 window.addEventListener("DOMContentLoaded", ()=>{
-  updateHomeProgress();
-  setTimeout(typeWriter, 650);
+  applyStaticTranslations();
+  typewriterText=t("hero.prompt");
+  setTimeout(typeWriter,650);
 });
 
 </script>
