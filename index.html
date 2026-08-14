@@ -520,6 +520,26 @@ button{font:inherit;color:inherit}
   transition:opacity .45s ease, transform .45s ease;
 }
 
+
+/* ===== 手機 CASE 標題寬度最終修正 ===== */
+@media (max-width:768px){
+  .case strong{
+    font-size:21px;
+    line-height:1.3;
+    margin-bottom:7px;
+    padding-right:0;
+    word-break:keep-all;
+    overflow-wrap:normal;
+  }
+
+  .case-complete-badge{
+    position:static;
+    display:inline-flex;
+    margin-top:10px;
+    width:max-content;
+  }
+}
+
 </style>
 <link rel="stylesheet" href="./css/theme.css">
 <script src="./js/common.js"></script>
