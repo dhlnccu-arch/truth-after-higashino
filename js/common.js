@@ -19,7 +19,7 @@ function createIdleTimer(onIdle, timeoutMs = 60000) {
     clearTimeout(timer);
     timer = setTimeout(onIdle, timeoutMs);
   }
-  ["pointerdown", "touchstart", "keydown", "mousemove"].forEach(ev =>
+  ["pointerdown", "keydown", "wheel"].forEach(ev =>
     document.addEventListener(ev, reset, { passive: true })
   );
   reset();
@@ -52,7 +52,15 @@ function initCatalogModal({ modalId, qrImgId, urlId, titleId, editionId, closeId
   function show({ title, qr, url, edition } = {}) {
     if (titleEl && title !== undefined) titleEl.textContent = `《${title}》`;
     if (editionEl && edition !== undefined) editionEl.textContent = edition;
-    if (qrEl) qrEl.src = qr || "";
+    if (qrEl) {
+      if (qr) {
+        qrEl.src = qr;
+        qrEl.style.display = "";
+      } else {
+        qrEl.removeAttribute("src");
+        qrEl.style.display = "none";
+      }
+    }
     if (urlEl) urlEl.textContent = url || "";
     modal.classList.add("show");
     modal.setAttribute("aria-hidden", "false");
@@ -64,8 +72,15 @@ function initCatalogModal({ modalId, qrImgId, urlId, titleId, editionId, closeId
   }
 
   if (closeBtn) closeBtn.addEventListener("click", hide);
+
   modal.addEventListener("click", e => {
     if (e.target === modal) hide();
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && modal.classList.contains("show")) {
+      hide();
+    }
   });
 
   return { show, hide };
