@@ -540,6 +540,23 @@ button{font:inherit;color:inherit}
   }
 }
 
+
+/* ===== 重新展開調查按鈕顯示邏輯 ===== */
+#restartInvestigationBtn{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translateY(-6px);
+}
+
+#restartInvestigationBtn.restart-visible{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translateY(0);
+  transition:opacity .35s ease, transform .35s ease;
+}
+
 </style>
 <link rel="stylesheet" href="./css/theme.css">
 <script src="./js/common.js"></script>
@@ -778,6 +795,12 @@ function updateHomeProgress(){
       badge.remove();
     }
   });
+
+  const restartBtn=document.getElementById("restartInvestigationBtn");
+  if(restartBtn){
+    const introFinished=document.body.classList.contains("home-intro-finished");
+    restartBtn.classList.toggle("restart-visible",doneCount>0 && introFinished);
+  }
 }
 
 function getNextUnfinishedCase(fromKey){
@@ -1161,6 +1184,9 @@ function revealCaseCards(){
   if(progressEl){
     progressEl.classList.add("progress-reveal");
   }
+
+  document.body.classList.add("home-intro-finished");
+  updateHomeProgress();
 
   caseCards.forEach((card, i)=>{
     setTimeout(()=>{
