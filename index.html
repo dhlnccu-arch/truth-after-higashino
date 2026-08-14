@@ -684,6 +684,116 @@ function goNextCase(){
   }
 }
 
+
+function renderReport(){
+  const el=document.getElementById("finalReport");
+  if(!el) return;
+
+  // 第一層：六個 CASE 的「調查視角」統一映射到三個軸：
+  // A = 線索／事實、B = 人物／動機、C = 餘波／價值
+  const axisMap={
+    reason:{how:"A",why:"B",after:"C"},
+    after:{trace:"A",secret:"B",remain:"C"},
+    love:{act:"A",why:"B",boundary:"C"},
+    justice:{law:"A",hurt:"B",system:"C"},
+    youth:{event:"A",pressure:"B",after:"C"},
+    hope:{mystery:"A",wish:"B",hope:"C"}
+  };
+
+  const scores={A:0,B:0,C:0};
+  caseOrder.forEach(key=>{
+    const choice=progress[key]?.choice;
+    const axis=axisMap[key]?.[choice];
+    if(axis) scores[axis]++;
+  });
+
+  const maxScore=Math.max(scores.A,scores.B,scores.C);
+  const leaders=Object.keys(scores).filter(k=>scores[k]===maxScore);
+
+  let profile,desc;
+  if(leaders.length!==1){
+    profile="線索與人性的調查者";
+    desc="你不願意只用一種方式理解真相。你會追查線索，也會理解動機；你在乎事情如何發生，同時也會把目光留給那些承受後果的人。對你而言，推理不是在「理性」與「人性」之間二選一，而是在兩者之間反覆確認：答案是否完整，又是否遺漏了某個人的處境。";
+  }else if(leaders[0]==="A"){
+    profile="理性的追跡者";
+    desc="你總是先問：「事情究竟是怎麼發生的？」面對複雜的人性，你不急著下結論，而是希望先找到足夠的證據、還原事件的脈絡。對你而言，理解一個人之前，首先要讓事實站得住腳。但走完六個 CASE，你也發現：真相能證明發生了什麼，卻未必能替人的選擇找到唯一答案。";
+  }else if(leaders[0]==="B"){
+    profile="人心的追問者";
+    desc="你很少滿足於知道誰做了什麼。你真正想追查的，是一個人為何沉默、為何守護、為何跨越界線，又為何在某個瞬間做出那個選擇。對你而言，理解動機並不等於原諒，而是拒絕把任何人簡化成「好人」或「壞人」。真相之所以複雜，正因為每個選擇背後，都有一段沒有被說完的故事。";
+  }else{
+    profile="真相之後的觀測者";
+    desc="當別人還在尋找答案，你的目光已經停在答案之後。你在意誰受了傷、誰被留下、誰必須承擔後果，以及一個已經發生的選擇會留下多久。對你而言，推理真正困難的部分，往往不是破解謎題，而是面對真相被揭開之後，人還要如何繼續生活。";
+  }
+
+  // 第二層：六個 CASE 的結案二選一，形成「判斷方式」
+  const verdicts=caseOrder
+    .map(k=>progress[k]?.verdict)
+    .filter(v=>v===0 || v===1);
+
+  const verdict0=verdicts.filter(v=>v===0).length;
+  const verdict1=verdicts.filter(v=>v===1).length;
+
+  let judgementName,judgementDesc;
+  if(verdict0>verdict1){
+    judgementName="理解與修復";
+    judgementDesc="你願意讓情境、動機與人的改變進入判斷。對你而言，責任仍然重要，但答案不必永遠停在懲罰或定罪；理解有時也是重新往前走的起點。";
+  }else if(verdict1>verdict0){
+    judgementName="界線與責任";
+    judgementDesc="你願意理解人的處境，卻不會因為理解就取消責任。你對「事情有原因，所以可以原諒」保持警覺，也相信有些界線不能因情感而消失。";
+  }else{
+    judgementName="保留判斷";
+    judgementDesc="你沒有固定站在同一種答案裡。面對不同案件，你會重新衡量動機、傷害、制度與後果。對你而言，人性的問題往往沒有可以套用六次的同一個答案。";
+  }
+
+  const pct=n=>Math.round((n/6)*100);
+
+  el.innerHTML=`
+    <div class="report-card">
+      <div class="report-kicker">INVESTIGATION REPORT｜最終調查報告</div>
+      <h3>${profile}</h3>
+
+      <div class="report-summary">
+        <div>
+          <div class="report-profile-copy">${desc}</div>
+
+          <div class="report-judgement">
+            <div class="report-judgement-title">你的判斷方式</div>
+            <h4>${judgementName}</h4>
+            <p>${judgementDesc}</p>
+          </div>
+
+          <div class="report-closing">
+            你的六件案件已完成。真相沒有消失，只是你開始看見，答案之外還有人。
+          </div>
+        </div>
+
+        <div class="report-axis-box">
+          <div class="report-axis-title">你的調查傾向</div>
+
+          <div class="report-axis-row">
+            <div class="report-axis-label">線索與事實</div>
+            <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.A)}%"></div></div>
+            <div class="report-axis-score">${scores.A}</div>
+          </div>
+
+          <div class="report-axis-row">
+            <div class="report-axis-label">人物與動機</div>
+            <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.B)}%"></div></div>
+            <div class="report-axis-score">${scores.B}</div>
+          </div>
+
+          <div class="report-axis-row">
+            <div class="report-axis-label">餘波與價值</div>
+            <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.C)}%"></div></div>
+            <div class="report-axis-score">${scores.C}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  el.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
 /* ===== 重新展開調查：讀者可主動清空進度，探索不同的可能 ===== */
 const toastEl=document.getElementById("toast");
 function showToast(msg){
