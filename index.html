@@ -493,9 +493,67 @@ function chooseVerdict(i,btn){
 function goNextCase(){const idx=caseOrder.indexOf(currentCaseKey); if(idx<caseOrder.length-1) openCaseByKey(caseOrder[idx+1]); else renderReport();}
 function renderReport(){
   const el=document.getElementById("finalReport"); if(!el) return;
-  const choiceIds=caseOrder.map(k=>progress[k]?.choice).filter(Boolean); const afterCount=choiceIds.filter(x=>["after","remain","boundary","system","hope"].includes(x)).length;
-  const profile=afterCount>=3?"真相之後的觀測者":"線索與人性的追查者";
-  const desc=afterCount>=3?"你總會把目光留在答案之後：誰受傷、誰留下、誰還必須繼續生活。對你而言，推理不是把謎題關上，而是打開理解人的另一扇門。":"你既想知道事情如何發生，也不願把人物簡化成答案。你在證據與情感之間來回確認，習慣讓推理最後回到人的選擇。";
+
+  // 每案的三選一分屬三個傾向軸：線索(clue) / 動機(motive) / 餘波(after)
+  const AXIS_MAP={
+    how:"clue",trace:"clue",act:"clue",law:"clue",event:"clue",mystery:"clue",
+    why:"motive",secret:"motive",hurt:"motive",pressure:"motive",wish:"motive",
+    after:"after",remain:"after",boundary:"after",system:"after",hope:"after"
+  };
+  const counts={clue:0,motive:0,after:0};
+  caseOrder.forEach(k=>{
+    const axis=AXIS_MAP[progress[k]?.choice];
+    if(axis) counts[axis]++;
+  });
+
+  // 每案結案的二選一，用來微調同一種人格底下的文字語氣，而不是決定主要人格
+  let verdict0=0,verdict1=0;
+  caseOrder.forEach(k=>{
+    const v=progress[k]?.verdict;
+    if(v===0) verdict0++; else if(v===1) verdict1++;
+  });
+  const verdictLean=verdict0>verdict1?"A":verdict1>verdict0?"B":"mixed";
+
+  // 三軸中最高分明顯領先（差 2 以上）才判定為單一傾向型，否則歸為混合型
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const dominant=(sorted[0][1]-sorted[1][1])>=2?sorted[0][0]:"mixed";
+
+  const PROFILES={
+    clue:{
+      name:"理性的解謎者",
+      base:"你習慣先把地基打穩——先確認發生了什麼、怎麼發生的，才願意往下推進。你相信邏輯值得被信任，也相信答案應該被清楚證明。",
+      tailA:"但你並不停在證明本身；當謎題解開，你願意相信答案也能成為往前走的起點。",
+      tailB:"只是你也很清楚，證明得再完整，也不代表一切都能被原諒或抹平。",
+      tailMixed:"你在「相信答案」與「保留懷疑」之間反覆拿捏，不急著讓推理停在一個立場。"
+    },
+    motive:{
+      name:"人心的追問者",
+      base:"比起手法本身，你更想知道一個人為什麼願意走到那一步。你相信動機能讓案件變得可以理解，即使理解未必等於認同。",
+      tailA:"你也傾向相信，理解之後還有轉圜的空間——原因清楚了，責任或許也能被重新看待。",
+      tailB:"但你不會把理解當成通行證；知道一個人為什麼這麼做，跟原諒他，對你來說始終是兩件事。",
+      tailMixed:"你願意聽完整個理由，卻也留一部分自己，不急著替任何人下判斷。"
+    },
+    after:{
+      name:"真相之後的觀測者",
+      base:"你總會把目光留在答案之後：誰受傷、誰留下、誰還必須繼續生活。對你而言，推理不是把謎題關上，而是打開理解人的另一扇門。",
+      tailA:"你願意理解制度、動機與選擇背後的複雜性，也相信理解可能成為繼續往前的起點。",
+      tailB:"你願意理解人的處境，卻不急著因此原諒。對你而言，同理與責任可以同時存在。",
+      tailMixed:"你在「往前走」與「留在原地陪伴」之間，還沒有給自己一個固定答案。"
+    },
+    mixed:{
+      name:"線索與人性的追查者",
+      base:"你既想知道事情如何發生，也不願把人物簡化成答案。你在證據與情感之間來回確認，習慣讓推理最後回到人的選擇。",
+      tailA:"整體而言，你比較願意相信：只要看得夠仔細，人心和真相一樣，最終都能找到一個可以安放的位置。",
+      tailB:"整體而言，你比較清楚：看得再仔細，有些事還是無法被完全解釋，也不需要勉強被原諒。",
+      tailMixed:"你沒有固定的立場，比較享受在每一案裡重新判斷一次。"
+    }
+  };
+
+  const p=PROFILES[dominant];
+  const tail=verdictLean==="A"?p.tailA:verdictLean==="B"?p.tailB:p.tailMixed;
+  const profile=p.name;
+  const desc=`${p.base}${tail}`;
+
   el.innerHTML=`<div class="report-card"><div class="report-kicker">INVESTIGATION REPORT｜調查報告</div><h3>${profile}</h3><p>${desc}</p></div>`;
   el.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
