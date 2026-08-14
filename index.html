@@ -220,10 +220,21 @@ button{font:inherit}
 /* ===== 非線性調查流程：首頁完成狀態 ===== */
 .home-progress{
   margin:-.2vh 0 1.1vh;
+  min-height:1.4em;
   font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
   font-size:clamp(15px,.95vw,20px);
   font-weight:800;
   color:var(--muted);
+  opacity:0;
+  transform:translateY(8px);
+  visibility:hidden;
+  transition:opacity .4s ease, transform .4s ease, visibility 0s linear .4s;
+}
+.home-progress.show{
+  opacity:1;
+  transform:translateY(0);
+  visibility:visible;
+  transition:opacity .4s ease, transform .4s ease;
 }
 .case.completed{
   border-color:rgba(158,47,42,.42);
@@ -523,6 +534,11 @@ function updateHomeProgress(){
       badge.remove();
     }
   });
+}
+
+function revealHomeProgress(){
+  const progressEl=document.getElementById("homeProgress");
+  if(progressEl) progressEl.classList.add("show");
 }
 
 function getNextUnfinishedCase(fromKey){
@@ -864,8 +880,9 @@ function typeWriter(){
     typewriterIndex++;
     setTimeout(typeWriter, 130);
   }else{
-    // 文字打完後先停一下，再讓六張 CASE 依序出現
-    setTimeout(revealCaseCards, 250);
+    // 文字打完後，先讓調查進度淡入，再讓六張 CASE 依序出現
+    setTimeout(revealHomeProgress, 180);
+    setTimeout(revealCaseCards, 420);
 
     // 游標再閃一下後消失
     setTimeout(()=>{
