@@ -180,7 +180,43 @@ button{font:inherit}
 .report-card .report-kicker{color:#e8b6ab;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:13px;letter-spacing:.18em;font-weight:900}
 .report-card h3{margin:8px 0 10px;font-size:clamp(28px,2vw,42px)}
 .panel .report-card p{color:rgba(255,255,255,.84);font-size:17px;line-height:1.7;margin:0;max-width:1000px}
+
 @media(max-width:1050px){.choice-grid,.clue-grid{grid-template-columns:1fr}.verdict-grid{grid-template-columns:1fr}.case-head{padding-right:90px}}
+
+/* ===== 最終調查報告 v2：三軸人格 + 判斷傾向 ===== */
+.report-card{margin-top:22px}
+.report-summary{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:24px;align-items:start;margin-top:18px}
+.report-profile-copy{font-size:17px;line-height:1.8;color:rgba(255,255,255,.88)}
+.report-axis-box,.report-judgement{
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  background:rgba(255,255,255,.07);
+  padding:18px 20px
+}
+.report-axis-title,.report-judgement-title{
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:13px;font-weight:900;letter-spacing:.14em;color:#f1c8be;margin-bottom:12px
+}
+.report-axis-row{
+  display:grid;grid-template-columns:92px 1fr 28px;gap:10px;align-items:center;
+  margin:11px 0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif
+}
+.report-axis-label{font-size:14px;color:rgba(255,255,255,.84)}
+.report-axis-track{height:9px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden}
+.report-axis-fill{height:100%;border-radius:999px;background:#e8b6ab}
+.report-axis-score{text-align:right;font-weight:900;font-size:14px;color:#fff}
+.report-judgement{margin-top:18px}
+.report-judgement h4{margin:0 0 8px;font-size:22px}
+.panel .report-judgement p{margin:0;color:rgba(255,255,255,.84);font-size:16px;line-height:1.75}
+.report-closing{
+  margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.14);
+  color:rgba(255,255,255,.72);font-size:15px;line-height:1.7
+}
+@media(max-width:900px){
+  .report-summary{grid-template-columns:1fr}
+  .report-axis-row{grid-template-columns:88px 1fr 24px}
+}
+
 
 /* ===== 重新展開調查：確認彈窗 + 提示訊息 ===== */
 .confirm-modal{
@@ -492,69 +528,111 @@ function chooseVerdict(i,btn){
 }
 function goNextCase(){const idx=caseOrder.indexOf(currentCaseKey); if(idx<caseOrder.length-1) openCaseByKey(caseOrder[idx+1]); else renderReport();}
 function renderReport(){
-  const el=document.getElementById("finalReport"); if(!el) return;
+  const el=document.getElementById("finalReport");
+  if(!el) return;
 
-  // 每案的三選一分屬三個傾向軸：線索(clue) / 動機(motive) / 餘波(after)
-  const AXIS_MAP={
-    how:"clue",trace:"clue",act:"clue",law:"clue",event:"clue",mystery:"clue",
-    why:"motive",secret:"motive",hurt:"motive",pressure:"motive",wish:"motive",
-    after:"after",remain:"after",boundary:"after",system:"after",hope:"after"
-  };
-  const counts={clue:0,motive:0,after:0};
-  caseOrder.forEach(k=>{
-    const axis=AXIS_MAP[progress[k]?.choice];
-    if(axis) counts[axis]++;
-  });
-
-  // 每案結案的二選一，用來微調同一種人格底下的文字語氣，而不是決定主要人格
-  let verdict0=0,verdict1=0;
-  caseOrder.forEach(k=>{
-    const v=progress[k]?.verdict;
-    if(v===0) verdict0++; else if(v===1) verdict1++;
-  });
-  const verdictLean=verdict0>verdict1?"A":verdict1>verdict0?"B":"mixed";
-
-  // 三軸中最高分明顯領先（差 2 以上）才判定為單一傾向型，否則歸為混合型
-  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  const dominant=(sorted[0][1]-sorted[1][1])>=2?sorted[0][0]:"mixed";
-
-  const PROFILES={
-    clue:{
-      name:"理性的解謎者",
-      base:"你習慣先把地基打穩——先確認發生了什麼、怎麼發生的，才願意往下推進。你相信邏輯值得被信任，也相信答案應該被清楚證明。",
-      tailA:"但你並不停在證明本身；當謎題解開，你願意相信答案也能成為往前走的起點。",
-      tailB:"只是你也很清楚，證明得再完整，也不代表一切都能被原諒或抹平。",
-      tailMixed:"你在「相信答案」與「保留懷疑」之間反覆拿捏，不急著讓推理停在一個立場。"
-    },
-    motive:{
-      name:"人心的追問者",
-      base:"比起手法本身，你更想知道一個人為什麼願意走到那一步。你相信動機能讓案件變得可以理解，即使理解未必等於認同。",
-      tailA:"你也傾向相信，理解之後還有轉圜的空間——原因清楚了，責任或許也能被重新看待。",
-      tailB:"但你不會把理解當成通行證；知道一個人為什麼這麼做，跟原諒他，對你來說始終是兩件事。",
-      tailMixed:"你願意聽完整個理由，卻也留一部分自己，不急著替任何人下判斷。"
-    },
-    after:{
-      name:"真相之後的觀測者",
-      base:"你總會把目光留在答案之後：誰受傷、誰留下、誰還必須繼續生活。對你而言，推理不是把謎題關上，而是打開理解人的另一扇門。",
-      tailA:"你願意理解制度、動機與選擇背後的複雜性，也相信理解可能成為繼續往前的起點。",
-      tailB:"你願意理解人的處境，卻不急著因此原諒。對你而言，同理與責任可以同時存在。",
-      tailMixed:"你在「往前走」與「留在原地陪伴」之間，還沒有給自己一個固定答案。"
-    },
-    mixed:{
-      name:"線索與人性的追查者",
-      base:"你既想知道事情如何發生，也不願把人物簡化成答案。你在證據與情感之間來回確認，習慣讓推理最後回到人的選擇。",
-      tailA:"整體而言，你比較願意相信：只要看得夠仔細，人心和真相一樣，最終都能找到一個可以安放的位置。",
-      tailB:"整體而言，你比較清楚：看得再仔細，有些事還是無法被完全解釋，也不需要勉強被原諒。",
-      tailMixed:"你沒有固定的立場，比較享受在每一案裡重新判斷一次。"
-    }
+  // 第一層：六個 CASE 的「調查視角」統一映射到三個軸：
+  // A = 線索／事實、B = 人物／動機、C = 餘波／價值
+  const axisMap={
+    reason:{how:"A",why:"B",after:"C"},
+    after:{trace:"A",secret:"B",remain:"C"},
+    love:{act:"A",why:"B",boundary:"C"},
+    justice:{law:"A",hurt:"B",system:"C"},
+    youth:{event:"A",pressure:"B",after:"C"},
+    hope:{mystery:"A",wish:"B",hope:"C"}
   };
 
-  const p=PROFILES[dominant];
-  const tail=verdictLean==="A"?p.tailA:verdictLean==="B"?p.tailB:p.tailMixed;
-  const profile=p.name;
-  const desc=`${p.base}${tail}`;
+  const scores={A:0,B:0,C:0};
+  caseOrder.forEach(key=>{
+    const choice=progress[key]?.choice;
+    const axis=axisMap[key]?.[choice];
+    if(axis) scores[axis]++;
+  });
 
-  el.innerHTML=`<div class="report-card"><div class="report-kicker">INVESTIGATION REPORT｜調查報告</div><h3>${profile}</h3><p>${desc}</p></div>`;
+  const maxScore=Math.max(scores.A,scores.B,scores.C);
+  const leaders=Object.keys(scores).filter(k=>scores[k]===maxScore);
+
+  let profile,desc;
+  if(leaders.length!==1){
+    profile="線索與人性的調查者";
+    desc="你不願意只用一種方式理解真相。你會追查線索，也會理解動機；你在乎事情如何發生，同時也會把目光留給那些承受後果的人。對你而言，推理不是在「理性」與「人性」之間二選一，而是在兩者之間反覆確認：答案是否完整，又是否遺漏了某個人的處境。";
+  }else if(leaders[0]==="A"){
+    profile="理性的追跡者";
+    desc="你總是先問：「事情究竟是怎麼發生的？」面對複雜的人性，你不急著下結論，而是希望先找到足夠的證據、還原事件的脈絡。對你而言，理解一個人之前，首先要讓事實站得住腳。但走完六個 CASE，你也發現：真相能證明發生了什麼，卻未必能替人的選擇找到唯一答案。";
+  }else if(leaders[0]==="B"){
+    profile="人心的追問者";
+    desc="你很少滿足於知道誰做了什麼。你真正想追查的，是一個人為何沉默、為何守護、為何跨越界線，又為何在某個瞬間做出那個選擇。對你而言，理解動機並不等於原諒，而是拒絕把任何人簡化成「好人」或「壞人」。真相之所以複雜，正因為每個選擇背後，都有一段沒有被說完的故事。";
+  }else{
+    profile="真相之後的觀測者";
+    desc="當別人還在尋找答案，你的目光已經停在答案之後。你在意誰受了傷、誰被留下、誰必須承擔後果，以及一個已經發生的選擇會留下多久。對你而言，推理真正困難的部分，往往不是破解謎題，而是面對真相被揭開之後，人還要如何繼續生活。";
+  }
+
+  // 第二層：六個 CASE 的結案二選一，形成「判斷方式」
+  const verdicts=caseOrder
+    .map(k=>progress[k]?.verdict)
+    .filter(v=>v===0 || v===1);
+
+  const verdict0=verdicts.filter(v=>v===0).length;
+  const verdict1=verdicts.filter(v=>v===1).length;
+
+  let judgementName,judgementDesc;
+  if(verdict0>verdict1){
+    judgementName="理解與修復";
+    judgementDesc="你願意讓情境、動機與人的改變進入判斷。對你而言，責任仍然重要，但答案不必永遠停在懲罰或定罪；理解有時也是重新往前走的起點。";
+  }else if(verdict1>verdict0){
+    judgementName="界線與責任";
+    judgementDesc="你願意理解人的處境，卻不會因為理解就取消責任。你對「事情有原因，所以可以原諒」保持警覺，也相信有些界線不能因情感而消失。";
+  }else{
+    judgementName="保留判斷";
+    judgementDesc="你沒有固定站在同一種答案裡。面對不同案件，你會重新衡量動機、傷害、制度與後果。對你而言，人性的問題往往沒有可以套用六次的同一個答案。";
+  }
+
+  const pct=n=>Math.round((n/6)*100);
+
+  el.innerHTML=`
+    <div class="report-card">
+      <div class="report-kicker">INVESTIGATION REPORT｜最終調查報告</div>
+      <h3>${profile}</h3>
+
+      <div class="report-summary">
+        <div>
+          <div class="report-profile-copy">${desc}</div>
+
+          <div class="report-judgement">
+            <div class="report-judgement-title">你的判斷方式</div>
+            <h4>${judgementName}</h4>
+            <p>${judgementDesc}</p>
+          </div>
+
+          <div class="report-closing">
+            你的六件案件已完成。真相沒有消失，只是你開始看見，答案之外還有人。
+          </div>
+        </div>
+
+        <div class="report-axis-box">
+          <div class="report-axis-title">你的調查傾向</div>
+
+          <div class="report-axis-row">
+            <div class="report-axis-label">線索與事實</div>
+            <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.A)}%"></div></div>
+            <div class="report-axis-score">${scores.A}</div>
+          </div>
+
+          <div class="report-axis-row">
+            <div class="report-axis-label">人物與動機</div>
+            <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.B)}%"></div></div>
+            <div class="report-axis-score">${scores.B}</div>
+          </div>
+
+          <div class="report-axis-row">
+            <div class="report-axis-label">餘波與價值</div>
+            <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.C)}%"></div></div>
+            <div class="report-axis-score">${scores.C}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
   el.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 
