@@ -183,9 +183,9 @@ button{font:inherit}
 
 @media(max-width:1050px){.choice-grid,.clue-grid{grid-template-columns:1fr}.verdict-grid{grid-template-columns:1fr}.case-head{padding-right:90px}}
 
-/* ===== 最終調查報告 v2：三軸人格 + 判斷傾向 ===== */
+/* ===== 最終調查報告 v3：三軸人格 + 三面向結案判斷 ===== */
 .report-card{margin-top:22px}
-.report-summary{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:24px;align-items:start;margin-top:18px}
+.report-summary{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr);gap:24px;align-items:start;margin-top:18px}
 .report-profile-copy{font-size:17px;line-height:1.8;color:rgba(255,255,255,.88)}
 .report-axis-box,.report-judgement{
   border:1px solid rgba(255,255,255,.14);
@@ -206,8 +206,26 @@ button{font:inherit}
 .report-axis-fill{height:100%;border-radius:999px;background:#e8b6ab}
 .report-axis-score{text-align:right;font-weight:900;font-size:14px;color:#fff}
 .report-judgement{margin-top:18px}
-.report-judgement h4{margin:0 0 8px;font-size:22px}
-.panel .report-judgement p{margin:0;color:rgba(255,255,255,.84);font-size:16px;line-height:1.75}
+.judgement-grid{display:grid;gap:12px;margin-top:10px}
+.judgement-item{
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:15px;
+  background:rgba(0,0,0,.08);
+  padding:14px 16px
+}
+.judgement-item-head{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  margin-bottom:7px
+}
+.judgement-dimension{
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:13px;font-weight:900;letter-spacing:.08em;color:#f1c8be
+}
+.judgement-result{
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:15px;font-weight:900;color:#fff
+}
+.panel .judgement-item p{margin:0;color:rgba(255,255,255,.82);font-size:15px;line-height:1.7}
 .report-closing{
   margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.14);
   color:rgba(255,255,255,.72);font-size:15px;line-height:1.7
@@ -215,26 +233,16 @@ button{font:inherit}
 @media(max-width:900px){
   .report-summary{grid-template-columns:1fr}
   .report-axis-row{grid-template-columns:88px 1fr 24px}
+  .judgement-item-head{align-items:flex-start;flex-direction:column;gap:4px}
 }
 
 /* ===== 非線性調查流程：首頁完成狀態 ===== */
 .home-progress{
   margin:-.2vh 0 1.1vh;
-  min-height:1.4em;
   font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
   font-size:clamp(15px,.95vw,20px);
   font-weight:800;
   color:var(--muted);
-  opacity:0;
-  transform:translateY(8px);
-  visibility:hidden;
-  transition:opacity .4s ease, transform .4s ease, visibility 0s linear .4s;
-}
-.home-progress.show{
-  opacity:1;
-  transform:translateY(0);
-  visibility:visible;
-  transition:opacity .4s ease, transform .4s ease;
 }
 .case.completed{
   border-color:rgba(158,47,42,.42);
@@ -536,11 +544,6 @@ function updateHomeProgress(){
   });
 }
 
-function revealHomeProgress(){
-  const progressEl=document.getElementById("homeProgress");
-  if(progressEl) progressEl.classList.add("show");
-}
-
 function getNextUnfinishedCase(fromKey){
   const start=caseOrder.indexOf(fromKey);
   for(let offset=1; offset<=caseOrder.length; offset++){
@@ -705,7 +708,7 @@ function renderReport(){
   const el=document.getElementById("finalReport");
   if(!el) return;
 
-  // 第一層：六個 CASE 的「調查視角」統一映射到三個軸：
+  // 第一層：六個 CASE 的「調查視角」映射到三個調查軸
   // A = 線索／事實、B = 人物／動機、C = 餘波／價值
   const axisMap={
     reason:{how:"A",why:"B",after:"C"},
@@ -741,25 +744,49 @@ function renderReport(){
     desc="當別人還在尋找答案，你的目光已經停在答案之後。你在意誰受了傷、誰被留下、誰必須承擔後果，以及一個已經發生的選擇會留下多久。對你而言，推理真正困難的部分，往往不是破解謎題，而是面對真相被揭開之後，人還要如何繼續生活。";
   }
 
-  // 第二層：六個 CASE 的結案二選一，形成「判斷方式」
-  const verdicts=caseOrder
-    .map(k=>progress[k]?.verdict)
-    .filter(v=>v===0 || v===1);
+  // 第二層：六個 CASE 的結案判斷分成三組，每組固定兩題
+  const v={
+    reason:progress.reason?.verdict,
+    after:progress.after?.verdict,
+    love:progress.love?.verdict,
+    justice:progress.justice?.verdict,
+    youth:progress.youth?.verdict,
+    hope:progress.hope?.verdict
+  };
 
-  const verdict0=verdicts.filter(v=>v===0).length;
-  const verdict1=verdicts.filter(v=>v===1).length;
+  function pairResult(a,b,leftName,midName,rightName,leftDesc,midDesc,rightDesc){
+    const vals=[a,b].filter(x=>x===0 || x===1);
+    const left=vals.filter(x=>x===0).length;
+    const right=vals.filter(x=>x===1).length;
 
-  let judgementName,judgementDesc;
-  if(verdict0>verdict1){
-    judgementName="理解與修復";
-    judgementDesc="你願意讓情境、動機與人的改變進入判斷。對你而言，責任仍然重要，但答案不必永遠停在懲罰或定罪；理解有時也是重新往前走的起點。";
-  }else if(verdict1>verdict0){
-    judgementName="界線與責任";
-    judgementDesc="你願意理解人的處境，卻不會因為理解就取消責任。你對「事情有原因，所以可以原諒」保持警覺，也相信有些界線不能因情感而消失。";
-  }else{
-    judgementName="保留判斷";
-    judgementDesc="你沒有固定站在同一種答案裡。面對不同案件，你會重新衡量動機、傷害、制度與後果。對你而言，人性的問題往往沒有可以套用六次的同一個答案。";
+    if(left>right) return {name:leftName,desc:leftDesc};
+    if(right>left) return {name:rightName,desc:rightDesc};
+    return {name:midName,desc:midDesc};
   }
+
+  const truthView=pairResult(
+    v.reason,v.hope,
+    "答案取向","平衡取向","理解取向",
+    "你傾向相信，理解應先建立在可以被說明、驗證與確認的基礎上。答案不是全部，卻是你開始理解一個人的重要起點。",
+    "你同時重視可靠的答案與人的複雜性。對你而言，真相需要被說清楚，但它也不能把人簡化成一條公式。",
+    "你接受有些人的選擇無法被公式完整解釋。比起漂亮地解完一個謎題，你更在意答案是否真的讓我們更接近一個人。"
+  );
+
+  const aftermathView=pairResult(
+    v.after,v.youth,
+    "修復取向","並存取向","餘波取向",
+    "你相信真相、成長與重新開始具有力量。即使傷害已經發生，人仍值得有機會重新理解自己，也重新走向下一段生活。",
+    "你同時相信人可以重新開始，也知道有些傷痕不會因此消失。修復與記得，在你的判斷裡可以同時存在。",
+    "你特別在意事件留下的長期後果。案件會結束、時間會前進，但失去與傷害不一定因此變輕；理解真相也不能抹去餘波。"
+  );
+
+  const justiceView=pairResult(
+    v.love,v.justice,
+    "情境取向","權衡取向","原則取向",
+    "你願意讓動機、處境與制度是否失靈進入判斷。對你而言，責任並非沒有界線，而是必須放回具體的人與情境中衡量。",
+    "你既不願忽略具體處境，也不願讓責任失去邊界。面對正義問題時，你傾向在理解情境與守住共同規則之間持續權衡。",
+    "你相信理解不能自動取消責任，正義也需要共同遵守的界線。即使制度不完美，個人的情感仍不能完全取代公共規則。"
+  );
 
   const pct=n=>Math.round((n/6)*100);
 
@@ -773,9 +800,33 @@ function renderReport(){
           <div class="report-profile-copy">${desc}</div>
 
           <div class="report-judgement">
-            <div class="report-judgement-title">你的判斷方式</div>
-            <h4>${judgementName}</h4>
-            <p>${judgementDesc}</p>
+            <div class="report-judgement-title">你的結案判斷</div>
+
+            <div class="judgement-grid">
+              <div class="judgement-item">
+                <div class="judgement-item-head">
+                  <div class="judgement-dimension">真相觀｜答案 ↔ 理解</div>
+                  <div class="judgement-result">${truthView.name}</div>
+                </div>
+                <p>${truthView.desc}</p>
+              </div>
+
+              <div class="judgement-item">
+                <div class="judgement-item-head">
+                  <div class="judgement-dimension">餘波觀｜重新開始 ↔ 承認傷痕</div>
+                  <div class="judgement-result">${aftermathView.name}</div>
+                </div>
+                <p>${aftermathView.desc}</p>
+              </div>
+
+              <div class="judgement-item">
+                <div class="judgement-item-head">
+                  <div class="judgement-dimension">正義觀｜情境判斷 ↔ 原則界線</div>
+                  <div class="judgement-result">${justiceView.name}</div>
+                </div>
+                <p>${justiceView.desc}</p>
+              </div>
+            </div>
           </div>
 
           <div class="report-closing">
@@ -880,9 +931,8 @@ function typeWriter(){
     typewriterIndex++;
     setTimeout(typeWriter, 130);
   }else{
-    // 文字打完後，先讓調查進度淡入，再讓六張 CASE 依序出現
-    setTimeout(revealHomeProgress, 180);
-    setTimeout(revealCaseCards, 420);
+    // 文字打完後先停一下，再讓六張 CASE 依序出現
+    setTimeout(revealCaseCards, 250);
 
     // 游標再閃一下後消失
     setTimeout(()=>{
