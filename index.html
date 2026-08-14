@@ -182,6 +182,41 @@ button{font:inherit}
 .panel .report-card p{color:rgba(255,255,255,.84);font-size:17px;line-height:1.7;margin:0;max-width:1000px}
 @media(max-width:1050px){.choice-grid,.clue-grid{grid-template-columns:1fr}.verdict-grid{grid-template-columns:1fr}.case-head{padding-right:90px}}
 
+/* ===== 重新展開調查：確認彈窗 + 提示訊息 ===== */
+.confirm-modal{
+  position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;
+  padding:28px;background:rgba(31,23,18,.55);backdrop-filter:blur(3px);
+}
+.confirm-modal.show{display:flex}
+.confirm-card{
+  width:min(560px,90vw);background:#fffaf3;border:1px solid rgba(92,73,59,.18);border-radius:24px;
+  padding:30px 32px;box-shadow:0 28px 80px rgba(0,0,0,.28);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+.confirm-kicker{color:var(--red);font-weight:800;letter-spacing:.1em;font-size:14px;margin-bottom:10px}
+.confirm-card h3{
+  margin:0 0 10px;font-size:clamp(24px,2vw,32px);
+  font-family:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU",serif;
+}
+.confirm-card p{margin:0 0 22px;color:var(--muted);font-size:17px;line-height:1.7}
+.confirm-actions{display:flex;gap:12px;justify-content:flex-end}
+.confirm-actions button{
+  border-radius:14px;padding:13px 22px;font-weight:800;cursor:pointer;font-size:16px;
+  border:1px solid var(--line);min-height:52px;
+}
+.confirm-actions .secondary{background:#fff}
+.confirm-actions .primary{background:var(--red);color:#fff;border-color:var(--red)}
+
+.toast{
+  position:fixed;left:50%;bottom:6vh;transform:translate(-50%,20px);z-index:10000;
+  background:#2c2722;color:#fff;padding:16px 26px;border-radius:999px;
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:clamp(16px,1vw,20px);font-weight:700;
+  opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;
+  box-shadow:0 14px 40px rgba(0,0,0,.28);max-width:90vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
 </style>
 <link rel="stylesheet" href="./css/theme.css">
 <script src="./js/common.js"></script>
@@ -203,6 +238,9 @@ button{font:inherit}
         <div class="subtitle">東野圭吾的人性推理</div>
         <div class="tagline">解開謎題的瞬間不是結束，而是對人性的拷問開始。</div>
       </section>
+      <div class="top-actions">
+        <button class="top-btn" id="restartInvestigationBtn">↺ 重新展開調查</button>
+      </div>
     </header>
 
     <section class="case-wrap">
@@ -255,6 +293,20 @@ button{font:inherit}
   </section>
 
   <div class="status">觸控螢幕模式：60 秒未操作將自動回到首頁</div>
+
+  <div class="confirm-modal" id="restartConfirm" aria-hidden="true">
+    <div class="confirm-card">
+      <div class="confirm-kicker">重新展開調查</div>
+      <h3>要清空目前的調查進度嗎？</h3>
+      <p>清空後，六大案件的選擇與判斷都會重新開始，你可以自由探索不同的可能。</p>
+      <div class="confirm-actions">
+        <button class="secondary" id="restartCancelBtn">取消</button>
+        <button class="primary" id="restartConfirmBtn">確定重新開始</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
 </main>
 
 <script>
@@ -447,6 +499,38 @@ function renderReport(){
   el.innerHTML=`<div class="report-card"><div class="report-kicker">INVESTIGATION REPORT｜調查報告</div><h3>${profile}</h3><p>${desc}</p></div>`;
   el.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
+
+/* ===== 重新展開調查：讀者可主動清空進度，探索不同的可能 ===== */
+const toastEl=document.getElementById("toast");
+function showToast(msg){
+  toastEl.textContent=msg;
+  toastEl.classList.add("show");
+  clearTimeout(showToast._timer);
+  showToast._timer=setTimeout(()=>toastEl.classList.remove("show"),2400);
+}
+
+const restartConfirm=document.getElementById("restartConfirm");
+function openRestartConfirm(){restartConfirm.classList.add("show");restartConfirm.setAttribute("aria-hidden","false");}
+function closeRestartConfirm(){restartConfirm.classList.remove("show");restartConfirm.setAttribute("aria-hidden","true");}
+
+function restartInvestigation(){
+  if(Object.keys(progress).length===0){
+    showToast("目前就是全新的調查，歡迎開始！");
+    return;
+  }
+  openRestartConfirm();
+}
+
+document.getElementById("restartInvestigationBtn").addEventListener("click",restartInvestigation);
+document.getElementById("restartCancelBtn").addEventListener("click",closeRestartConfirm);
+document.getElementById("restartConfirmBtn").addEventListener("click",()=>{
+  resetProgress();
+  closePanel();
+  closeRestartConfirm();
+  showToast("已重新展開調查，歡迎探索不同的可能。");
+});
+restartConfirm.addEventListener("click",e=>{if(e.target===restartConfirm) closeRestartConfirm();});
+
 
 document.querySelectorAll("[data-case]").forEach(btn=>btn.addEventListener("click",()=>openCaseByKey(btn.dataset.case)));
 document.querySelectorAll("[data-action]").forEach(btn=>btn.addEventListener("click",()=>{const action=btn.dataset.action;if(action==="books"){window.location.href="book-list.html";return;}if(action==="film"){openPanel(`<h2>影展專區</h2><p>正式版可放映片單、日期、原著作品、預告與映後提問。</p>`);}}));
