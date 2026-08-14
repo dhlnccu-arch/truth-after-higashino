@@ -626,6 +626,65 @@ html[lang="en"] .case strong{
   }
 }
 
+
+/* ===== 三語切換器固定位置修正 ===== */
+.top-actions{
+  display:grid;
+  grid-template-columns:216px 220px;
+  justify-content:end;
+  align-items:start;
+  gap:12px;
+  width:448px;
+  flex:0 0 448px;
+}
+
+.language-switcher{
+  width:216px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.lang-btn{
+  width:100%;
+  min-width:0;
+  white-space:nowrap;
+  text-align:center;
+}
+
+#restartInvestigationBtn{
+  width:220px;
+  justify-self:end;
+  white-space:nowrap;
+}
+
+/* 手機：語言切換器固定滿寬，三顆按鈕各佔 1/3；
+   重新展開調查另起一列，不再影響語言按鈕位置。 */
+@media (max-width:768px){
+  .top-actions{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+    width:100%;
+    min-width:0;
+    flex:none;
+    margin-top:18px;
+  }
+
+  .language-switcher{
+    width:100%;
+    grid-template-columns:repeat(3,1fr);
+    order:1;
+  }
+
+  #restartInvestigationBtn{
+    width:100%;
+    max-width:220px;
+    justify-self:start;
+    order:2;
+  }
+}
+
 </style>
 <link rel="stylesheet" href="./css/theme.css">
 
