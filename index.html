@@ -559,6 +559,19 @@ button{font:inherit;color:inherit}
 
 </style>
 <link rel="stylesheet" href="./css/theme.css">
+
+<style id="mobile-home-bg-override">
+@media (max-width:768px){
+  body.page-home .stage{
+    background-image:url("./images/home-bg-mobile.png");
+    background-size:cover;
+    background-position:center top;
+    background-repeat:no-repeat;
+    background-attachment:scroll;
+  }
+}
+</style>
+
 <script src="./js/common.js"></script>
 </head>
 <body class="page-home">
@@ -666,7 +679,7 @@ const caseData={
     books:[
       {title:"嫌疑犯X的獻身",surface:"完美的不在場證明，是如何成立的？",real:"如果犧牲出於愛，它還能被單純稱為犯罪嗎？",more:"石神的計算幾乎無懈可擊，但小說真正留下的不是公式，而是一個人究竟可以為另一個人做到什麼程度。"},
       {title:"聖女的救贖",surface:"幾乎不可能完成的犯罪，是怎麼發生的？",real:"當等待與怨恨累積多年，愛與報復還能清楚分開嗎？",more:"科學可以還原手法，卻無法縮短一段漫長關係裡的沉默。東野把「不可能犯罪」轉成情感時間的證據。"},
-      {title:"真夏方程式",surface:"一場死亡背後，究竟藏著什麼因果？",real:"如果揭開真相會傷害一個孩子，知道答案仍然是最好的選擇嗎？",more:"湯川逼近真相的同時，也必須面對知識的責任：知道與說出，並不是完全相同的選擇。"}
+      {title:"盛夏方程式",surface:"一場死亡背後，究竟藏著什麼因果？",real:"如果揭開真相會傷害一個孩子，知道答案仍然是最好的選擇嗎？",more:"湯川逼近真相的同時，也必須面對知識的責任：知道與說出，並不是完全相同的選擇。"}
     ],
     closeQ:"理性可以解開犯罪的方法，但它能解開人的選擇嗎？",
     verdicts:["可以，人的選擇終究有其原因。","不一定，人並不是公式。"],
