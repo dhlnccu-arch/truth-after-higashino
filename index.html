@@ -447,6 +447,64 @@ button{font:inherit}
   .red-thread{opacity:.22}
 }
 
+
+/* ===== 手機滑動體驗修正 ===== */
+@media (max-width:768px){
+  body.panel-open{
+    overflow:hidden;
+  }
+
+  .panel{
+    touch-action:pan-y;
+    overscroll-behavior-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  #panelContent,
+  .case-shell,
+  .choice-grid,
+  .clue-grid,
+  .case-closeout,
+  .report-card{
+    touch-action:pan-y;
+  }
+
+  .panel button{
+    touch-action:manipulation;
+  }
+
+  .close{
+    float:none;
+    display:block;
+    margin-left:auto;
+  }
+}
+
+
+/* ===== 最終報告閱讀順序修正 ===== */
+.report-summary{
+  grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr);
+  grid-template-areas:
+    "profile axis"
+    "judgement judgement"
+    "closing closing";
+}
+.report-profile-copy{grid-area:profile}
+.report-axis-box{grid-area:axis}
+.report-judgement{grid-area:judgement}
+.report-closing{grid-area:closing}
+
+@media(max-width:900px){
+  .report-summary{
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "profile"
+      "axis"
+      "judgement"
+      "closing";
+  }
+}
+
 </style>
 <link rel="stylesheet" href="./css/theme.css">
 <script src="./js/common.js"></script>
@@ -661,8 +719,8 @@ const progress=JSON.parse(localStorage.getItem("truthAfterProgress")||"{}");
 
 function saveProgress(){localStorage.setItem("truthAfterProgress",JSON.stringify(progress));}
 function resetProgress(){Object.keys(progress).forEach(k=>delete progress[k]);localStorage.removeItem("truthAfterProgress");}
-function openPanel(html){content.innerHTML=html;panel.classList.add("open","case-mode");panel.scrollTop=0;}
-function closePanel(){panel.classList.remove("open","case-mode");currentCaseKey=null;updateHomeProgress();}
+function openPanel(html){content.innerHTML=html;panel.classList.add("open","case-mode");document.body.classList.add("panel-open");panel.scrollTop=0;}
+function closePanel(){panel.classList.remove("open","case-mode");document.body.classList.remove("panel-open");currentCaseKey=null;updateHomeProgress();}
 function updateHomeProgress(){
   const doneCount=caseOrder.filter(k=>progress[k]?.done).length;
   const progressEl=document.getElementById("homeProgress");
@@ -939,43 +997,7 @@ function renderReport(){
       <h3>${profile}</h3>
 
       <div class="report-summary">
-        <div>
-          <div class="report-profile-copy">${desc}</div>
-
-          <div class="report-judgement">
-            <div class="report-judgement-title">你的結案判斷</div>
-
-            <div class="judgement-grid">
-              <div class="judgement-item">
-                <div class="judgement-item-head">
-                  <div class="judgement-dimension">真相觀｜答案 ↔ 理解</div>
-                  <div class="judgement-result">${truthView.name}</div>
-                </div>
-                <p>${truthView.desc}</p>
-              </div>
-
-              <div class="judgement-item">
-                <div class="judgement-item-head">
-                  <div class="judgement-dimension">餘波觀｜重新開始 ↔ 承認傷痕</div>
-                  <div class="judgement-result">${aftermathView.name}</div>
-                </div>
-                <p>${aftermathView.desc}</p>
-              </div>
-
-              <div class="judgement-item">
-                <div class="judgement-item-head">
-                  <div class="judgement-dimension">正義觀｜情境判斷 ↔ 原則界線</div>
-                  <div class="judgement-result">${justiceView.name}</div>
-                </div>
-                <p>${justiceView.desc}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="report-closing">
-            你的六件案件已完成。真相沒有消失，只是你開始看見，答案之外還有人。
-          </div>
-        </div>
+        <div class="report-profile-copy">${desc}</div>
 
         <div class="report-axis-box">
           <div class="report-axis-title">你的調查傾向</div>
@@ -997,6 +1019,40 @@ function renderReport(){
             <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.C)}%"></div></div>
             <div class="report-axis-score">${scores.C}</div>
           </div>
+        </div>
+
+        <div class="report-judgement">
+          <div class="report-judgement-title">你的結案判斷</div>
+
+          <div class="judgement-grid">
+            <div class="judgement-item">
+              <div class="judgement-item-head">
+                <div class="judgement-dimension">真相觀｜答案 ↔ 理解</div>
+                <div class="judgement-result">${truthView.name}</div>
+              </div>
+              <p>${truthView.desc}</p>
+            </div>
+
+            <div class="judgement-item">
+              <div class="judgement-item-head">
+                <div class="judgement-dimension">餘波觀｜重新開始 ↔ 承認傷痕</div>
+                <div class="judgement-result">${aftermathView.name}</div>
+              </div>
+              <p>${aftermathView.desc}</p>
+            </div>
+
+            <div class="judgement-item">
+              <div class="judgement-item-head">
+                <div class="judgement-dimension">正義觀｜情境判斷 ↔ 原則界線</div>
+                <div class="judgement-result">${justiceView.name}</div>
+              </div>
+              <p>${justiceView.desc}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-closing">
+          你的六件案件已完成。真相沒有消失，只是你開始看見，答案之外還有人。
         </div>
       </div>
     </div>`;
