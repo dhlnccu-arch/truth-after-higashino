@@ -505,6 +505,21 @@ button{font:inherit}
   }
 }
 
+
+/* ===== 首頁調查進度延後出現 ===== */
+.home-progress{
+  opacity:0;
+  transform:translateY(8px);
+  pointer-events:none;
+}
+
+.home-progress.progress-reveal{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+  transition:opacity .45s ease, transform .45s ease;
+}
+
 </style>
 <link rel="stylesheet" href="./css/theme.css">
 <script src="./js/common.js"></script>
@@ -1120,10 +1135,17 @@ const caseCards = [...document.querySelectorAll(".case-grid .case")];
 let typewriterIndex = 0;
 
 function revealCaseCards(){
+  const progressEl=document.getElementById("homeProgress");
+
+  // 先顯示調查進度，再讓六張 CASE 依序進場
+  if(progressEl){
+    progressEl.classList.add("progress-reveal");
+  }
+
   caseCards.forEach((card, i)=>{
     setTimeout(()=>{
       card.classList.add("case-reveal");
-    }, i * 120);
+    }, 180 + i * 120);
   });
 }
 
