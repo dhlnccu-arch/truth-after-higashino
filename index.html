@@ -217,6 +217,38 @@ button{font:inherit}
   .report-axis-row{grid-template-columns:88px 1fr 24px}
 }
 
+/* ===== 非線性調查流程：首頁完成狀態 ===== */
+.home-progress{
+  margin:-.2vh 0 1.1vh;
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:clamp(15px,.95vw,20px);
+  font-weight:800;
+  color:var(--muted);
+}
+.case.completed{
+  border-color:rgba(158,47,42,.42);
+  box-shadow:0 12px 30px rgba(72,52,38,.12), inset 0 0 0 2px rgba(158,47,42,.05);
+}
+.case-complete-badge{
+  position:absolute;
+  right:14px;
+  top:12px;
+  z-index:2;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(158,47,42,.10);
+  color:var(--red);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:12px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.04em;
+}
+
+
 
 /* ===== 重新展開調查：確認彈窗 + 提示訊息 ===== */
 .confirm-modal{
@@ -281,6 +313,7 @@ button{font:inherit}
 
     <section class="case-wrap">
       <div class="case-title"><span id="typewriter-title"></span><span class="typing-cursor">▋</span></div>
+      <div class="home-progress" id="homeProgress">調查進度：已完成 0 / 6</div>
       <div class="case-grid">
         <button class="case" style="--accent:var(--reason)" data-case="reason">
           <small>CASE 01｜理性</small>
@@ -467,10 +500,51 @@ const progress=JSON.parse(localStorage.getItem("truthAfterProgress")||"{}");
 function saveProgress(){localStorage.setItem("truthAfterProgress",JSON.stringify(progress));}
 function resetProgress(){Object.keys(progress).forEach(k=>delete progress[k]);localStorage.removeItem("truthAfterProgress");}
 function openPanel(html){content.innerHTML=html;panel.classList.add("open","case-mode");panel.scrollTop=0;}
-function closePanel(){panel.classList.remove("open","case-mode");currentCaseKey=null;}
+function closePanel(){panel.classList.remove("open","case-mode");currentCaseKey=null;updateHomeProgress();}
+function updateHomeProgress(){
+  const doneCount=caseOrder.filter(k=>progress[k]?.done).length;
+  const progressEl=document.getElementById("homeProgress");
+  if(progressEl) progressEl.textContent=`調查進度：已完成 ${doneCount} / 6`;
+
+  document.querySelectorAll("[data-case]").forEach(btn=>{
+    const key=btn.dataset.case;
+    const isDone=!!progress[key]?.done;
+    btn.classList.toggle("completed",isDone);
+
+    let badge=btn.querySelector(".case-complete-badge");
+    if(isDone){
+      if(!badge){
+        badge=document.createElement("span");
+        badge.className="case-complete-badge";
+        btn.appendChild(badge);
+      }
+      badge.textContent="✓ 已完成";
+    }else if(badge){
+      badge.remove();
+    }
+  });
+}
+
+function getNextUnfinishedCase(fromKey){
+  const start=caseOrder.indexOf(fromKey);
+  for(let offset=1; offset<=caseOrder.length; offset++){
+    const idx=(start+offset)%caseOrder.length;
+    const key=caseOrder[idx];
+    if(!progress[key]?.done) return key;
+  }
+  return null;
+}
+
 function dotsFor(key){
   const idx=caseOrder.indexOf(key);
-  return `<div class="case-progress"><span>調查進度</span><div class="progress-dots">${caseOrder.map((k,i)=>`<i class="progress-dot ${progress[k]?.done?'done':''} ${i===idx?'current':''}"></i>`).join("")}</div><span>${idx+1} / 6</span></div>`;
+  const doneCount=caseOrder.filter(k=>progress[k]?.done).length;
+  return `<div class="case-progress">
+    <span>調查進度</span>
+    <div class="progress-dots">
+      ${caseOrder.map((k,i)=>`<i class="progress-dot ${progress[k]?.done?'done':''} ${i===idx?'current':''}"></i>`).join("")}
+    </div>
+    <span>已完成 ${doneCount} / 6</span>
+  </div>`;
 }
 function openCaseByKey(key){
   const c=caseData[key]; if(!c) return; currentCaseKey=key;
@@ -506,7 +580,69 @@ function openCaseByKey(key){
   document.querySelectorAll(".verdict-btn").forEach(btn=>btn.addEventListener("click",()=>chooseVerdict(+btn.dataset.verdict,btn)));
   const returnBtn=document.querySelector("[data-return-cases]"); if(returnBtn) returnBtn.addEventListener("click",closePanel);
   const nextBtn=document.querySelector("[data-next-case]"); if(nextBtn) nextBtn.addEventListener("click",goNextCase);
+
+  restoreCaseState(key);
 }
+
+function restoreCaseState(key){
+  const saved=progress[key];
+  if(!saved) return;
+
+  if(saved.choice){
+    const c=caseData[key];
+    const ch=c.choices.find(x=>x.id===saved.choice);
+    document.querySelectorAll(".choice-btn").forEach(b=>
+      b.classList.toggle("selected",b.dataset.choice===saved.choice)
+    );
+
+    const feedback=document.getElementById("choiceFeedback");
+    if(ch && feedback){
+      feedback.innerHTML=`<strong>你原本選擇從「${ch.title}」開始。</strong><br>${ch.reply}`;
+      feedback.classList.add("show");
+    }
+
+    const zone=document.getElementById("clueZone");
+    if(zone) zone.classList.add("show");
+    document.querySelectorAll(".clue-card").forEach(card=>card.classList.add("reveal"));
+
+    const closeout=document.getElementById("caseCloseout");
+    if(closeout) closeout.classList.add("show");
+  }
+
+  if(saved.verdict===0 || saved.verdict===1){
+    const c=caseData[key];
+    document.querySelectorAll(".verdict-btn").forEach((b,i)=>
+      b.classList.toggle("selected",i===saved.verdict)
+    );
+
+    const res=document.getElementById("verdictResponse");
+    if(res){
+      res.innerHTML=`<strong>你的判斷已記錄。</strong><br>${c.closeText}`;
+      res.classList.add("show");
+    }
+
+    const nav=document.getElementById("caseNav");
+    if(nav) nav.classList.add("show");
+    updateNextButton();
+  }
+
+  if(caseOrder.every(k=>progress[k]?.done)){
+    renderReport();
+  }
+}
+
+function updateNextButton(){
+  const next=document.querySelector("[data-next-case]");
+  if(!next || !currentCaseKey) return;
+
+  const unfinished=getNextUnfinishedCase(currentCaseKey);
+  if(unfinished){
+    next.textContent=`繼續追查 ${caseData[unfinished].case} →`;
+  }else{
+    next.textContent="查看調查報告";
+  }
+}
+
 function choosePerspective(choiceId){
   const c=caseData[currentCaseKey], ch=c.choices.find(x=>x.id===choiceId); if(!ch) return;
   progress[currentCaseKey]=progress[currentCaseKey]||{}; progress[currentCaseKey].choice=choiceId; saveProgress();
@@ -515,125 +651,37 @@ function choosePerspective(choiceId){
   const zone=document.getElementById("clueZone"); zone.classList.add("show");
   document.querySelectorAll(".clue-card").forEach((card,i)=>setTimeout(()=>card.classList.add("reveal"),260+i*260));
   setTimeout(()=>document.getElementById("caseCloseout").classList.add("show"),1150);
+  if(caseOrder.every(k=>progress[k]?.done)) setTimeout(renderReport,80);
 }
 function toggleClue(i,btn){const el=document.getElementById(`clueMore${i}`); const open=el.classList.toggle("show"); btn.textContent=open?"收起線索":"展開線索";}
 function chooseVerdict(i,btn){
-  const c=caseData[currentCaseKey]; progress[currentCaseKey]=progress[currentCaseKey]||{}; progress[currentCaseKey].verdict=i; progress[currentCaseKey].done=true; saveProgress();
+  const c=caseData[currentCaseKey];
+  progress[currentCaseKey]=progress[currentCaseKey]||{};
+  progress[currentCaseKey].verdict=i;
+  progress[currentCaseKey].done=true;
+  saveProgress();
+
   document.querySelectorAll(".verdict-btn").forEach(b=>b.classList.toggle("selected",b===btn));
-  const res=document.getElementById("verdictResponse"); res.innerHTML=`<strong>你的判斷已記錄。</strong><br>${c.closeText}`; res.classList.add("show");
-  const nav=document.getElementById("caseNav"); nav.classList.add("show"); const idx=caseOrder.indexOf(currentCaseKey); const next=document.querySelector("[data-next-case]");
-  if(idx<caseOrder.length-1){next.textContent=`繼續追查 ${caseData[caseOrder[idx+1]].case} →`;}
-  else{next.textContent="查看調查報告";}
+
+  const res=document.getElementById("verdictResponse");
+  res.innerHTML=`<strong>你的判斷已記錄。</strong><br>${c.closeText}`;
+  res.classList.add("show");
+
+  const nav=document.getElementById("caseNav");
+  nav.classList.add("show");
+
+  updateHomeProgress();
+  updateNextButton();
+
   if(caseOrder.every(k=>progress[k]?.done)) renderReport();
 }
-function goNextCase(){const idx=caseOrder.indexOf(currentCaseKey); if(idx<caseOrder.length-1) openCaseByKey(caseOrder[idx+1]); else renderReport();}
-function renderReport(){
-  const el=document.getElementById("finalReport");
-  if(!el) return;
-
-  // 第一層：六個 CASE 的「調查視角」統一映射到三個軸：
-  // A = 線索／事實、B = 人物／動機、C = 餘波／價值
-  const axisMap={
-    reason:{how:"A",why:"B",after:"C"},
-    after:{trace:"A",secret:"B",remain:"C"},
-    love:{act:"A",why:"B",boundary:"C"},
-    justice:{law:"A",hurt:"B",system:"C"},
-    youth:{event:"A",pressure:"B",after:"C"},
-    hope:{mystery:"A",wish:"B",hope:"C"}
-  };
-
-  const scores={A:0,B:0,C:0};
-  caseOrder.forEach(key=>{
-    const choice=progress[key]?.choice;
-    const axis=axisMap[key]?.[choice];
-    if(axis) scores[axis]++;
-  });
-
-  const maxScore=Math.max(scores.A,scores.B,scores.C);
-  const leaders=Object.keys(scores).filter(k=>scores[k]===maxScore);
-
-  let profile,desc;
-  if(leaders.length!==1){
-    profile="線索與人性的調查者";
-    desc="你不願意只用一種方式理解真相。你會追查線索，也會理解動機；你在乎事情如何發生，同時也會把目光留給那些承受後果的人。對你而言，推理不是在「理性」與「人性」之間二選一，而是在兩者之間反覆確認：答案是否完整，又是否遺漏了某個人的處境。";
-  }else if(leaders[0]==="A"){
-    profile="理性的追跡者";
-    desc="你總是先問：「事情究竟是怎麼發生的？」面對複雜的人性，你不急著下結論，而是希望先找到足夠的證據、還原事件的脈絡。對你而言，理解一個人之前，首先要讓事實站得住腳。但走完六個 CASE，你也發現：真相能證明發生了什麼，卻未必能替人的選擇找到唯一答案。";
-  }else if(leaders[0]==="B"){
-    profile="人心的追問者";
-    desc="你很少滿足於知道誰做了什麼。你真正想追查的，是一個人為何沉默、為何守護、為何跨越界線，又為何在某個瞬間做出那個選擇。對你而言，理解動機並不等於原諒，而是拒絕把任何人簡化成「好人」或「壞人」。真相之所以複雜，正因為每個選擇背後，都有一段沒有被說完的故事。";
+function goNextCase(){
+  const unfinished=getNextUnfinishedCase(currentCaseKey);
+  if(unfinished){
+    openCaseByKey(unfinished);
   }else{
-    profile="真相之後的觀測者";
-    desc="當別人還在尋找答案，你的目光已經停在答案之後。你在意誰受了傷、誰被留下、誰必須承擔後果，以及一個已經發生的選擇會留下多久。對你而言，推理真正困難的部分，往往不是破解謎題，而是面對真相被揭開之後，人還要如何繼續生活。";
+    renderReport();
   }
-
-  // 第二層：六個 CASE 的結案二選一，形成「判斷方式」
-  const verdicts=caseOrder
-    .map(k=>progress[k]?.verdict)
-    .filter(v=>v===0 || v===1);
-
-  const verdict0=verdicts.filter(v=>v===0).length;
-  const verdict1=verdicts.filter(v=>v===1).length;
-
-  let judgementName,judgementDesc;
-  if(verdict0>verdict1){
-    judgementName="理解與修復";
-    judgementDesc="你願意讓情境、動機與人的改變進入判斷。對你而言，責任仍然重要，但答案不必永遠停在懲罰或定罪；理解有時也是重新往前走的起點。";
-  }else if(verdict1>verdict0){
-    judgementName="界線與責任";
-    judgementDesc="你願意理解人的處境，卻不會因為理解就取消責任。你對「事情有原因，所以可以原諒」保持警覺，也相信有些界線不能因情感而消失。";
-  }else{
-    judgementName="保留判斷";
-    judgementDesc="你沒有固定站在同一種答案裡。面對不同案件，你會重新衡量動機、傷害、制度與後果。對你而言，人性的問題往往沒有可以套用六次的同一個答案。";
-  }
-
-  const pct=n=>Math.round((n/6)*100);
-
-  el.innerHTML=`
-    <div class="report-card">
-      <div class="report-kicker">INVESTIGATION REPORT｜最終調查報告</div>
-      <h3>${profile}</h3>
-
-      <div class="report-summary">
-        <div>
-          <div class="report-profile-copy">${desc}</div>
-
-          <div class="report-judgement">
-            <div class="report-judgement-title">你的判斷方式</div>
-            <h4>${judgementName}</h4>
-            <p>${judgementDesc}</p>
-          </div>
-
-          <div class="report-closing">
-            你的六件案件已完成。真相沒有消失，只是你開始看見，答案之外還有人。
-          </div>
-        </div>
-
-        <div class="report-axis-box">
-          <div class="report-axis-title">你的調查傾向</div>
-
-          <div class="report-axis-row">
-            <div class="report-axis-label">線索與事實</div>
-            <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.A)}%"></div></div>
-            <div class="report-axis-score">${scores.A}</div>
-          </div>
-
-          <div class="report-axis-row">
-            <div class="report-axis-label">人物與動機</div>
-            <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.B)}%"></div></div>
-            <div class="report-axis-score">${scores.B}</div>
-          </div>
-
-          <div class="report-axis-row">
-            <div class="report-axis-label">餘波與價值</div>
-            <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.C)}%"></div></div>
-            <div class="report-axis-score">${scores.C}</div>
-          </div>
-        </div>
-      </div>
-    </div>`;
-
-  el.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 
 /* ===== 重新展開調查：讀者可主動清空進度，探索不同的可能 ===== */
@@ -662,6 +710,7 @@ document.getElementById("restartCancelBtn").addEventListener("click",closeRestar
 document.getElementById("restartConfirmBtn").addEventListener("click",()=>{
   resetProgress();
   closePanel();
+  updateHomeProgress();
   closeRestartConfirm();
   showToast("已重新展開調查，歡迎探索不同的可能。");
 });
@@ -678,7 +727,7 @@ const params=new URLSearchParams(window.location.search); const requestedCase=pa
 createIdleTimer(()=>closePanel());
 // 展場情境：60 秒閒置只收起面板（Tier 1，門檻低，避免中斷還在思考的訪客）；
 // 完全沒有任何操作達 3 分鐘，才視為訪客已離開，清空調查進度讓下一位訪客從頭開始（Tier 2）。
-createIdleTimer(()=>resetProgress(), 180000);
+createIdleTimer(()=>{resetProgress();updateHomeProgress();}, 180000);
 
 
 // ===== 首頁打字機 + CASE 依序淡入 =====
@@ -721,6 +770,7 @@ function typeWriter(){
 
 // 頁面開啟後稍微停頓再開始打字
 window.addEventListener("DOMContentLoaded", ()=>{
+  updateHomeProgress();
   setTimeout(typeWriter, 650);
 });
 
