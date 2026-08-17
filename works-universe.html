@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>作品宇宙｜真相之後</title>
 <style>
+
 :root{
   --ink:#211d19;--muted:#6b635c;--paper:rgba(249,245,238,.96);--line:rgba(92,73,59,.24);--red:#9e2f2a;
   /* 六大主題色統一定義在 css/theme.css，這裡不再重複 */
@@ -238,6 +239,72 @@ h1{font-size:clamp(46px,4.2vw,88px);margin:.12em 0 .06em;line-height:1}
   .catalog-qr-box img{max-width:280px;margin:auto}
 }
 
+
+
+/* ===== 三語切換 ===== */
+.top-actions{
+  display:grid;
+  grid-template-columns:216px 150px 190px;
+  justify-content:end;
+  align-items:start;
+  gap:12px;
+  width:580px;
+  flex:0 0 580px;
+}
+.language-switcher{
+  width:216px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+.lang-btn{
+  width:100%;
+  height:42px;
+  min-width:0;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.8);
+  border-radius:12px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+  color:var(--ink);
+  font-weight:700;
+}
+.lang-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+#resetBtn{width:150px;white-space:nowrap}
+#homeBtn{width:190px;white-space:nowrap}
+html[lang="en"] h1,
+html[lang="en"] .detail-panel h2,
+html[lang="en"] .map-title h2{font-family:Georgia,"Times New Roman",serif}
+html[lang="ja"] h1,
+html[lang="ja"] .detail-panel h2,
+html[lang="ja"] .map-title h2{font-family:"Noto Serif JP","Yu Mincho","Hiragino Mincho ProN",serif}
+@media(max-width:1000px){
+  html,body{height:auto;min-height:100%;overflow:auto}
+  .stage{height:auto;min-height:100dvh;overflow:visible}
+  .app{height:auto;min-height:100dvh;display:block;padding:20px}
+  .topbar{flex-direction:column}
+  .top-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    width:100%;
+    min-width:0;
+    flex:none;
+    margin-top:16px;
+  }
+  .language-switcher{grid-column:1/-1;width:100%}
+  #resetBtn,#homeBtn{width:100%}
+  .filters{margin:16px 0}
+  .content{display:block}
+  .map-panel{min-height:70vh}
+  .detail-panel{display:block;margin-top:16px;max-height:none}
+  .footer{margin-top:16px;flex-direction:column;align-items:stretch}
+  .footer button{width:100%}
+}
+
 </style>
 <link rel="stylesheet" href="./css/theme.css">
 <script src="./js/common.js"></script>
@@ -247,30 +314,28 @@ h1{font-size:clamp(46px,4.2vw,88px);margin:.12em 0 .06em;line-height:1}
 <div class="app">
   <header class="topbar">
     <div>
-      <div class="kicker">《真相之後──東野圭吾的人性推理》</div>
-      <h1>作品宇宙</h1>
-      <div class="subtitle">一本書，可能同時屬於不只一種人性命題。</div>
+      <div class="kicker" id="pageKicker"></div>
+      <h1 id="pageTitle"></h1>
+      <div class="subtitle" id="pageSubtitle"></div>
     </div>
     <div class="top-actions">
-      <button id="resetBtn">顯示全部</button>
-      <button id="homeBtn">⌂ 回首頁</button>
+      <div class="language-switcher" aria-label="Language">
+        <button class="lang-btn" type="button" data-lang="zh-Hant">繁中</button>
+        <button class="lang-btn" type="button" data-lang="ja">日本語</button>
+        <button class="lang-btn" type="button" data-lang="en">EN</button>
+      </div>
+      <button id="resetBtn"></button>
+      <button id="homeBtn"></button>
     </div>
   </header>
 
-  <nav class="filters" aria-label="六大主題">
-    <button class="filter" data-filter="理性" style="--accent:var(--reason)">理性</button>
-    <button class="filter" data-filter="餘波" style="--accent:var(--after)">餘波</button>
-    <button class="filter" data-filter="愛" style="--accent:var(--love)">愛</button>
-    <button class="filter" data-filter="正義" style="--accent:var(--justice)">正義</button>
-    <button class="filter" data-filter="青春" style="--accent:var(--youth)">青春</button>
-    <button class="filter" data-filter="希望" style="--accent:var(--hope)">希望</button>
-  </nav>
+  <nav class="filters" id="filters" aria-label="六大主題"></nav>
 
   <section class="content">
     <div class="map-panel">
       <div class="map-title">
-        <h2>點選主題，看看哪些作品會亮起</h2>
-        <span class="mode-note">點主題：作品聚集｜點作品：紅線與關聯主題亮起</span>
+        <h2 id="mapTitle"></h2>
+        <span class="mode-note" id="modeNote"></span>
       </div>
       <div class="universe" id="universe">
         <svg viewBox="0 0 1000 700" preserveAspectRatio="none" id="lines"></svg>
@@ -278,36 +343,30 @@ h1{font-size:clamp(46px,4.2vw,88px);margin:.12em 0 .06em;line-height:1}
       </div>
     </div>
 
-    <aside class="detail-panel" id="detail">
-      <div class="label">作品探索</div>
-      <h2>請點選一本作品</h2>
-      <p>你可以先從上方六大主題切入，也可以直接點選作品，看看它同時跨越哪些人性命題。</p>
-      <div class="question">東野圭吾的作品很少只屬於單一類型；真正有趣的，往往是不同命題交會的地方。</div>
-    </aside>
+    <aside class="detail-panel" id="detail"></aside>
   </section>
 
   <footer class="footer">
-    <div class="footer-note">觸控螢幕模式：60 秒未操作會回復到「顯示全部」。</div>
-    <button id="quizBtn">前往讀者測驗 →</button>
+    <div class="footer-note" id="footerNote"></div>
+    <button id="quizBtn"></button>
   </footer>
 </div>
 </main>
-
 
 <div id="catalogModal" class="catalog-modal" aria-hidden="true">
   <div class="catalog-modal-card">
     <div class="catalog-modal-top">
       <div>
-        <div class="catalog-modal-kicker">政大圖書館館藏</div>
+        <div class="catalog-modal-kicker" id="catalogKicker"></div>
         <h2 id="catalogModalTitle"></h2>
       </div>
-      <button id="catalogModalClose" class="catalog-modal-close">關閉 ×</button>
+      <button id="catalogModalClose" class="catalog-modal-close"></button>
     </div>
     <div class="catalog-qr-box">
-      <img id="catalogQrImage" alt="館藏 QR Code">
+      <img id="catalogQrImage" alt="Catalog QR Code">
       <div class="catalog-qr-copy">
-        <h3>使用手機掃描查看館藏</h3>
-        <p>請用手機掃瞄 QR Code，以開啟政大圖書館 Primo 館藏紀錄頁面。</p>
+        <h3 id="scanTitle"></h3>
+        <p id="scanBody"></p>
         <div id="catalogUrl" class="catalog-url"></div>
       </div>
     </div>
@@ -315,146 +374,107 @@ h1{font-size:clamp(46px,4.2vw,88px);margin:.12em 0 .06em;line-height:1}
 </div>
 
 <script>
-const colors={
-  "理性":"#6f6051","餘波":"#88664a","愛":"#995b68","正義":"#7b6648","青春":"#66765f","希望":"#5f7489"
+const DATA={"themes":[{"key":"reason","zh-Hant":"理性","ja":"理性","en":"Reason","x":9,"y":13,"color":"#6f6051"},{"key":"after","zh-Hant":"餘波","ja":"余波","en":"Aftermath","x":50,"y":12,"color":"#88664a"},{"key":"love","zh-Hant":"愛","ja":"愛","en":"Love","x":91,"y":13,"color":"#995b68"},{"key":"justice","zh-Hant":"正義","ja":"正義","en":"Justice","x":9,"y":87,"color":"#7b6648"},{"key":"youth","zh-Hant":"青春","ja":"青春","en":"Youth","x":50,"y":88,"color":"#66765f"},{"key":"hope","zh-Hant":"希望","ja":"希望","en":"Hope","x":91,"y":87,"color":"#5f7489"}],"books":[{"title":{"zh-Hant":"嫌疑犯X的獻身","ja":"容疑者Xの献身","en":"The Devotion of Suspect X"},"tags":["reason","love"],"intro":{"zh-Hant":"石神以近乎完美的邏輯設計出一場看似無法破解的犯罪。然而，當湯川一步步逼近真相，真正令人震撼的已經不是詭計本身，而是一個人究竟願意為另一個人犧牲到什麼程度。","ja":"石神は、ほとんど完璧ともいえる論理で解き明かしがたい犯罪を組み立てます。しかし湯川が真相へ近づくにつれ、読者を本当に揺さぶるのはトリックそのものではなく、一人の人間が他者のためにどこまで犠牲になれるのかという問いです。","en":"Ishigami constructs an apparently unsolvable crime with near-perfect logic. Yet as Yukawa closes in on the truth, the real shock lies not in the trick itself, but in how far one person is willing to sacrifice for another."},"q":{"zh-Hant":"當邏輯抵達完美，愛是否仍能被計算？","ja":"論理が完璧に達したとき、愛まで計算できるのでしょうか？","en":"When logic reaches perfection, can love still be calculated?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021451180605721","qr":"qr/s01_b03_zh.png","tagReasons":{"reason":{"zh-Hant":"以數學般精密的設計挑戰推理極限。","ja":"数学のように緻密な設計で推理の限界に挑みます。","en":"Its mathematically precise design pushes deductive reasoning to the limit."},"love":{"zh-Hant":"犯罪背後最核心的力量，是一場極端的守護與犧牲。","ja":"犯罪の核心には、極端なまでの守護と自己犠牲があります。","en":"At the core of the crime lies an extreme act of protection and sacrifice."}}},{"title":{"zh-Hant":"聖女的救贖","ja":"聖女の救済","en":"Salvation of a Saint"},"tags":["reason","love"],"intro":{"zh-Hant":"一場近乎不可能的毒殺案，讓科學推理與長年累積的情感正面碰撞。真正值得追問的，不只是手法如何成立，而是一段關係如何在時間裡變成復仇的條件。","ja":"ほとんど不可能に見える毒殺事件が、科学的推理と長年積み重なった感情を真正面から衝突させます。問われるのは手口だけではなく、ひとつの関係が時間のなかでどのように復讐の条件へ変わっていったのかです。","en":"An almost impossible poisoning brings scientific deduction into direct conflict with years of accumulated emotion. The deeper question is not only how the method worked, but how a relationship became the condition for revenge over time."},"q":{"zh-Hant":"如果犯罪源自一段長久的情感，真相會比較容易被接受嗎？","ja":"犯罪が長く積み重なった感情から生まれたなら、真実は受け入れやすくなるのでしょうか？","en":"If a crime grows out of a long history of emotion, does that make the truth easier to accept?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021451180305721","qr":"qr/s01_b04_zh.png","tagReasons":{"reason":{"zh-Hant":"不可能犯罪的結構，需要科學與邏輯拆解。","ja":"不可能犯罪の構造を、科学と論理で解きほぐします。","en":"The impossible-crime structure demands scientific and logical analysis."},"love":{"zh-Hant":"婚姻、期待與失望逐步轉化為複雜的情感動機。","ja":"結婚、期待、失望が複雑な感情の動機へと変化していきます。","en":"Marriage, expectation, and disappointment gradually become a complex emotional motive."}}},{"title":{"zh-Hant":"真夏方程式","ja":"真夏の方程式","en":"A Midsummer's Equation"},"tags":["reason","after"],"intro":{"zh-Hant":"湯川學在海邊小鎮面對的不只是科學謎題，也是一段被隱藏多年的往事。真相一旦揭開，影響的並非只有案件本身，而是仍在成長中的人如何承受答案。","ja":"海辺の町で湯川が向き合うのは、科学的な謎だけではなく、長年隠されてきた過去です。真実が明らかになったとき、問われるのは事件そのものだけでなく、成長途上の人がその答えをどう受け止めるかです。","en":"In a seaside town, Yukawa confronts not only a scientific mystery but also a past hidden for years. Once the truth is revealed, the issue is no longer just the case itself, but how someone still growing up can bear the answer."},"q":{"zh-Hant":"科學能解釋現象，但能否承擔揭開真相之後的代價？","ja":"科学は現象を説明できても、真実を明かしたあとの代償まで背負えるのでしょうか？","en":"Science can explain what happened—but can it bear the cost of revealing the truth?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991011159649705721","qr":"qr/s01_b06_zh.png","tagReasons":{"reason":{"zh-Hant":"科學觀察與推理仍是破解案件的重要工具。","ja":"科学的な観察と推理が事件解明の重要な手段になります。","en":"Scientific observation and deduction remain essential tools for solving the case."},"after":{"zh-Hant":"多年以前的選擇持續影響下一代與仍活著的人。","ja":"過去の選択が、次の世代と今を生きる人々に影響し続けます。","en":"Choices made years earlier continue to affect the next generation and those still living."}}},{"title":{"zh-Hant":"新參者","ja":"新参者","en":"Newcomer"},"tags":["after","hope"],"intro":{"zh-Hant":"加賀恭一郎走進日本橋的人情街區，破案同時也逐一理解與案件擦身而過的人們。每一段小小的祕密，都指向傷害之後仍可能存在的修補與善意。","ja":"加賀恭一郎は日本橋の街に入り込み、事件を追いながら、その周囲で暮らす人々を一人ずつ理解していきます。小さな秘密の一つひとつが、傷ついたあとにも残る修復と善意の可能性を示します。","en":"Kaga enters the neighborhoods of Nihonbashi and, while solving the case, comes to understand the ordinary people touched by it. Each small secret points toward the possibility of repair and kindness after harm."},"q":{"zh-Hant":"找出犯人之後，刑警還能替留下來的人做什麼？","ja":"犯人を突き止めたあと、刑事は残された人々のために何ができるのでしょうか？","en":"After identifying the culprit, what can a detective still do for those left behind?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991010700549705721","qr":"qr/s02_b08_zh.png","tagReasons":{"after":{"zh-Hant":"焦點落在案件如何改變周遭普通人的生活。","ja":"事件が周囲の普通の人々の暮らしをどう変えるかに焦点を当てます。","en":"The focus is on how the case changes the lives of ordinary people around it."},"hope":{"zh-Hant":"理解與體貼讓受傷的人仍有重新前進的可能。","ja":"理解と思いやりが、傷ついた人にもう一度前へ進む可能性を与えます。","en":"Understanding and compassion give wounded people a chance to move forward again."}}},{"title":{"zh-Hant":"紅色手指","ja":"赤い指","en":"A Red Finger"},"tags":["after","love"],"intro":{"zh-Hant":"當家庭以保護之名選擇沉默，愛就可能變成遮蔽真相的力量。這部作品讓家庭倫理與犯罪責任緊緊纏在一起。","ja":"家族が「守るため」に沈黙を選ぶとき、愛は真実を覆い隠す力にもなり得ます。本作では、家族倫理と犯罪責任が強く絡み合います。","en":"When a family chooses silence in the name of protection, love can become a force that hides the truth. The novel tightly entwines family ethics with criminal responsibility."},"q":{"zh-Hant":"家人之間的沉默，究竟是保護還是傷害？","ja":"家族の沈黙は、守ることなのでしょうか、それとも傷つけることなのでしょうか？","en":"Is silence within a family an act of protection—or an act of harm?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991006872299705721","qr":"qr/s02_b07_zh.png","tagReasons":{"after":{"zh-Hant":"犯罪之後，家庭必須長期承受祕密與罪責。","ja":"犯罪のあと、家族は秘密と罪責を長く背負い続けます。","en":"After the crime, the family must live for years with secrecy and guilt."},"love":{"zh-Hant":"父母對孩子的保護，在極端情況下跨越了倫理界線。","ja":"子どもを守ろうとする親の愛が、極端な状況で倫理の一線を越えます。","en":"Parental protection crosses an ethical boundary under extreme circumstances."}}},{"title":{"zh-Hant":"麒麟之翼","ja":"麒麟の翼","en":"A Death in Tokyo"},"tags":["after","hope"],"intro":{"zh-Hant":"死亡留下的線索，不只指向犯人，也指向一個父親未能說出口的心意。加賀追查的是案件，同時也是家人之間錯過的理解。","ja":"死者が残した手がかりは、犯人だけでなく、父親が言葉にできなかった思いにもつながっています。加賀が追うのは事件であり、同時に家族のあいだで失われた理解でもあります。","en":"The clues left by the dead point not only toward a culprit, but toward feelings a father never managed to express. Kaga investigates the case—and the understanding a family failed to reach."},"q":{"zh-Hant":"死亡留下的最後訊息，能不能讓活著的人重新理解彼此？","ja":"死者が残した最後のメッセージは、生きる人々に互いを理解し直すきっかけを与えられるでしょうか？","en":"Can a final message left by the dead help the living understand one another again?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991012293809705721","qr":"qr/s02_b09_zh.png","tagReasons":{"after":{"zh-Hant":"失去親人之後，家屬仍要重新拼湊對彼此的認識。","ja":"家族を失ったあと、残された人々は互いへの理解を組み立て直さなければなりません。","en":"After losing a loved one, the family must reconstruct how they understand one another."},"hope":{"zh-Hant":"真相讓遺憾有機會被理解，也讓關係重新連結。","ja":"真実は後悔を理解へ変え、関係を結び直す可能性を生みます。","en":"The truth creates a chance to understand regret and reconnect relationships."}}},{"title":{"zh-Hant":"白夜行","ja":"白夜行","en":"Under the Midnight Sun"},"tags":["love","youth","after"],"intro":{"zh-Hant":"一場童年時期的犯罪，讓兩個人的人生從此只能在彼此的陰影中前進。《白夜行》不是單純的犯罪小說，而是一段關於創傷、依存與無法走進陽光的人生。","ja":"幼少期のひとつの事件が、二人の人生を互いの影のなかに縛りつけます。『白夜行』は単なる犯罪小説ではなく、傷、依存、そして光の下へ出られない人生を描く物語です。","en":"A crime in childhood leaves two lives moving forward only within each other’s shadow. Under the Midnight Sun is more than a crime novel; it is a story of trauma, dependence, and lives unable to step into the light."},"q":{"zh-Hant":"兩個人彼此守護，也彼此困住，這仍然是愛嗎？","ja":"二人が互いを守りながら、同時に縛り合っているとしたら、それでも愛と呼べるのでしょうか？","en":"If two people protect each other while also trapping each other, is that still love?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991013650489705721","qr":"qr/s03_b01_zh.png","tagReasons":{"love":{"zh-Hant":"兩人的關係以極端守護與依存維繫。","ja":"二人の関係は、極端な守護と依存によって成り立っています。","en":"Their relationship is sustained by extreme protection and dependence."},"youth":{"zh-Hant":"童年與青少年時期的創傷塑造了往後的人生。","ja":"幼少期から青春期にかけての傷が、その後の人生を形づくります。","en":"Trauma from childhood and adolescence shapes everything that follows."},"after":{"zh-Hant":"早年的案件像影子一樣持續延伸多年。","ja":"過去の事件が影のように長い年月を追い続けます。","en":"An early crime continues to cast a shadow across many years."}}},{"title":{"zh-Hant":"秘密","ja":"秘密","en":"Naoko"},"tags":["love","hope"],"intro":{"zh-Hant":"當熟悉的身體與熟悉的靈魂不再重合，一段婚姻被迫重新定義。這是一個超越推理框架、直接追問愛與身份的故事。","ja":"見慣れた身体と知っているはずの魂が一致しなくなったとき、夫婦の関係は再定義を迫られます。推理の枠を越え、愛とアイデンティティそのものを問う物語です。","en":"When a familiar body and a familiar soul no longer align, a marriage must be redefined. The story moves beyond conventional mystery to ask directly what love and identity mean."},"q":{"zh-Hant":"當身體、記憶與身份改變，愛要如何辨認對方？","ja":"身体、記憶、アイデンティティが変わったとき、愛はどうやって相手を見分けるのでしょうか？","en":"When body, memory, and identity change, how does love recognize the other person?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202629705721","qr":"qr/s03_b03_zh.png","tagReasons":{"love":{"zh-Hant":"婚姻與親密關係面臨身份錯位的考驗。","ja":"結婚と親密さが、アイデンティティのずれによって試されます。","en":"Marriage and intimacy are tested by a radical shift in identity."},"hope":{"zh-Hant":"面對無法逆轉的失去，人仍必須尋找繼續生活的方法。","ja":"取り戻せない喪失を前にしても、人は生き続ける方法を探さなければなりません。","en":"Even in the face of irreversible loss, people must find a way to keep living."}}},{"title":{"zh-Hant":"幻夜","ja":"幻夜","en":"Phantom Night"},"tags":["love","justice"],"intro":{"zh-Hant":"當情感被用來操控他人，愛便與慾望、利用和權力糾纏。《幻夜》把讀者帶進一個難以用單一道德標準判斷的世界。","ja":"感情が他者を操るために使われるとき、愛は欲望、利用、権力と絡み合います。『幻夜』は、単純な道徳基準では裁けない世界へ読者を連れていきます。","en":"When emotion becomes a tool for manipulating others, love tangles with desire, exploitation, and power. Phantom Night draws the reader into a world that resists simple moral judgment."},"q":{"zh-Hant":"如果愛變成利用與控制，理解還有意義嗎？","ja":"愛が利用と支配に変わったとき、それでも理解することに意味はあるのでしょうか？","en":"If love turns into exploitation and control, does understanding still matter?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991019733539705721","qr":"qr/s03_b02_zh.png","tagReasons":{"love":{"zh-Hant":"親密關係在操控與依存中逐漸變形。","ja":"親密な関係が、支配と依存のなかで次第に歪んでいきます。","en":"An intimate relationship becomes distorted by control and dependence."},"justice":{"zh-Hant":"角色的選擇逼迫讀者思考責任、代價與公平。","ja":"登場人物の選択が、責任、代償、公平について考えさせます。","en":"The characters’ choices force us to consider responsibility, cost, and fairness."}}},{"title":{"zh-Hant":"徬徨之刃","ja":"さまよう刃","en":"The Hovering Blade"},"tags":["justice","after"],"intro":{"zh-Hant":"面對女兒遭害、法律卻未必能給出令人接受的答案，一位父親選擇自行追索正義。作品將讀者推進法律與復仇之間最尖銳的灰色地帶。","ja":"娘を奪われても、法が必ずしも納得できる答えを与えてくれないとき、一人の父親は自ら正義を求め始めます。本作は、法と復讐のあいだにある最も鋭い灰色地帯へ読者を押し込みます。","en":"When a father loses his daughter and the law cannot offer an acceptable answer, he chooses to pursue justice himself. The novel pushes the reader into the sharpest gray zone between law and revenge."},"q":{"zh-Hant":"當法律無法平息被害者家屬的痛苦，復仇會變成正義嗎？","ja":"法が遺族の苦しみを鎮められないとき、復讐は正義になり得るのでしょうか？","en":"When the law cannot ease a victim family’s pain, can revenge become justice?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991014915419705721","qr":"qr/s03_b09_zh.png","tagReasons":{"justice":{"zh-Hant":"少年司法與私人復仇形成直接衝突。","ja":"少年司法と私的な復讐が真正面から衝突します。","en":"Juvenile justice collides directly with private revenge."},"after":{"zh-Hant":"受害者家屬的痛苦並不會隨案件結束而消失。","ja":"遺族の苦しみは、事件が終わっても消えません。","en":"The family’s pain does not disappear when the case ends."}}},{"title":{"zh-Hant":"空洞的十字架","ja":"虚ろな十字架","en":"Hollow Cross"},"tags":["justice","after"],"intro":{"zh-Hant":"死刑是否等於贖罪？懲罰是否真的能讓被害者家屬得到答案？這部作品把犯罪之後漫長的生命拉到判決之外重新檢視。","ja":"死刑は贖罪と同じなのでしょうか。処罰は本当に遺族へ答えを与えるのでしょうか。本作は、判決のあとも続く長い人生を見つめ直します。","en":"Does the death penalty amount to atonement? Can punishment truly give victims’ families an answer? The novel looks beyond the verdict to the long lives that continue after a crime."},"q":{"zh-Hant":"懲罰完成之後，罪真的消失了嗎？","ja":"罰を受け終えたあと、罪は本当に消えるのでしょうか？","en":"After punishment is complete, does guilt truly disappear?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991017375569705721","qr":"qr/s04_b01_zh.png","tagReasons":{"justice":{"zh-Hant":"直接辯證死刑、懲罰與贖罪的意義。","ja":"死刑、処罰、贖罪の意味を正面から問い直します。","en":"It directly questions the meaning of capital punishment, punishment, and atonement."},"after":{"zh-Hant":"受害與加害雙方都長期活在事件留下的後果裡。","ja":"被害者側も加害者側も、事件が残した影響のなかで長く生き続けます。","en":"Both victims and offenders live for years with the consequences left by the crime."}}},{"title":{"zh-Hant":"白金數據","ja":"プラチナデータ","en":"Platinum Data"},"tags":["justice","reason"],"intro":{"zh-Hant":"當國家以DNA與大數據追蹤犯罪，效率與安全似乎達到新的高度；但當科技開始決定誰值得被懷疑，自由與隱私又該放在哪裡？","ja":"国家がDNAと大規模データを使って犯罪を追跡すると、効率と安全性は飛躍的に高まるように見えます。しかしテクノロジーが「誰を疑うべきか」を決め始めたとき、自由とプライバシーはどこに置かれるのでしょうか。","en":"When the state uses DNA and large-scale data to track crime, efficiency and safety seem to reach a new level. But when technology begins deciding who deserves suspicion, where do freedom and privacy belong?"},"q":{"zh-Hant":"更安全的社會，是否必然要犧牲隱私與自由？","ja":"より安全な社会のためには、プライバシーと自由を犠牲にしなければならないのでしょうか？","en":"Must a safer society necessarily sacrifice privacy and freedom?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991002682659705721","qr":"qr/s04_b03_zh.png","tagReasons":{"justice":{"zh-Hant":"科技治理引出權力、隱私與公平的問題。","ja":"テクノロジーによる統治が、権力、プライバシー、公平の問題を浮かび上がらせます。","en":"Technological governance raises questions of power, privacy, and fairness."},"reason":{"zh-Hant":"數據與科學模型被視為近乎客觀的真相工具。","ja":"データと科学モデルが、ほぼ客観的な真実の道具として扱われます。","en":"Data and scientific models are treated as nearly objective instruments of truth."}}},{"title":{"zh-Hant":"放學後","ja":"放課後","en":"After School"},"tags":["youth","justice"],"intro":{"zh-Hant":"看似平靜的校園，藏著競爭、壓力與不能說出口的祕密。東野圭吾從早期作品開始，就已經在追問青春如何一步步走向不可逆的選擇。","ja":"一見穏やかな学校には、競争、圧力、口にできない秘密が潜んでいます。東野圭吾は初期作品から、青春がどのように取り返しのつかない選択へ向かうのかを問い続けていました。","en":"A seemingly quiet school conceals competition, pressure, and unspoken secrets. Even in his early work, Higashino was already asking how youth can move step by step toward irreversible choices."},"q":{"zh-Hant":"青春中的壓力與秘密，會在什麼時候跨過不可逆的界線？","ja":"青春の圧力と秘密は、いつ取り返しのつかない一線を越えるのでしょうか？","en":"When do the pressures and secrets of youth cross an irreversible line?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202259705721","qr":"qr/s05_b01_zh.png","tagReasons":{"youth":{"zh-Hant":"校園生活與年輕人的壓力構成故事核心。","ja":"学校生活と若者の重圧が物語の中心にあります。","en":"School life and the pressures faced by young people form the core of the story."},"justice":{"zh-Hant":"犯罪責任與動機讓讀者重新判斷誰應被責怪。","ja":"犯罪責任と動機が、誰を責めるべきかという判断を揺さぶります。","en":"Responsibility and motive force the reader to reconsider who deserves blame."}}},{"title":{"zh-Hant":"同級生","ja":"同級生","en":"Classmates"},"tags":["youth","after"],"intro":{"zh-Hant":"同儕關係、誤解與沉默，在青春裡往往比成人想像得更沉重。作品透過案件追問：那些沒說出口的事情，最後會留下什麼？","ja":"仲間同士の関係、誤解、沈黙は、青春期には大人が思う以上に重くのしかかります。本作は事件を通して、語られなかったことが最後に何を残すのかを問いかけます。","en":"Peer relationships, misunderstandings, and silence can weigh far more heavily in youth than adults imagine. Through the case, the novel asks what unspoken things ultimately leave behind."},"q":{"zh-Hant":"同儕之間的沉默與誤解，會留下多長的影子？","ja":"仲間のあいだの沈黙と誤解は、どれほど長い影を残すのでしょうか？","en":"How long a shadow can silence and misunderstanding among peers leave behind?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202459705721","qr":"qr/s05_b02_zh.png","tagReasons":{"youth":{"zh-Hant":"聚焦學生之間的友情、誤解與脆弱。","ja":"学生同士の友情、誤解、脆さに焦点を当てます。","en":"It focuses on friendship, misunderstanding, and vulnerability among students."},"after":{"zh-Hant":"一個事件持續影響同儕關係與後續選擇。","ja":"ひとつの事件が、その後の人間関係と選択に影響し続けます。","en":"One event continues to shape relationships and later choices."}}},{"title":{"zh-Hant":"畢業","ja":"卒業 雪月花殺人ゲーム","en":"Graduation: The Setsugekka Murder Game"},"tags":["youth","reason"],"intro":{"zh-Hant":"畢業前夕，本應走向未來的年輕人，卻因案件被迫重新檢視彼此。友情、競爭與理性推理在校園裡交錯。","ja":"卒業を目前に控え、本来なら未来へ向かうはずの若者たちは、事件によって互いの関係を見つめ直すことになります。友情、競争、そして論理的な推理が学園のなかで交差します。","en":"On the eve of graduation, young people who should be looking toward the future are forced by a case to reexamine one another. Friendship, competition, and logical deduction intersect on campus."},"q":{"zh-Hant":"校園裡看似單純的關係，藏著多少難以說出口的競爭與情感？","ja":"学校での一見単純な関係の裏に、どれほど語れない競争や感情が隠れているのでしょうか？","en":"How much unspoken competition and emotion can hide beneath seemingly simple school relationships?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991006991519705721","qr":"qr/s02_b01_zh.png","tagReasons":{"youth":{"zh-Hant":"畢業與友情構成角色最重要的人生節點。","ja":"卒業と友情が、登場人物にとって重要な人生の節目になります。","en":"Graduation and friendship form a crucial turning point in the characters’ lives."},"reason":{"zh-Hant":"案件設計與推理解謎仍保有鮮明本格色彩。","ja":"事件の構成と推理には、鮮明な本格ミステリーの魅力があります。","en":"The case design and deduction retain a strong classic-mystery character."}}},{"title":{"zh-Hant":"流星之絆","ja":"流星の絆","en":"Bonds of Shooting Stars"},"tags":["youth","love","after"],"intro":{"zh-Hant":"父母遭害之後，三兄妹共同長大，也共同背負一樁未解的創傷。手足之愛既是支撐，也是讓他們無法輕易放下過去的力量。","ja":"両親を失った三兄妹は、ともに成長しながら、未解決の傷をともに背負っていきます。きょうだいの愛は支えであると同時に、過去を簡単には手放せなくする力でもあります。","en":"After their parents are killed, three siblings grow up together while carrying an unresolved trauma. Their bond sustains them, but also keeps the past from being easily released."},"q":{"zh-Hant":"手足共同背負的創傷，會把彼此拉得更近，還是困得更深？","ja":"きょうだいが共有する傷は、互いをより近づけるのでしょうか、それともより深く縛るのでしょうか？","en":"Does shared trauma draw siblings closer together—or bind them more tightly to the past?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991003400579705721","qr":"qr/s03_b10_zh.png","tagReasons":{"youth":{"zh-Hant":"童年失去父母的經驗塑造三兄妹的成長。","ja":"幼い頃に両親を失った経験が、三兄妹の成長を形づくります。","en":"Losing their parents in childhood shapes the siblings’ development."},"love":{"zh-Hant":"手足間的守護成為彼此最深的連結。","ja":"きょうだい同士の守り合いが、最も深い絆になります。","en":"Mutual protection becomes the siblings’ deepest bond."},"after":{"zh-Hant":"父母死亡後的案件持續決定他們的人生方向。","ja":"両親の死にまつわる事件が、その後の人生の方向を決め続けます。","en":"The case surrounding their parents’ deaths continues to shape their lives."}}},{"title":{"zh-Hant":"解憂雜貨店","ja":"ナミヤ雑貨店の奇蹟","en":"The Miracles of the Namiya General Store"},"tags":["hope","youth"],"intro":{"zh-Hant":"一間跨越時間回信的雜貨店，讓不同人生在意想不到的地方相遇。沒有傳統命案，卻依然透過選擇與祕密完成另一種解謎。","ja":"時を超えて手紙に返事をする雑貨店が、異なる人生を思いがけない場所でつなぎます。伝統的な殺人事件はなくても、選択と秘密を通して別のかたちの謎解きが生まれます。","en":"A general store that answers letters across time brings different lives together in unexpected ways. There is no traditional murder case, yet choices and secrets create another kind of mystery."},"q":{"zh-Hant":"一個陌生人的善意，真的能改變另一個人的人生嗎？","ja":"見知らぬ人の善意は、本当に誰かの人生を変えられるのでしょうか？","en":"Can the kindness of a stranger truly change another person’s life?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991013917119705721","qr":"qr/s06_b01_zh.png","tagReasons":{"hope":{"zh-Hant":"陌生人的回應與善意成為改變人生的契機。","ja":"見知らぬ人からの返事と善意が、人生を変えるきっかけになります。","en":"A stranger’s response and kindness become a turning point in another life."},"youth":{"zh-Hant":"許多關鍵選擇都發生在人生尚未定型的年輕階段。","ja":"多くの重要な選択が、まだ人生が定まりきらない若い時期に起こります。","en":"Many decisive choices occur while life is still taking shape in youth."}}},{"title":{"zh-Hant":"祈念之樹","ja":"クスノキの番人","en":"The Camphorwood Custodian"},"tags":["hope","after"],"intro":{"zh-Hant":"人們把不能說出口的祕密交給一棵樹，也把理解彼此的可能留在那裡。這部作品讓「解謎」變成傾聽與理解的過程。","ja":"人々は言葉にできない秘密を一本のクスノキに託し、そこに互いを理解する可能性も残します。本作では「謎解き」が、耳を傾け理解するための過程へと変わります。","en":"People entrust unspeakable secrets to a camphor tree, leaving there the possibility of understanding one another. In this story, “solving” becomes a process of listening and understanding."},"q":{"zh-Hant":"如果祕密不是為了隱瞞，而是為了理解呢？","ja":"もし秘密が隠すためではなく、理解するためにあるとしたら？","en":"What if a secret exists not to hide something, but to help someone understand?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021192068705721","qr":"qr/s06_b02_zh.png","tagReasons":{"hope":{"zh-Hant":"理解祕密讓人重新與他人建立連結。","ja":"秘密を理解することで、人は他者と再びつながることができます。","en":"Understanding a secret allows people to reconnect with others."},"after":{"zh-Hant":"過去未完成的情感仍持續影響現在的人。","ja":"過去に残された未完の感情が、今を生きる人々に影響し続けます。","en":"Unresolved feelings from the past continue to affect people in the present."}}},{"title":{"zh-Hant":"時生","ja":"時生","en":"Tokio"},"tags":["hope","love"],"intro":{"zh-Hant":"如果能提前知道人生的失去，我們是否還願意走向同一段相遇？《時生》以奇想包裹親情與人生選擇，留下溫柔而沉重的答案。","ja":"もし人生で失うものをあらかじめ知っていたら、それでも同じ出会いを選ぶでしょうか。『時生』は奇想的な設定のなかに親子の情と人生の選択を包み込み、やさしくも重い答えを残します。","en":"If we knew in advance what life would take from us, would we still choose the same encounter? Tokio wraps family love and life choices in a speculative premise, leaving an answer that is both gentle and weighty."},"q":{"zh-Hant":"知道結局之後，我們還會選擇同樣的人生嗎？","ja":"結末を知っていても、私たちは同じ人生を選ぶのでしょうか？","en":"If we knew the ending, would we still choose the same life?"},"catalog":"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991009666239705721","qr":"qr/s06_b04_zh.png","tagReasons":{"hope":{"zh-Hant":"即使知道失去，人仍可以選擇珍惜與前進。","ja":"失うことを知っていても、人は大切にし、前へ進むことを選べます。","en":"Even knowing loss is coming, people can still choose to cherish and move forward."},"love":{"zh-Hant":"親情與陪伴構成故事真正的情感核心。","ja":"親子の愛情と寄り添うことが、物語の本当の感情的核心です。","en":"Family love and companionship form the story’s emotional core."}}}],"ui":{"zh-Hant":{"pageTitle":"作品宇宙｜真相之後","kicker":"《真相之後──東野圭吾的人性推理》","title":"作品宇宙","subtitle":"一本書，可能同時屬於不只一種人性命題。","showAll":"顯示全部","home":"⌂ 回首頁","mapTitle":"點選主題，看看哪些作品會亮起","modeNote":"點主題：作品聚集｜點作品：紅線與關聯主題亮起","exploreLabel":"作品探索","chooseBook":"請點選一本作品","chooseBookCopy":"你可以先從上方六大主題切入，也可以直接點選作品，看看它同時跨越哪些人性命題。","chooseBookQ":"東野圭吾的作品很少只屬於單一類型；真正有趣的，往往是不同命題交會的地方。","footer":"觸控螢幕模式：60 秒未操作會回復到「顯示全部」。","quiz":"前往讀者測驗 →","catalogKicker":"政大圖書館館藏","close":"關閉 ×","scanTitle":"使用手機掃描查看館藏","scanBody":"請用手機掃瞄 QR Code，以開啟政大圖書館 Primo 館藏紀錄頁面。","themeExplore":"主題探索","themeCopy":"與「{theme}」相關的作品已自動聚集到中央，其他作品暫時淡出。點任一本書，即可查看它與其他主題的交會。","themeQ":"作品不是被固定在單一分類裡，而是隨著你的選擇重新形成一張人性關係圖。","bookConnect":"這本作品同時連結 <b>{tags}</b> 等命題。下方可看到它為什麼會跨越這些主題。","viewIntro":"查看策展導讀","collapseIntro":"收合策展導讀","viewCatalog":"查看館藏","catalogMissing":"此作品尚未設定館藏網址。請在程式碼 books 資料中的 catalog 欄位貼上該書館藏連結。","resetQ":"點主題時，相關作品會自動聚集；點作品時，與它相連的主題與紅線會被強調。"},"ja":{"pageTitle":"作品世界｜真実のその先","kicker":"『真実のその先――東野圭吾が描く、人間の心とミステリー』","title":"作品世界","subtitle":"一冊の本が、複数の人間的テーマにまたがることがあります。","showAll":"すべて表示","home":"⌂ ホームへ戻る","mapTitle":"テーマを選んで、どの作品が浮かび上がるか見てみましょう","modeNote":"テーマを選択：作品が集まる｜作品を選択：関連テーマと線が強調される","exploreLabel":"作品探索","chooseBook":"作品を一冊選んでください","chooseBookCopy":"上の6つのテーマから入ることも、作品を直接選んで、その作品がどんな人間的テーマを横断しているかを見ることもできます。","chooseBookQ":"東野圭吾の作品は、ひとつのジャンルやテーマだけには収まりません。面白さは、異なる問いが交差する場所にあります。","footer":"タッチスクリーンモード：60秒間操作がない場合、「すべて表示」に戻ります。","quiz":"読者診断へ →","catalogKicker":"政治大学図書館 所蔵","close":"閉じる ×","scanTitle":"スマートフォンで所蔵を確認","scanBody":"QRコードをスマートフォンで読み取り、政治大学図書館Primoの所蔵レコードを開いてください。","themeExplore":"テーマ探索","themeCopy":"「{theme}」に関連する作品が中央に集まり、その他の作品は一時的に非表示になります。作品を一冊選ぶと、ほかのテーマとのつながりも確認できます。","themeQ":"作品はひとつの分類に固定されるのではなく、あなたの選択によって人間性の関係図として組み替わっていきます。","bookConnect":"この作品は <b>{tags}</b> などのテーマにつながっています。なぜ複数のテーマを横断するのか、下で確認できます。","viewIntro":"策展解説を見る","collapseIntro":"策展解説を閉じる","viewCatalog":"所蔵を見る","catalogMissing":"この作品にはまだ所蔵URLが設定されていません。booksデータの catalog 欄位に所蔵リンクを追加してください。","resetQ":"テーマを選ぶと関連作品が集まり、作品を選ぶと関連テーマと線が強調されます。"},"en":{"pageTitle":"Works Universe | Beyond the Truth","kicker":"Beyond the Truth — Keigo Higashino: Human Nature Behind the Mystery","title":"Works Universe","subtitle":"A single book can belong to more than one question about human nature.","showAll":"Show All","home":"⌂ Back to Home","mapTitle":"Choose a theme and see which works light up","modeNote":"Choose a theme: works gather｜Choose a book: related themes and lines are highlighted","exploreLabel":"Explore the Works","chooseBook":"Choose a book","chooseBookCopy":"Start with one of the six themes above, or choose a book directly to see which questions about human nature it crosses.","chooseBookQ":"Higashino’s works rarely belong to only one category. Their real interest often lies where different questions intersect.","footer":"Touchscreen mode: after 60 seconds of inactivity, the view returns to “Show All.”","quiz":"Go to Reader Quiz →","catalogKicker":"NCCU Library Collection","close":"Close ×","scanTitle":"Scan with Your Phone to View the Catalog Record","scanBody":"Scan the QR code with your phone to open the NCCU Library Primo catalog record.","themeExplore":"Explore a Theme","themeCopy":"Works related to “{theme}” have gathered in the center while the others fade out. Choose any book to see how it intersects with other themes.","themeQ":"These works are not fixed within a single category. Your choices redraw them as a map of human questions and connections.","bookConnect":"This work connects <b>{tags}</b> and related themes. Below, you can see why it crosses these areas.","viewIntro":"View Curatorial Note","collapseIntro":"Hide Curatorial Note","viewCatalog":"View Library Record","catalogMissing":"No catalog URL has been set for this work yet. Add the library link to the catalog field in the books data.","resetQ":"Choose a theme to gather related works; choose a book to highlight its connected themes and lines."}}};
+const LANGUAGE_CONFIG={
+  "zh-Hant":{query:"zh",htmlLang:"zh-Hant"},
+  "ja":{query:"ja",htmlLang:"ja"},
+  "en":{query:"en",htmlLang:"en"}
 };
-
-const themes=[
-  {name:"理性",x:9,y:13},{name:"餘波",x:50,y:12},{name:"愛",x:91,y:13},
-  {name:"正義",x:9,y:87},{name:"青春",x:50,y:88},{name:"希望",x:91,y:87}
-];
-
-/*
-  每一本作品都可以獨立修改：
-  intro   = 策展導讀
-  q       = 人性提問
-  catalog = 館藏網址
-  tagReasons = 為什麼這本書會連到各主題
-*/
-const books=[
-  {
-    title:"嫌疑犯X的獻身", tags:["理性","愛"],
-    intro:"石神以近乎完美的邏輯設計出一場看似無法破解的犯罪。然而，當湯川一步步逼近真相，真正令人震撼的已經不是詭計本身，而是一個人究竟願意為另一個人犧牲到什麼程度。",
-    q:"當邏輯抵達完美，愛是否仍能被計算？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021451180605721", qr:"qr/s01_b03_zh.png",
-    tagReasons:{"理性":"以數學般精密的設計挑戰推理極限。","愛":"犯罪背後最核心的力量，是一場極端的守護與犧牲。"}
-  },
-  {
-    title:"聖女的救贖", tags:["理性","愛"],
-    intro:"一場近乎不可能的毒殺案，讓科學推理與長年累積的情感正面碰撞。真正值得追問的，不只是手法如何成立，而是一段關係如何在時間裡變成復仇的條件。",
-    q:"如果犯罪源自一段長久的情感，真相會比較容易被接受嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021451180305721", qr:"qr/s01_b04_zh.png",
-    tagReasons:{"理性":"不可能犯罪的結構，需要科學與邏輯拆解。","愛":"婚姻、期待與失望逐步轉化為複雜的情感動機。"}
-  },
-  {
-    title:"盛夏方程式", tags:["理性","餘波"],
-    intro:"湯川學在海邊小鎮面對的不只是科學謎題，也是一段被隱藏多年的往事。真相一旦揭開，影響的並非只有案件本身，而是仍在成長中的人如何承受答案。",
-    q:"科學能解釋現象，但能否承擔揭開真相之後的代價？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991011159649705721", qr:"qr/s01_b06_zh.png",
-    tagReasons:{"理性":"科學觀察與推理仍是破解案件的重要工具。","餘波":"多年以前的選擇持續影響下一代與仍活著的人。"}
-  },
-  {
-    title:"新參者", tags:["餘波","希望"],
-    intro:"加賀恭一郎走進日本橋的人情街區，破案同時也逐一理解與案件擦身而過的人們。每一段小小的祕密，都指向傷害之後仍可能存在的修補與善意。",
-    q:"找出犯人之後，刑警還能替留下來的人做什麼？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991010700549705721", qr:"qr/s02_b08_zh.png",
-    tagReasons:{"餘波":"焦點落在案件如何改變周遭普通人的生活。","希望":"理解與體貼讓受傷的人仍有重新前進的可能。"}
-  },
-  {
-    title:"紅色手指", tags:["餘波","愛"],
-    intro:"當家庭以保護之名選擇沉默，愛就可能變成遮蔽真相的力量。這部作品讓家庭倫理與犯罪責任緊緊纏在一起。",
-    q:"家人之間的沉默，究竟是保護還是傷害？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991006872299705721", qr:"qr/s02_b07_zh.png",
-    tagReasons:{"餘波":"犯罪之後，家庭必須長期承受祕密與罪責。","愛":"父母對孩子的保護，在極端情況下跨越了倫理界線。"}
-  },
-  {
-    title:"麒麟之翼", tags:["餘波","希望"],
-    intro:"死亡留下的線索，不只指向犯人，也指向一個父親未能說出口的心意。加賀追查的是案件，同時也是家人之間錯過的理解。",
-    q:"死亡留下的最後訊息，能不能讓活著的人重新理解彼此？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991012293809705721", qr:"qr/s02_b09_zh.png",
-    tagReasons:{"餘波":"失去親人之後，家屬仍要重新拼湊對彼此的認識。","希望":"真相讓遺憾有機會被理解，也讓關係重新連結。"}
-  },
-  {
-    title:"白夜行", tags:["愛","青春","餘波"],
-    intro:"一場童年時期的犯罪，讓兩個人的人生從此只能在彼此的陰影中前進。《白夜行》不是單純的犯罪小說，而是一段關於創傷、依存與無法走進陽光的人生。",
-    q:"兩個人彼此守護，也彼此困住，這仍然是愛嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991013650489705721", qr:"qr/s03_b01_zh.png",
-    tagReasons:{"愛":"兩人的關係以極端守護與依存維繫。","青春":"童年與青少年時期的創傷塑造了往後的人生。","餘波":"早年的案件像影子一樣持續延伸多年。"}
-  },
-  {
-    title:"秘密", tags:["愛","希望"],
-    intro:"當熟悉的身體與熟悉的靈魂不再重合，一段婚姻被迫重新定義。這是一個超越推理框架、直接追問愛與身份的故事。",
-    q:"當身體、記憶與身份改變，愛要如何辨認對方？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202629705721", qr:"qr/s03_b03_zh.png",
-    tagReasons:{"愛":"婚姻與親密關係面臨身份錯位的考驗。","希望":"面對無法逆轉的失去，人仍必須尋找繼續生活的方法。"}
-  },
-  {
-    title:"幻夜", tags:["愛","正義"],
-    intro:"當情感被用來操控他人，愛便與慾望、利用和權力糾纏。《幻夜》把讀者帶進一個難以用單一道德標準判斷的世界。",
-    q:"如果愛變成利用與控制，理解還有意義嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991019733539705721", qr:"qr/s03_b02_zh.png",
-    tagReasons:{"愛":"親密關係在操控與依存中逐漸變形。","正義":"角色的選擇逼迫讀者思考責任、代價與公平。"}
-  },
-  {
-    title:"徬徨之刃", tags:["正義","餘波"],
-    intro:"面對女兒遭害、法律卻未必能給出令人接受的答案，一位父親選擇自行追索正義。作品將讀者推進法律與復仇之間最尖銳的灰色地帶。",
-    q:"當法律無法平息被害者家屬的痛苦，復仇會變成正義嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991014915419705721", qr:"qr/s03_b09_zh.png",
-    tagReasons:{"正義":"少年司法與私人復仇形成直接衝突。","餘波":"受害者家屬的痛苦並不會隨案件結束而消失。"}
-  },
-  {
-    title:"空洞的十字架", tags:["正義","餘波"],
-    intro:"死刑是否等於贖罪？懲罰是否真的能讓被害者家屬得到答案？這部作品把犯罪之後漫長的生命拉到判決之外重新檢視。",
-    q:"懲罰完成之後，罪真的消失了嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991017375569705721", qr:"qr/s04_b01_zh.png",
-    tagReasons:{"正義":"直接辯證死刑、懲罰與贖罪的意義。","餘波":"受害與加害雙方都長期活在事件留下的後果裡。"}
-  },
-  {
-    title:"白金數據", tags:["正義","理性"],
-    intro:"當國家以DNA與大數據追蹤犯罪，效率與安全似乎達到新的高度；但當科技開始決定誰值得被懷疑，自由與隱私又該放在哪裡？",
-    q:"更安全的社會，是否必然要犧牲隱私與自由？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991002682659705721", qr:"qr/s04_b03_zh.png",
-    tagReasons:{"正義":"科技治理引出權力、隱私與公平的問題。","理性":"數據與科學模型被視為近乎客觀的真相工具。"}
-  },
-  {
-    title:"放學後", tags:["青春","正義"],
-    intro:"看似平靜的校園，藏著競爭、壓力與不能說出口的祕密。東野圭吾從早期作品開始，就已經在追問青春如何一步步走向不可逆的選擇。",
-    q:"青春中的壓力與秘密，會在什麼時候跨過不可逆的界線？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202259705721", qr:"qr/s05_b01_zh.png",
-    tagReasons:{"青春":"校園生活與年輕人的壓力構成故事核心。","正義":"犯罪責任與動機讓讀者重新判斷誰應被責怪。"}
-  },
-  {
-    title:"同級生", tags:["青春","餘波"],
-    intro:"同儕關係、誤解與沉默，在青春裡往往比成人想像得更沉重。作品透過案件追問：那些沒說出口的事情，最後會留下什麼？",
-    q:"同儕之間的沉默與誤解，會留下多長的影子？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991003202459705721", qr:"qr/s05_b02_zh.png",
-    tagReasons:{"青春":"聚焦學生之間的友情、誤解與脆弱。","餘波":"一個事件持續影響同儕關係與後續選擇。"}
-  },
-  {
-    title:"畢業", tags:["青春","理性"],
-    intro:"畢業前夕，本應走向未來的年輕人，卻因案件被迫重新檢視彼此。友情、競爭與理性推理在校園裡交錯。",
-    q:"校園裡看似單純的關係，藏著多少難以說出口的競爭與情感？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991006991519705721", qr:"qr/s02_b01_zh.png",
-    tagReasons:{"青春":"畢業與友情構成角色最重要的人生節點。","理性":"案件設計與推理解謎仍保有鮮明本格色彩。"}
-  },
-  {
-    title:"流星之絆", tags:["青春","愛","餘波"],
-    intro:"父母遭害之後，三兄妹共同長大，也共同背負一樁未解的創傷。手足之愛既是支撐，也是讓他們無法輕易放下過去的力量。",
-    q:"手足共同背負的創傷，會把彼此拉得更近，還是困得更深？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/muf5u7/alma991003400579705721", qr:"qr/s03_b10_zh.png",
-    tagReasons:{"青春":"童年失去父母的經驗塑造三兄妹的成長。","愛":"手足間的守護成為彼此最深的連結。","餘波":"父母死亡後的案件持續決定他們的人生方向。"}
-  },
-  {
-    title:"解憂雜貨店", tags:["希望","青春"],
-    intro:"一間跨越時間回信的雜貨店，讓不同人生在意想不到的地方相遇。沒有傳統命案，卻依然透過選擇與祕密完成另一種解謎。",
-    q:"一個陌生人的善意，真的能改變另一個人的人生嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991013917119705721", qr:"qr/s06_b01_zh.png",
-    tagReasons:{"希望":"陌生人的回應與善意成為改變人生的契機。","青春":"許多關鍵選擇都發生在人生尚未定型的年輕階段。"}
-  },
-  {
-    title:"祈念之樹", tags:["希望","餘波"],
-    intro:"人們把不能說出口的祕密交給一棵樹，也把理解彼此的可能留在那裡。這部作品讓「解謎」變成傾聽與理解的過程。",
-    q:"如果祕密不是為了隱瞞，而是為了理解呢？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991021192068705721", qr:"qr/s06_b02_zh.png",
-    tagReasons:{"希望":"理解祕密讓人重新與他人建立連結。","餘波":"過去未完成的情感仍持續影響現在的人。"}
-  },
-  {
-    title:"時生", tags:["希望","愛"],
-    intro:"如果能提前知道人生的失去，我們是否還願意走向同一段相遇？《時生》以奇想包裹親情與人生選擇，留下溫柔而沉重的答案。",
-    q:"知道結局之後，我們還會選擇同樣的人生嗎？", catalog:"https://nccu.primo.exlibrisgroup.com/permalink/886NCCU_INST/10847of/alma991009666239705721", qr:"qr/s06_b04_zh.png",
-    tagReasons:{"希望":"即使知道失去，人仍可以選擇珍惜與前進。","愛":"親情與陪伴構成故事真正的情感核心。"}
-  }
-];
+function normalizeLang(value){
+  if(!value)return null;
+  const v=String(value).toLowerCase();
+  if(["zh","zh-hant","zh_tw","zh-tw"].includes(v))return "zh-Hant";
+  if(["ja","jp","ja-jp"].includes(v))return "ja";
+  if(["en","en-us","en-gb"].includes(v))return "en";
+  return null;
+}
+function resolveInitialLanguage(){
+  const params=new URLSearchParams(window.location.search);
+  return normalizeLang(params.get("lang"))||
+         normalizeLang(localStorage.getItem("truthAfterLang"))||
+         "zh-Hant";
+}
+let currentLang=resolveInitialLanguage();
+let currentFilter=null;
+let currentBookIndex=null;
 
 const nodes=document.getElementById("nodes");
 const lines=document.getElementById("lines");
 const detail=document.getElementById("detail");
-let currentFilter=null;
-let currentBookIndex=null;
 
-/* 顯示全部時使用固定、碰撞安全的 4×5 排列。 */
+function t(key){
+  return DATA.ui[currentLang][key];
+}
+function fmt(text,vars={}){
+  return String(text).replace(/\{(\w+)\}/g,(_,k)=>vars[k]??"");
+}
+function themeLabel(key){
+  return DATA.themes.find(t=>t.key===key)?.[currentLang] || key;
+}
+function themeColor(key){
+  return DATA.themes.find(t=>t.key===key)?.color || "#777";
+}
+function bookTitle(book){
+  return book.title[currentLang] || book.title["zh-Hant"];
+}
+function withCurrentLang(url){
+  const u=new URL(url,window.location.href);
+  u.searchParams.set("lang",LANGUAGE_CONFIG[currentLang].query);
+  return u.pathname.split("/").pop()+u.search+u.hash;
+}
+function updateLangButtons(){
+  document.querySelectorAll(".lang-btn").forEach(btn=>{
+    const active=btn.dataset.lang===currentLang;
+    btn.classList.toggle("active",active);
+    btn.setAttribute("aria-pressed",active?"true":"false");
+  });
+}
+function buildFilters(){
+  const box=document.getElementById("filters");
+  box.innerHTML=DATA.themes.map(th=>`
+    <button class="filter ${currentFilter===th.key?"active":""}"
+      data-filter="${th.key}" style="--accent:${th.color}">${th[currentLang]}</button>
+  `).join("");
+  box.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>setFilter(b.dataset.filter)));
+}
+function applyStatic(){
+  document.documentElement.lang=LANGUAGE_CONFIG[currentLang].htmlLang;
+  document.title=t("pageTitle");
+  document.getElementById("pageKicker").textContent=t("kicker");
+  document.getElementById("pageTitle").textContent=t("title");
+  document.getElementById("pageSubtitle").textContent=t("subtitle");
+  document.getElementById("resetBtn").textContent=t("showAll");
+  document.getElementById("homeBtn").textContent=t("home");
+  document.getElementById("mapTitle").textContent=t("mapTitle");
+  document.getElementById("modeNote").textContent=t("modeNote");
+  document.getElementById("footerNote").textContent=t("footer");
+  document.getElementById("quizBtn").textContent=t("quiz");
+  document.getElementById("catalogKicker").textContent=t("catalogKicker");
+  document.getElementById("catalogModalClose").textContent=t("close");
+  document.getElementById("scanTitle").textContent=t("scanTitle");
+  document.getElementById("scanBody").textContent=t("scanBody");
+  updateLangButtons();
+  buildFilters();
+}
+function setLanguage(lang,{syncUrl=true}={}){
+  currentLang=normalizeLang(lang)||"zh-Hant";
+  localStorage.setItem("truthAfterLang",currentLang);
+  if(syncUrl){
+    const u=new URL(window.location.href);
+    u.searchParams.set("lang",LANGUAGE_CONFIG[currentLang].query);
+    history.replaceState(null,"",u.pathname+u.search+u.hash);
+  }
+  applyStatic();
+  draw();
+  if(currentBookIndex!==null){
+    selectBook(currentBookIndex,document.querySelector(`.book-node[data-book="${currentBookIndex}"]`));
+  }else if(currentFilter){
+    renderThemeDetail(currentFilter);
+  }else{
+    renderDefaultDetail();
+  }
+}
+
 const allSlots=[
   [27,23],[42,23],[58,23],[73,23],
   [27,37],[42,37],[58,37],[73,37],
@@ -462,8 +482,6 @@ const allSlots=[
   [27,65],[42,65],[58,65],[73,65],
   [32,79],[47,79],[62,79]
 ];
-
-/* 主題篩選後，相關作品聚集在中央；最多可容納 9 本而不重疊。 */
 const focusSlots=[
   [34,35],[50,35],[66,35],
   [34,52],[50,52],[66,52],
@@ -471,43 +489,46 @@ const focusSlots=[
 ];
 
 function getBookPosition(idx){
-  if(!currentFilter) return allSlots[idx] || [50,50];
-  const related=books.map((b,i)=>({b,i})).filter(x=>x.b.tags.includes(currentFilter));
+  if(!currentFilter)return allSlots[idx]||[50,50];
+  const related=DATA.books.map((b,i)=>({b,i})).filter(x=>x.b.tags.includes(currentFilter));
   const focusIndex=related.findIndex(x=>x.i===idx);
-  if(focusIndex>=0) return focusSlots[focusIndex] || [50,52];
+  if(focusIndex>=0)return focusSlots[focusIndex]||[50,52];
   return [50,52];
 }
 
 function draw(){
   nodes.innerHTML="";
   lines.innerHTML="";
-
-  themes.forEach(t=>{
+  DATA.themes.forEach(th=>{
     const d=document.createElement("div");
     d.className="theme-node";
-    if(currentFilter===t.name) d.classList.add("active-theme");
-    d.dataset.theme=t.name;
-    d.style.left=t.x+"%"; d.style.top=t.y+"%"; d.style.setProperty("--accent",colors[t.name]);
-    d.textContent=t.name;
+    if(currentFilter===th.key)d.classList.add("active-theme");
+    d.dataset.theme=th.key;
+    d.style.left=th.x+"%";
+    d.style.top=th.y+"%";
+    d.style.setProperty("--accent",th.color);
+    d.textContent=th[currentLang];
     nodes.appendChild(d);
   });
 
-  books.forEach((b,idx)=>{
+  DATA.books.forEach((b,idx)=>{
     const pos=getBookPosition(idx);
-    const isRelated=!currentFilter || b.tags.includes(currentFilter);
+    const isRelated=!currentFilter||b.tags.includes(currentFilter);
 
     b.tags.forEach(tag=>{
-      const t=themes.find(x=>x.name===tag);
+      const th=DATA.themes.find(x=>x.key===tag);
       const line=document.createElementNS("http://www.w3.org/2000/svg","line");
       line.dataset.book=String(idx);
       line.dataset.theme=tag;
-      line.setAttribute("x1",pos[0]*10); line.setAttribute("y1",pos[1]*7);
-      line.setAttribute("x2",t.x*10); line.setAttribute("y2",t.y*7);
-      line.setAttribute("stroke",colors[tag]);
-      const active=currentFilter ? tag===currentFilter && isRelated : true;
-      line.setAttribute("stroke-width",active ? "3" : "1.2");
-      line.setAttribute("opacity",active ? (currentFilter ? "0.72" : "0.20") : "0.03");
-      if(currentFilter && tag===currentFilter){
+      line.setAttribute("x1",pos[0]*10);
+      line.setAttribute("y1",pos[1]*7);
+      line.setAttribute("x2",th.x*10);
+      line.setAttribute("y2",th.y*7);
+      line.setAttribute("stroke",th.color);
+      const active=currentFilter?tag===currentFilter&&isRelated:true;
+      line.setAttribute("stroke-width",active?"3":"1.2");
+      line.setAttribute("opacity",active?(currentFilter?"0.72":"0.20"):"0.03");
+      if(currentFilter&&tag===currentFilter){
         line.setAttribute("stroke-dasharray","9 7");
         line.style.strokeDashoffset="24";
         requestAnimationFrame(()=>{line.style.strokeDashoffset="0";});
@@ -516,65 +537,96 @@ function draw(){
     });
 
     const d=document.createElement("button");
-    d.type="button"; d.className="book-node";
+    d.type="button";
+    d.className="book-node";
     d.dataset.book=String(idx);
-    d.style.left=pos[0]+"%"; d.style.top=pos[1]+"%";
-    if(currentFilter && !isRelated) d.classList.add("dim");
-    if(currentFilter && isRelated) d.classList.add("related");
-    if(currentBookIndex===idx) d.classList.add("selected");
-    d.innerHTML=`《${b.title}》<small>${b.tags.join(" × ")}</small>`;
+    d.style.left=pos[0]+"%";
+    d.style.top=pos[1]+"%";
+    if(currentFilter&&!isRelated)d.classList.add("dim");
+    if(currentFilter&&isRelated)d.classList.add("related");
+    if(currentBookIndex===idx)d.classList.add("selected");
+    d.innerHTML=`${currentLang==="zh-Hant"?"《"+bookTitle(b)+"》":currentLang==="ja"?"『"+bookTitle(b)+"』":bookTitle(b)}<small>${b.tags.map(themeLabel).join(" × ")}</small>`;
     d.addEventListener("click",()=>selectBook(idx,d));
     nodes.appendChild(d);
   });
-
-  if(currentBookIndex!==null) highlightBookConnections(currentBookIndex);
+  if(currentBookIndex!==null)highlightBookConnections(currentBookIndex);
 }
 
 function highlightBookConnections(idx){
-  const b=books[idx];
+  const b=DATA.books[idx];
   document.querySelectorAll(".theme-node").forEach(n=>n.classList.toggle("connected-theme",b.tags.includes(n.dataset.theme)));
   lines.querySelectorAll("line").forEach(line=>{
     const sameBook=line.dataset.book===String(idx);
-    line.setAttribute("opacity",sameBook ? "0.92" : (currentFilter ? "0.025" : "0.07"));
-    line.setAttribute("stroke-width",sameBook ? "4.5" : "1.2");
+    line.setAttribute("opacity",sameBook?"0.92":(currentFilter?"0.025":"0.07"));
+    line.setAttribute("stroke-width",sameBook?"4.5":"1.2");
   });
 }
 
 function selectBook(idx,el){
   currentBookIndex=idx;
   document.querySelectorAll(".book-node").forEach(n=>n.classList.remove("selected"));
-  el.classList.add("selected");
+  if(el)el.classList.add("selected");
   highlightBookConnections(idx);
-  const b=books[idx];
+  const b=DATA.books[idx];
+  const tagsText=b.tags.map(themeLabel);
   detail.innerHTML=`
-    <div class="label">作品探索</div>
-    <h2>《${b.title}》</h2>
-    <div class="tags">${b.tags.map(t=>`<span class="tag" style="background:${colors[t]}">${t}</span>`).join("")}</div>
-    <p>這本作品同時連結 <b>${b.tags.join("、")}</b> 等命題。下方可看到它為什麼會跨越這些主題。</p>
+    <div class="label">${t("exploreLabel")}</div>
+    <h2>${currentLang==="zh-Hant"?"《"+bookTitle(b)+"》":currentLang==="ja"?"『"+bookTitle(b)+"』":bookTitle(b)}</h2>
+    <div class="tags">${b.tags.map(tag=>`<span class="tag" style="background:${themeColor(tag)}">${themeLabel(tag)}</span>`).join("")}</div>
+    <p>${fmt(t("bookConnect"),{tags:tagsText.join(currentLang==="en"?", ":"、")})}</p>
     <div class="tag-reasons">
-      ${b.tags.map(t=>`<div class="tag-reason" style="--accent:${colors[t]}"><b>${t}</b><span>${b.tagReasons[t] || ""}</span></div>`).join("")}
+      ${b.tags.map(tag=>`<div class="tag-reason" style="--accent:${themeColor(tag)}"><b>${themeLabel(tag)}</b><span>${b.tagReasons[tag][currentLang]}</span></div>`).join("")}
     </div>
-    <div class="question">${b.q}</div>
+    <div class="question">${b.q[currentLang]}</div>
     <div class="detail-actions">
-      <button class="primary" id="introBtn">查看策展導讀</button>
-      <button id="catalogBtn" ${b.catalog ? "" : "disabled"}>查看館藏</button>
+      <button class="primary" id="introBtn">${t("viewIntro")}</button>
+      <button id="catalogBtn" ${b.catalog?"":"disabled"}>${t("viewCatalog")}</button>
     </div>
-    <div id="introContent" class="intro-content">${b.intro}</div>
-    ${b.catalog ? "" : `<div class="catalog-note">此作品尚未設定館藏網址。請在程式碼 books 資料中的 catalog 欄位貼上該書館藏連結。</div>`}
+    <div id="introContent" class="intro-content">${b.intro[currentLang]}</div>
+    ${b.catalog?"":`<div class="catalog-note">${t("catalogMissing")}</div>`}
   `;
   const introBtn=document.getElementById("introBtn");
   const introContent=document.getElementById("introContent");
   introBtn.addEventListener("click",()=>{
     introContent.classList.toggle("open");
-    introBtn.textContent=introContent.classList.contains("open") ? "收合策展導讀" : "查看策展導讀";
-    if(introContent.classList.contains("open")) setTimeout(()=>introContent.scrollIntoView({behavior:"smooth",block:"nearest"}),120);
+    introBtn.textContent=introContent.classList.contains("open")?t("collapseIntro"):t("viewIntro");
+    if(introContent.classList.contains("open"))setTimeout(()=>introContent.scrollIntoView({behavior:"smooth",block:"nearest"}),120);
   });
   const catalogBtn=document.getElementById("catalogBtn");
-  if(b.catalog){
-    catalogBtn.addEventListener("click",()=>showCatalogModal(b));
-  }
+  if(b.catalog)catalogBtn.addEventListener("click",()=>showCatalogModal(b));
 }
 
+function renderDefaultDetail(){
+  detail.innerHTML=`
+    <div class="label">${t("exploreLabel")}</div>
+    <h2>${t("chooseBook")}</h2>
+    <p>${t("chooseBookCopy")}</p>
+    <div class="question">${t("resetQ")}</div>
+  `;
+}
+function renderThemeDetail(key){
+  const name=themeLabel(key);
+  detail.innerHTML=`
+    <div class="label">${t("themeExplore")}</div>
+    <h2>${name}</h2>
+    <p>${fmt(t("themeCopy"),{theme:name})}</p>
+    <div class="question">${t("themeQ")}</div>
+  `;
+}
+function setFilter(key){
+  currentFilter=key;
+  currentBookIndex=null;
+  buildFilters();
+  draw();
+  renderThemeDetail(key);
+}
+function resetUniverse(){
+  currentFilter=null;
+  currentBookIndex=null;
+  buildFilters();
+  draw();
+  renderDefaultDetail();
+}
 
 const catalogModal=initCatalogModal({
   modalId:"catalogModal",
@@ -583,50 +635,26 @@ const catalogModal=initCatalogModal({
   urlId:"catalogUrl",
   closeId:"catalogModalClose"
 });
-
 function showCatalogModal(book){
-  if(!book.catalog || !catalogModal) return;
-  catalogModal.show({title:book.title, qr:book.qr, url:book.catalog});
+  if(!book.catalog||!catalogModal)return;
+  catalogModal.show({title:bookTitle(book),qr:book.qr,url:book.catalog});
 }
-
 function closeCatalogModal(){
-  if(catalogModal) catalogModal.hide();
+  if(catalogModal)catalogModal.hide();
 }
 
-
-function setFilter(name){
-  currentFilter=name;
-  currentBookIndex=null;
-  document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter===name));
-  draw();
-  detail.innerHTML=`
-    <div class="label">主題探索</div>
-    <h2>${name}</h2>
-    <p>與「${name}」相關的作品已自動聚集到中央，其他作品暫時淡出。點任一本書，即可查看它與其他主題的交會。</p>
-    <div class="question">作品不是被固定在單一分類裡，而是隨著你的選擇重新形成一張人性關係圖。</div>
-  `;
-}
-
-function resetUniverse(){
-  currentFilter=null;
-  currentBookIndex=null;
-  document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));
-  draw();
-  detail.innerHTML=`
-    <div class="label">作品探索</div>
-    <h2>請點選一本作品</h2>
-    <p>你可以先從上方六大主題切入，也可以直接點選作品，看看它同時跨越哪些人性命題。</p>
-    <div class="question">點主題時，相關作品會自動聚集；點作品時，與它相連的主題與紅線會被強調。</div>
-  `;
-}
-
-document.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>setFilter(b.dataset.filter)));
+document.querySelectorAll(".lang-btn").forEach(btn=>btn.addEventListener("click",()=>setLanguage(btn.dataset.lang)));
 document.getElementById("resetBtn").addEventListener("click",resetUniverse);
-document.getElementById("homeBtn").addEventListener("click",()=>window.location.href="./index.html");
-document.getElementById("quizBtn").addEventListener("click",()=>window.location.href="./reader-quiz.html");
+document.getElementById("homeBtn").addEventListener("click",()=>window.location.href=withCurrentLang("./index.html"));
+document.getElementById("quizBtn").addEventListener("click",()=>window.location.href=withCurrentLang("./reader-quiz.html"));
 
-createIdleTimer(()=>{closeCatalogModal();resetUniverse();});
+applyStatic();
+localStorage.setItem("truthAfterLang",currentLang);
 draw();
+renderDefaultDetail();
+if(typeof createIdleTimer==="function"){
+  createIdleTimer(()=>{closeCatalogModal();resetUniverse();});
+}
 </script>
 </body>
 </html>
