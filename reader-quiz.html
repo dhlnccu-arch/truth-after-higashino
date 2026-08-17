@@ -24,16 +24,23 @@ button{font:inherit}
 /* ===== 三語切換 ===== */
 .top-actions{
   display:grid;
-  grid-template-columns:216px auto auto;
+  grid-template-columns:216px 132px 132px;
   align-items:center;
   justify-content:end;
   gap:12px;
+  width:504px;
+  flex:0 0 504px;
 }
 .language-switcher{
   width:216px;
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:8px;
+}
+#restartTop,
+#homeTop{
+  width:132px;
+  white-space:nowrap;
 }
 .lang-btn{
   width:100%;
@@ -67,11 +74,16 @@ html[lang="ja"] .big-title{font-size:clamp(46px,4.4vw,92px)}
   .topbar{align-items:flex-start;flex-direction:column}
   .top-actions{
     width:100%;
+    flex:none;
     grid-template-columns:1fr 1fr;
     gap:10px;
   }
   .language-switcher{
     grid-column:1 / -1;
+    width:100%;
+  }
+  #restartTop,
+  #homeTop{
     width:100%;
   }
   .ghost{width:100%;padding:11px 14px;min-height:48px}
