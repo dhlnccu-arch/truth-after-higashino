@@ -2810,7 +2810,13 @@ function typeWriter(){
   if(typewriterIndex < typewriterText.length){
     typewriterTarget.textContent += typewriterText.charAt(typewriterIndex);
     typewriterIndex++;
-    setTimeout(typeWriter, 130);
+
+    const typeSpeed =
+      currentLang === "en" ? 60 :
+      currentLang === "ja" ? 100 :
+      130;
+
+    setTimeout(typeWriter, typeSpeed);
   }else{
     // 文字打完後先停一下，再讓六張 CASE 依序出現
     setTimeout(revealCaseCards, 250);
