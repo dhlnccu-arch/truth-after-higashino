@@ -826,112 +826,223 @@ const LANGUAGE_CONFIG={
 };
 
 const i18n={
-  "zh-Hant":{
-    hero:{
-      eyebrow:"2026年9-10月主題書展暨影展",
-      title:"真相之後",
-      subtitle:"東野圭吾的人性推理",
-      tagline:"解開謎題的瞬間不是結束，而是對人性拷問的開始。",
-      prompt:"你想先追查哪一種真相？"
+  "zh-Hant": {
+    "hero": {
+      "eyebrow": "2026年9-10月主題書展暨影展",
+      "title": "真相之後",
+      "subtitle": "東野圭吾的人性推理",
+      "tagline": "解開謎題的瞬間不是結束，而是對人性的拷問開始。",
+      "prompt": "你想先追查哪一種真相？"
     },
-    nav:{
-      universe:"作品宇宙",
-      quiz:"讀者測驗",
-      film:"影展專區",
-      books:"完整書單"
+    "nav": {
+      "universe": "作品宇宙",
+      "quiz": "讀者測驗",
+      "film": "影展專區",
+      "books": "完整書單"
     },
-    common:{
-      close:"關閉",restart:"↺ 重新展開調查",progressPrefix:"調查進度：已完成",progressSuffix:"/ 6",
-      investigationProgress:"調查進度",originalChoice:"你原本選擇從「{choice}」開始。",currentChoice:"你選擇從「{choice}」開始。",
-      judgementRecorded:"你的判斷已記錄。",returnCases:"返回六大案件",continueCase:"繼續追查 {case} →",viewReport:"查看調查報告",
-      evidence:"證物",surfaceQuestion:"表面問題",realQuestion:"真正的問題",expandClue:"展開線索",collapseClue:"收起線索",
-      caseReview:"CASE REVIEW｜結案判斷",restartTitle:"要清空目前的調查進度嗎？",
-      restartBody:"清空後，六大案件的選擇與判斷都會重新開始，你可以自由探索不同的可能。",
-      cancel:"取消",confirmRestart:"確定重新開始",freshToast:"目前就是全新的調查，歡迎開始！",
-      restartedToast:"已重新展開調查，歡迎探索不同的可能。",
-      filmPlaceholder:"正式版可放映片單、日期、原著作品、預告與映後提問。"
+    "common": {
+      "close": "關閉",
+      "restart": "↺ 重新展開調查",
+      "progressPrefix": "調查進度：已完成",
+      "progressSuffix": "/ 6",
+      "investigationProgress": "調查進度",
+      "originalChoice": "你原本選擇從「{choice}」開始。",
+      "currentChoice": "你選擇從「{choice}」開始。",
+      "judgementRecorded": "你的判斷已記錄。",
+      "returnCases": "返回六大案件",
+      "continueCase": "繼續追查 {case} →",
+      "viewReport": "查看調查報告",
+      "evidence": "證物",
+      "surfaceQuestion": "表面問題",
+      "realQuestion": "真正的問題",
+      "expandClue": "展開線索",
+      "collapseClue": "收起線索",
+      "caseReview": "CASE REVIEW｜結案判斷",
+      "restartTitle": "要清空目前的調查進度嗎？",
+      "restartBody": "清空後，六大案件的選擇與判斷都會重新開始，你可以自由探索不同的可能。",
+      "cancel": "取消",
+      "confirmRestart": "確定重新開始",
+      "freshToast": "目前就是全新的調查，歡迎開始！",
+      "restartedToast": "已重新展開調查，歡迎探索不同的可能。",
+      "filmPlaceholder": "正式版可放映片單、日期、原著作品、預告與映後提問。"
     },
-    cases:{
-      reason:{label:"CASE 01｜理性",title:"理性可以解開一切嗎？",subtitle:"偵探伽利略系列"},
-      after:{label:"CASE 02｜餘波",title:"死亡之後，留下來的是誰？",subtitle:"加賀恭一郎系列"},
-      love:{label:"CASE 03｜愛",title:"愛，能不能成為犯罪的理由？",subtitle:"人性與情感的邊界"},
-      justice:{label:"CASE 04｜正義",title:"當社會製造了罪犯",subtitle:"司法、公共議題與社會省思"},
-      youth:{label:"CASE 05｜青春",title:"青春從來不只是青春",subtitle:"校園、同儕與成長的代價"},
-      hope:{label:"CASE 06｜希望",title:"沒有命案，也可以是東野圭吾",subtitle:"溫暖、希望與非典型解謎"}
+    "cases": {
+      "reason": {
+        "label": "CASE 01｜理性",
+        "title": "理性可以解開一切嗎？",
+        "subtitle": "偵探伽利略系列"
+      },
+      "after": {
+        "label": "CASE 02｜餘波",
+        "title": "死亡之後，留下來的是誰？",
+        "subtitle": "加賀恭一郎系列"
+      },
+      "love": {
+        "label": "CASE 03｜愛",
+        "title": "愛，能不能成為犯罪的理由？",
+        "subtitle": "人性與情感的邊界"
+      },
+      "justice": {
+        "label": "CASE 04｜正義",
+        "title": "當社會製造了罪犯",
+        "subtitle": "司法、公共議題與社會省思"
+      },
+      "youth": {
+        "label": "CASE 05｜青春",
+        "title": "青春從來不只是青春",
+        "subtitle": "校園、同儕與成長的代價"
+      },
+      "hope": {
+        "label": "CASE 06｜希望",
+        "title": "沒有命案，也可以是東野圭吾",
+        "subtitle": "溫暖、希望與非典型解謎"
+      }
     }
   },
-
-  /* 第一階段先建立可切換架構。
-     第二階段會補上完整日文文案，目前未翻譯欄位會自動 fallback 到繁中。 */
-  "ja":{
-    hero:{
-      eyebrow:"2026年9–10月 テーマ図書展・映画特集",
-      title:"真実のその先",
-      subtitle:"東野圭吾が描く人間性とミステリー",
-      tagline:"謎が解けた瞬間は終わりではない。そこから、人間性への問いが始まる。",
-      prompt:"あなたは、どの真実から追いますか？"
+  "ja": {
+    "hero": {
+      "eyebrow": "2026年9–10月 テーマ図書展・映画特集",
+      "title": "真実のその先",
+      "subtitle": "東野圭吾が描く、人間の心とミステリー",
+      "tagline": "謎が解けた瞬間は、終わりではない。そこから、人間性への問いが始まる。",
+      "prompt": "あなたは、どの真実から追いますか？"
     },
-    nav:{
-      universe:"作品世界",
-      quiz:"読者診断",
-      film:"映画特集",
-      books:"全作品リスト"
+    "nav": {
+      "universe": "作品世界",
+      "quiz": "読者診断",
+      "film": "映画特集",
+      "books": "全作品リスト"
     },
-    common:{
-      close:"閉じる",restart:"↺ 調査をやり直す",progressPrefix:"調査進捗：完了",progressSuffix:"/ 6",
-      investigationProgress:"調査進捗",originalChoice:"前回は「{choice}」から調査を始めました。",currentChoice:"「{choice}」から調査を始めます。",
-      judgementRecorded:"あなたの判断を記録しました。",returnCases:"6つのCASEへ戻る",continueCase:"次の調査へ：{case} →",viewReport:"最終調査レポートを見る",
-      evidence:"証拠",surfaceQuestion:"表面的な問い",realQuestion:"本当の問い",expandClue:"手がかりを開く",collapseClue:"手がかりを閉じる",
-      caseReview:"CASE REVIEW｜最終判断",restartTitle:"現在の調査記録を消去しますか？",
-      restartBody:"消去すると、6つのCASEの選択と判断がすべてリセットされます。別の可能性を自由に探索できます。",
-      cancel:"キャンセル",confirmRestart:"最初からやり直す",freshToast:"現在は新しい調査状態です。さあ始めましょう。",
-      restartedToast:"調査をリセットしました。別の可能性を探ってみましょう。",
-      filmPlaceholder:"正式版では上映作品、日程、原作、予告編、上映後の問いなどを掲載できます。"
+    "common": {
+      "close": "閉じる",
+      "restart": "↺ 調査をやり直す",
+      "progressPrefix": "調査進捗：完了",
+      "progressSuffix": "/ 6",
+      "investigationProgress": "調査進捗",
+      "originalChoice": "前回は「{choice}」から調査を始めました。",
+      "currentChoice": "「{choice}」から調査を始めます。",
+      "judgementRecorded": "あなたの判断を記録しました。",
+      "returnCases": "6つのCASEへ戻る",
+      "continueCase": "次の調査へ：{case} →",
+      "viewReport": "最終調査レポートを見る",
+      "evidence": "証拠品",
+      "surfaceQuestion": "表面的な問い",
+      "realQuestion": "本質的な問い",
+      "expandClue": "手がかりを開く",
+      "collapseClue": "手がかりを閉じる",
+      "caseReview": "CASE REVIEW｜最終判断",
+      "restartTitle": "現在の調査記録を消去しますか？",
+      "restartBody": "リセットすると、6つのCASEにおける選択と判断がすべて初期化され、別の可能性を自由に探索できます。",
+      "cancel": "キャンセル",
+      "confirmRestart": "最初からやり直す",
+      "freshToast": "現在は初期状態です。いつでも調査を開始できます。",
+      "restartedToast": "調査をリセットしました。新たな視点で真相を探ってみましょう。",
+      "filmPlaceholder": "正式版では上映作品、日程、原作小説、予告編、上映後の問いかけ等を掲載します。"
     },
-    cases:{
-      reason:{label:"CASE 01｜理性",title:"理性はすべてを解き明かせるのか？",subtitle:"ガリレオシリーズ"},
-      after:{label:"CASE 02｜余波",title:"死のあとに、残されるのは誰か？",subtitle:"加賀恭一郎シリーズ"},
-      love:{label:"CASE 03｜愛",title:"愛は、犯罪の理由になり得るのか？",subtitle:"人間性と感情の境界"},
-      justice:{label:"CASE 04｜正義",title:"社会が犯罪者を生み出すとき",subtitle:"司法・公共問題・社会への問い"},
-      youth:{label:"CASE 05｜青春",title:"青春は、ただの青春ではない",subtitle:"学校・仲間・成長の代償"},
-      hope:{label:"CASE 06｜希望",title:"殺人事件がなくても、東野圭吾",subtitle:"温もり・希望・非典型ミステリー"}
+    "cases": {
+      "reason": {
+        "label": "CASE 01｜理性",
+        "title": "理性はすべてを解き明かせるのか？",
+        "subtitle": "ガリレオシリーズ"
+      },
+      "after": {
+        "label": "CASE 02｜余波",
+        "title": "死のあとに、残されるのは誰か？",
+        "subtitle": "加賀恭一郎シリーズ"
+      },
+      "love": {
+        "label": "CASE 03｜愛",
+        "title": "愛は、犯罪の理由になり得るのか？",
+        "subtitle": "感情と人間性の境界"
+      },
+      "justice": {
+        "label": "CASE 04｜正義",
+        "title": "社会が犯罪者を生み出すとき",
+        "subtitle": "司法・公共問題・社会への問い"
+      },
+      "youth": {
+        "label": "CASE 05｜青春",
+        "title": "青春は、ただの青春ではない",
+        "subtitle": "学校・仲間・成長の代償"
+      },
+      "hope": {
+        "label": "CASE 06｜希望",
+        "title": "殺人事件がなくても、東野圭吾",
+        "subtitle": "温もり・希望・非典型ミステリー"
+      }
     }
   },
-
-  /* 第一階段先建立可切換架構。
-     第二階段會補上完整英文文案，目前未翻譯欄位會自動 fallback 到繁中。 */
-  "en":{
-    hero:{
-      eyebrow:"September–October 2026 Thematic Book & Film Exhibition",
-      title:"Beyond the Truth",
-      subtitle:"Keigo Higashino: Mystery and Human Nature",
-      tagline:"Solving the mystery is not the end—it is where the questions about human nature begin.",
-      prompt:"Which truth will you investigate first?"
+  "en": {
+    "hero": {
+      "eyebrow": "September–October 2026 Book & Film Exhibition",
+      "title": "Beyond the Truth",
+      "subtitle": "Keigo Higashino: Human Nature Behind the Mystery",
+      "tagline": "Solving the mystery is not the end. It is where the questions about human nature begin.",
+      "prompt": "Which truth will you investigate first?"
     },
-    nav:{
-      universe:"Works Universe",
-      quiz:"Reader Quiz",
-      film:"Film Program",
-      books:"Full Book List"
+    "nav": {
+      "universe": "Works Universe",
+      "quiz": "Reader Quiz",
+      "film": "Film Program",
+      "books": "Full Book List"
     },
-    common:{
-      close:"Close",restart:"↺ Restart Investigation",progressPrefix:"Investigation progress:",progressSuffix:"of 6 completed",
-      investigationProgress:"Investigation progress",originalChoice:"You previously began with “{choice}.”",currentChoice:"You chose to begin with “{choice}.”",
-      judgementRecorded:"Your judgement has been recorded.",returnCases:"Back to the Six Cases",continueCase:"Continue with {case} →",viewReport:"View Final Report",
-      evidence:"Evidence",surfaceQuestion:"Surface question",realQuestion:"The deeper question",expandClue:"Reveal clue",collapseClue:"Hide clue",
-      caseReview:"CASE REVIEW｜Final Judgement",restartTitle:"Clear your current investigation progress?",
-      restartBody:"Clearing progress will reset all choices and judgements across the six cases, allowing you to explore a different path.",
-      cancel:"Cancel",confirmRestart:"Restart Investigation",freshToast:"This is already a fresh investigation. Begin whenever you are ready.",
-      restartedToast:"Investigation reset. Explore a different possibility.",
-      filmPlaceholder:"The final version can include the screening list, dates, original works, trailers, and post-screening questions."
+    "common": {
+      "close": "Close",
+      "restart": "↺ Restart Investigation",
+      "progressPrefix": "Investigation Progress:",
+      "progressSuffix": "of 6",
+      "investigationProgress": "Investigation Progress",
+      "originalChoice": "You previously started with “{choice}.”",
+      "currentChoice": "You chose to begin with “{choice}.”",
+      "judgementRecorded": "Your judgement has been recorded.",
+      "returnCases": "Back to the Six Cases",
+      "continueCase": "Continue to {case} →",
+      "viewReport": "View Investigation Report",
+      "evidence": "Evidence",
+      "surfaceQuestion": "Surface Question",
+      "realQuestion": "The Deeper Question",
+      "expandClue": "Reveal Clue",
+      "collapseClue": "Hide Clue",
+      "caseReview": "CASE REVIEW｜Final Verdict",
+      "restartTitle": "Clear current investigation progress?",
+      "restartBody": "Resetting will clear all your choices and judgements across the six cases, allowing you to explore different perspectives.",
+      "cancel": "Cancel",
+      "confirmRestart": "Confirm Restart",
+      "freshToast": "You are on a fresh investigation. Begin whenever you are ready!",
+      "restartedToast": "Investigation reset. Explore a new path forward.",
+      "filmPlaceholder": "The final version will feature screening schedules, source novels, trailers, and post-screening discussion prompts."
     },
-    cases:{
-      reason:{label:"CASE 01｜Reason",title:"Can reason explain everything?",subtitle:"The Galileo Series"},
-      after:{label:"CASE 02｜Aftermath",title:"After death, who is left behind?",subtitle:"The Kyoichiro Kaga Series"},
-      love:{label:"CASE 03｜Love",title:"Can love ever justify a crime?",subtitle:"The boundary between emotion and human nature"},
-      justice:{label:"CASE 04｜Justice",title:"When society creates a criminal",subtitle:"Law, public issues, and social reflection"},
-      youth:{label:"CASE 05｜Youth",title:"Youth is never just youth",subtitle:"School, peers, and the cost of growing up"},
-      hope:{label:"CASE 06｜Hope",title:"Higashino without a murder",subtitle:"Warmth, hope, and unconventional mysteries"}
+    "cases": {
+      "reason": {
+        "label": "CASE 01｜Reason",
+        "title": "Can Reason Explain Everything?",
+        "subtitle": "The Detective Galileo Series"
+      },
+      "after": {
+        "label": "CASE 02｜Aftermath",
+        "title": "Who Remains After Death?",
+        "subtitle": "The Kyoichiro Kaga Series"
+      },
+      "love": {
+        "label": "CASE 03｜Love",
+        "title": "Can Love Justify Crime?",
+        "subtitle": "The Boundary Between Emotion and Human Nature"
+      },
+      "justice": {
+        "label": "CASE 04｜Justice",
+        "title": "When Society Creates Criminals",
+        "subtitle": "Law, Public Issues, and Social Reflection"
+      },
+      "youth": {
+        "label": "CASE 05｜Youth",
+        "title": "Youth Is Never Just Youth",
+        "subtitle": "School, Peers, and the Cost of Growing Up"
+      },
+      "hope": {
+        "label": "CASE 06｜Hope",
+        "title": "Higashino Beyond Murder Mysteries",
+        "subtitle": "Warmth, Hope, and Unconventional Mysteries"
+      }
     }
   }
 };
@@ -1011,336 +1122,1001 @@ document.querySelectorAll("[data-lang]").forEach(btn=>{
 
 const caseOrder=["reason","after","love","justice","youth","hope"];
 const caseDataZh={
-  reason:{
-    case:"CASE 01｜理性", title:"理性可以解開一切嗎？",
-    scene:"所有證據都指向同一個答案。但如果真相本身，比謊言更殘酷呢？湯川學相信公式、實驗與邏輯；而東野圭吾總在答案出現後，再把問題推回人的身上。",
-    prompt:"你會先追查哪一條線索？",
-    choices:[
-      {id:"how",title:"犯罪手法",code:"HOW",hint:"事情是怎麼發生的？",reply:"你選擇從「怎麼做到」開始。湯川學也會從這裡開始；只是科學能證明發生了什麼，卻未必能回答一個人為什麼願意付出那樣的代價。"},
-      {id:"why",title:"利益與恩怨",code:"WHY",hint:"他為什麼這麼做？",reply:"你先追查人的理由。動機讓案件變得可以理解，但「可以理解」和「可以原諒」從來不是同一件事。"},
-      {id:"after",title:"背後的代價",code:"AFTER",hint:"真相之後，誰承擔後果？",reply:"你把目光放到答案之後。這正是本展想追問的地方：當謎題解開，真正困難的往往才剛開始。"}
+  "reason": {
+    "case": "CASE 01｜理性",
+    "title": "理性可以解開一切嗎？",
+    "scene": "所有證據都指向同一個答案。但如果真相本身，比謊言更殘酷呢？湯川學相信公式、實驗與邏輯；而東野圭吾總在答案出現後，再把問題推回人的身上。",
+    "prompt": "你會先追查哪一條線索？",
+    "choices": [
+      {
+        "id": "how",
+        "title": "犯罪手法",
+        "code": "HOW",
+        "hint": "事情是怎麼發生的？",
+        "reply": "你選擇從「怎麼做到」開始。湯川學也會從這裡開始；只是科學能證明發生了什麼，卻未必能回答一個人為什麼願意付出那樣的代價。"
+      },
+      {
+        "id": "why",
+        "title": "利益與恩怨",
+        "code": "WHY",
+        "hint": "他為什麼這麼做？",
+        "reply": "你先追查人的理由。動機讓案件變得可以理解，但「可以理解」和「可以原諒」從來不是同一件事。"
+      },
+      {
+        "id": "after",
+        "title": "背後的代價",
+        "code": "AFTER",
+        "hint": "真相之後，誰承擔後果？",
+        "reply": "你把目光放到答案之後。這正是本展想追問的地方：當謎題解開，真正困難的往往才剛開始。"
+      }
     ],
-    books:[
-      {title:"嫌疑犯X的獻身",surface:"完美的不在場證明，是如何成立的？",real:"如果犧牲出於愛，它還能被單純稱為犯罪嗎？",more:"石神的計算幾乎無懈可擊，但小說真正留下的不是公式，而是一個人究竟可以為另一個人做到什麼程度。"},
-      {title:"聖女的救贖",surface:"幾乎不可能完成的犯罪，是怎麼發生的？",real:"當等待與怨恨累積多年，愛與報復還能清楚分開嗎？",more:"科學可以還原手法，卻無法縮短一段漫長關係裡的沉默。東野把「不可能犯罪」轉成情感時間的證據。"},
-      {title:"真夏方程式",surface:"一場死亡背後，究竟藏著什麼因果？",real:"如果揭開真相會傷害一個孩子，知道答案仍然是最好的選擇嗎？",more:"湯川逼近真相的同時，也必須面對知識的責任：知道與說出，並不是完全相同的選擇。"}
+    "books": [
+      {
+        "title": "嫌疑犯X的獻身",
+        "surface": "完美的不在場證明，是如何成立的？",
+        "real": "如果犧牲出於愛，它還能被單純稱為犯罪嗎？",
+        "more": "石神的計算幾乎無懈可擊，但小說真正留下的不是公式，而是一個人究竟可以為另一個人做到什麼程度。"
+      },
+      {
+        "title": "聖女的救贖",
+        "surface": "幾乎不可能完成的犯罪，是怎麼發生的？",
+        "real": "當等待與怨恨累積多年，愛與報復還能清楚分開嗎？",
+        "more": "科學可以還原手法，卻無法縮短一段漫長關係裡的沉默。東野把「不可能犯罪」轉成情感時間的證據。"
+      },
+      {
+        "title": "真夏方程式",
+        "surface": "一場死亡背後，究竟藏著什麼因果？",
+        "real": "如果揭開真相會傷害一個孩子，知道答案仍然是最好的選擇嗎？",
+        "more": "湯川逼近真相的同時，也必須面對知識的責任：知道與說出，並不是完全相同的選擇。"
+      }
     ],
-    closeQ:"理性可以解開犯罪的方法，但它能解開人的選擇嗎？",
-    verdicts:["可以，人的選擇終究有其原因。","不一定，人並不是公式。"],
-    closeText:"真相被證明的那一刻，或許才是人性問題真正開始的地方。"
+    "closeQ": "理性可以解開犯罪的方法，但它能解開人的選擇嗎？",
+    "verdicts": [
+      "可以，人的選擇終究有其原因。",
+      "不一定，人並不是公式。"
+    ],
+    "closeText": "真相被證明的那一刻，或許才是人性問題真正開始的地方。"
   },
-  after:{
-    case:"CASE 02｜餘波", title:"死亡之後，留下來的是誰？",
-    scene:"案件可以結案，失去卻不會跟著結束。加賀恭一郎追查的，不只有兇手，也有被一場死亡改變的人：遺族、親人，以及那些沒有說出口的秘密。",
-    prompt:"面對一場已經發生的死亡，你會先看哪裡？",
-    choices:[
-      {id:"trace",title:"最後行蹤",code:"TRACE",hint:"死者生前經歷了什麼？",reply:"你先重建事情發生的軌跡。線索可以帶你接近死亡的瞬間，但加賀更常停下來看：那個瞬間之後，誰的人生被迫改變。"},
-      {id:"secret",title:"未說出口的秘密",code:"SECRET",hint:"誰在保護，誰在隱瞞？",reply:"你注意到沉默。家庭裡的秘密常不是為了欺騙陌生人，而是為了保護最親近的人；也因此，保護有時會悄悄變成傷害。"},
-      {id:"remain",title:"留下來的人",code:"AFTER",hint:"真相之後，人如何繼續生活？",reply:"你直接看向案件的餘波。對留下來的人而言，破案不是句點，而是重新學習如何生活的起點。"}
+  "after": {
+    "case": "CASE 02｜餘波",
+    "title": "死亡之後，留下來的是誰？",
+    "scene": "案件可以結案，失去卻不會跟著結束。加賀恭一郎追查的，不只有兇手，也有被一場死亡改變的人：遺族、親人，以及那些沒有說出口的秘密。",
+    "prompt": "面對一場已經發生的死亡，你會先看哪裡？",
+    "choices": [
+      {
+        "id": "trace",
+        "title": "最後行蹤",
+        "code": "TRACE",
+        "hint": "死者生前經歷了什麼？",
+        "reply": "你先重建事情發生的軌跡。線索可以帶你接近死亡的瞬間，但加賀更常停下來看：那個瞬間之後，誰的人生被迫改變。"
+      },
+      {
+        "id": "secret",
+        "title": "未說出口的秘密",
+        "code": "SECRET",
+        "hint": "誰在保護，誰在隱瞞？",
+        "reply": "你注意到沉默。家庭裡的秘密常不是為了欺騙陌生人，而是為了保護最親近的人；也因此，保護有時會悄悄變成傷害。"
+      },
+      {
+        "id": "remain",
+        "title": "留下來的人",
+        "code": "AFTER",
+        "hint": "真相之後，人如何繼續生活？",
+        "reply": "你直接看向案件的餘波。對留下來的人而言，破案不是句點，而是重新學習如何生活的起點。"
+      }
     ],
-    books:[
-      {title:"新參者",surface:"日本橋的人際關係裡，哪一條線索通往真相？",real:"比找到兇手更重要的，會不會是讓被案件改變的人重新理解彼此？",more:"加賀像「新參者」一樣進入街區，也一步步看見每個普通人的祕密。破案之外，他更在乎那些仍要生活下去的人。"},
-      {title:"紅色手指",surface:"一個家庭為什麼共同掩蓋犯罪？",real:"當守護家人變成掩蓋傷害，愛與共犯之間還剩多少距離？",more:"最令人窒息的不是案件本身，而是家庭如何用沉默延續錯誤。東野把責任推回每一個選擇不說的人。"},
-      {title:"麒麟之翼",surface:"死者留下的最後行動，究竟想指向什麼？",real:"一場死亡能不能成為家人重新理解彼此的最後機會？",more:"追查線索的過程，也是一段遲來的理解。死亡無法逆轉，但真相有時能改變留下來的人如何記住彼此。"}
+    "books": [
+      {
+        "title": "新參者",
+        "surface": "日本橋的人際關係裡，哪一條線索通往真相？",
+        "real": "比找到兇手更重要的，會不會是讓被案件改變的人重新理解彼此？",
+        "more": "加賀像「新參者」一樣進入街區，也一步步看見每個普通人的祕密。破案之外，他更在乎那些仍要生活下去的人。"
+      },
+      {
+        "title": "紅色手指",
+        "surface": "一個家庭為什麼共同掩蓋犯罪？",
+        "real": "當守護家人變成掩蓋傷害，愛與共犯之間還剩多少距離？",
+        "more": "最令人窒息的不是案件本身，而是家庭如何用沉默延續錯誤。東野把責任推回每一個選擇不說的人。"
+      },
+      {
+        "title": "麒麟之翼",
+        "surface": "死者留下的最後行動，究竟想指向什麼？",
+        "real": "一場死亡能不能成為家人重新理解彼此的最後機會？",
+        "more": "追查線索的過程，也是一段遲來的理解。死亡無法逆轉，但真相有時能改變留下來的人如何記住彼此。"
+      }
     ],
-    closeQ:"破案能結束案件，但能否減輕因失去而造成的傷痕？",
-    verdicts:["能，知道真相才能真正往前走。","不能，有些餘波會留得比真相更久。"],
-    closeText:"案件有結案日期，失去沒有。真相的價值，也許不是消除痛苦，而是讓人知道該如何與它共處。"
+    "closeQ": "破案能結束案件，但能否減輕因失去而造成的傷痕？",
+    "verdicts": [
+      "能，知道真相才能真正往前走。",
+      "不能，有些餘波會留得比真相更久。"
+    ],
+    "closeText": "案件有結案日期，失去沒有。真相的價值，也許不是消除痛苦，而是讓人知道該如何與它共處。"
   },
-  love:{
-    case:"CASE 03｜愛", title:"愛，能不能成為犯罪的理由？",
-    scene:"守護、犧牲、佔有、控制——它們有時都以「愛」為名。當一個人說自己是為了所愛之人而跨越界線，我們究竟是在理解他的理由，還是在替他的行為尋找藉口？",
-    prompt:"當愛與犯罪糾纏在一起，你會先追查什麼？",
-    choices:[
-      {id:"act",title:"越界的行為",code:"ACT",hint:"他究竟做了什麼？",reply:"你先把行為和情感分開。這是一條重要界線：再強烈的感情，也不能讓傷害自動失去責任。"},
-      {id:"why",title:"愛的理由",code:"WHY",hint:"他說自己是為了誰？",reply:"你願意先理解動機。理解能讓人物變得立體，但也會逼我們面對更難的問題：理解之後，我們還能否清楚判斷對錯？"},
-      {id:"boundary",title:"守護與控制的界線",code:"BOUNDARY",hint:"愛從哪裡開始變成傷害？",reply:"你在尋找界線。東野最擅長讓守護與佔有只隔一步，讓讀者看見「為你好」如何可能成為另一種控制。"}
+  "love": {
+    "case": "CASE 03｜愛",
+    "title": "愛，能不能成為犯罪的理由？",
+    "scene": "守護、犧牲、佔有、控制——它們有時都以「愛」為名。當一個人說自己是為了所愛之人而跨越界線，我們究竟是在理解他的理由，還是在替他的行為尋找藉口？",
+    "prompt": "當愛與犯罪糾纏在一起，你會先追查什麼？",
+    "choices": [
+      {
+        "id": "act",
+        "title": "越界的行為",
+        "code": "ACT",
+        "hint": "他究竟做了什麼？",
+        "reply": "你先把行為和情感分開。這是一條重要界線：再強烈的感情，也不能讓傷害自動失去責任。"
+      },
+      {
+        "id": "why",
+        "title": "愛的理由",
+        "code": "WHY",
+        "hint": "他說自己是為了誰？",
+        "reply": "你願意先理解動機。理解能讓人物變得立體，但也會逼我們面對更難的問題：理解之後，我們還能否清楚判斷對錯？"
+      },
+      {
+        "id": "boundary",
+        "title": "守護與控制的界線",
+        "code": "BOUNDARY",
+        "hint": "愛從哪裡開始變成傷害？",
+        "reply": "你在尋找界線。東野最擅長讓守護與佔有只隔一步，讓讀者看見「為你好」如何可能成為另一種控制。"
+      }
     ],
-    books:[
-      {title:"白夜行",surface:"兩個人的命運為何長年被同一樁案件牽引？",real:"彼此守護，也彼此困住；當愛只能存在於黑暗中，它還能走向光嗎？",more:"小說沒有把情感說破，反而讓沉默成為最大的線索。讀者必須自己判斷：這份關係究竟是救贖，還是共同沉淪。"},
-      {title:"秘密",surface:"當身體與靈魂不再重合，家人該如何面對？",real:"當熟悉的身體裡住著另一個熟悉的人，愛究竟是在愛誰？",more:"《秘密》把推理轉向身分與關係。最難回答的不是超自然現象，而是人在失去與重新選擇之間，如何定義愛。"},
-      {title:"幻夜",surface:"一段關係裡，誰在利用誰？",real:"如果愛逐漸變成操控與依附，我們還能從中看見真正的感情嗎？",more:"人物彼此靠近，也彼此成為工具。《幻夜》讓「愛」不再天然純潔，而是一股可能救人、也可能吞沒人的力量。"}
+    "books": [
+      {
+        "title": "白夜行",
+        "surface": "兩個人的命運為何長年被同一樁案件牽引？",
+        "real": "彼此守護，也彼此困住；當愛只能存在於黑暗中，它還能走向光嗎？",
+        "more": "小說沒有把情感說破，反而讓沉默成為最大的線索。讀者必須自己判斷：這份關係究竟是救贖，還是共同沉淪。"
+      },
+      {
+        "title": "秘密",
+        "surface": "當身體與靈魂不再重合，家人該如何面對？",
+        "real": "當熟悉的身體裡住著另一個熟悉的人，愛究竟是在愛誰？",
+        "more": "《秘密》把推理轉向身分與關係。最難回答的不是超自然現象，而是人在失去與重新選擇之間，如何定義愛。"
+      },
+      {
+        "title": "幻夜",
+        "surface": "一段關係裡，誰在利用誰？",
+        "real": "如果愛逐漸變成操控與依附，我們還能從中看見真正的感情嗎？",
+        "more": "人物彼此靠近，也彼此成為工具。《幻夜》讓「愛」不再天然純潔，而是一股可能救人、也可能吞沒人的力量。"
+      }
     ],
-    closeQ:"理解一個人「因愛而犯罪」的理由，是否會改變你對他的判斷？",
-    verdicts:["會，動機讓責任有了不同重量。","不會，理解不等於原諒。"],
-    closeText:"愛可以解釋行為，卻未必能替行為辯護。真正困難的，是我們願意理解到哪裡，又願意原諒到哪裡。"
+    "closeQ": "理解一個人「因愛而犯罪」的理由，是否會改變你對他的判斷？",
+    "verdicts": [
+      "會，動機讓責任有了不同重量。",
+      "不會，理解不等於原諒。"
+    ],
+    "closeText": "愛可以解釋行為，卻未必能替行為辯護。真正困難的，是我們願意理解到哪裡，又願意原諒到哪裡。"
   },
-  justice:{
-    case:"CASE 04｜正義", title:"當社會製造了罪犯",
-    scene:"法律會判決有罪或無罪，但正義不一定在宣判那一刻完成。少年法、死刑、科技監控、受害者創傷與社會偏見，都讓「誰該負責」變得比案件本身更複雜。",
-    prompt:"當制度與個人的痛苦衝突，你會先相信什麼？",
-    choices:[
-      {id:"law",title:"法律判決",code:"LAW",hint:"制度如何定義罪與罰？",reply:"你先守住制度。法律必須可被共同遵循，但它的尺度也可能讓某些痛苦無法被完整看見。"},
-      {id:"hurt",title:"受害者的痛苦",code:"HURT",hint:"判決真的回應了誰？",reply:"你先看受傷的人。當程序完成而痛苦仍然存在，「正義已經完成」這句話就會變得格外困難。"},
-      {id:"system",title:"社會的責任",code:"SYSTEM",hint:"誰創造了走向犯罪的條件？",reply:"你把鏡頭拉遠。個人必須為行為負責，但制度、環境與科技也可能默默決定一個人有哪些選擇。"}
+  "justice": {
+    "case": "CASE 04｜正義",
+    "title": "當社會製造了罪犯",
+    "scene": "法律會判決有罪或無罪，但正義不一定在宣判那一刻完成。少年法、死刑、科技監控、受害者創傷與社會偏見，都讓「誰該負責」變得比案件本身更複雜。",
+    "prompt": "當制度與個人的痛苦衝突，你會先相信什麼？",
+    "choices": [
+      {
+        "id": "law",
+        "title": "法律判決",
+        "code": "LAW",
+        "hint": "制度如何定義罪與罰？",
+        "reply": "你先守住制度。法律必須可被共同遵循，但它的尺度也可能讓某些痛苦無法被完整看見。"
+      },
+      {
+        "id": "hurt",
+        "title": "受害者的痛苦",
+        "code": "HURT",
+        "hint": "判決真的回應了誰？",
+        "reply": "你先看受傷的人。當程序完成而痛苦仍然存在，「正義已經完成」這句話就會變得格外困難。"
+      },
+      {
+        "id": "system",
+        "title": "社會的責任",
+        "code": "SYSTEM",
+        "hint": "誰創造了走向犯罪的條件？",
+        "reply": "你把鏡頭拉遠。個人必須為行為負責，但制度、環境與科技也可能默默決定一個人有哪些選擇。"
+      }
     ],
-    books:[
-      {title:"徬徨之刃",surface:"當法律無法阻止悲劇，父親還能做什麼？",real:"當制度無法平息被害者家屬的痛苦，復仇是否可能被理解？",more:"小說讓讀者同時看見法律的必要與不足。越靠近受害者的痛苦，越難用單一答案處理「正義」。"},
-      {title:"空洞的十字架",surface:"刑罰究竟能不能阻止下一次犯罪？",real:"判決與懲罰完成之後，罪真的消失了嗎？",more:"東野把死刑爭議從抽象立場拉回具體人生：懲罰、悔悟、補償與失去之間，沒有哪一個詞可以獨自完成正義。"},
-      {title:"白金數據",surface:"DNA 與大型資料庫能不能讓犯罪無所遁形？",real:"當科技以安全之名掌握每個人的資料，自由與隱私還剩多少空間？",more:"最可靠的系統也由人設計。當科技被賦予判斷人的權力，真正需要被監督的也許不只是犯罪者。"}
+    "books": [
+      {
+        "title": "徬徨之刃",
+        "surface": "當法律無法阻止悲劇，父親還能做什麼？",
+        "real": "當制度無法平息被害者家屬的痛苦，復仇是否可能被理解？",
+        "more": "小說讓讀者同時看見法律的必要與不足。越靠近受害者的痛苦，越難用單一答案處理「正義」。"
+      },
+      {
+        "title": "空洞的十字架",
+        "surface": "刑罰究竟能不能阻止下一次犯罪？",
+        "real": "判決與懲罰完成之後，罪真的消失了嗎？",
+        "more": "東野把死刑爭議從抽象立場拉回具體人生：懲罰、悔悟、補償與失去之間，沒有哪一個詞可以獨自完成正義。"
+      },
+      {
+        "title": "白金數據",
+        "surface": "DNA 與大型資料庫能不能讓犯罪無所遁形？",
+        "real": "當科技以安全之名掌握每個人的資料，自由與隱私還剩多少空間？",
+        "more": "最可靠的系統也由人設計。當科技被賦予判斷人的權力，真正需要被監督的也許不只是犯罪者。"
+      }
     ],
-    closeQ:"如果法律給出的答案無法撫平傷害，個人是否有權尋找自己的正義？",
-    verdicts:["有時可以，制度也可能失靈。","不可以，正義不能靠每個人自行定義。"],
-    closeText:"正義之所以困難，正因為它必須同時面對規則與人的痛苦。答案越簡單，往往越容易遺漏某個人。"
+    "closeQ": "如果法律給出的答案無法撫平傷害，個人是否有權尋找自己的正義？",
+    "verdicts": [
+      "有時可以，制度也可能失靈。",
+      "不可以，正義不能靠每個人自行定義。"
+    ],
+    "closeText": "正義之所以困難，正因為它必須同時面對規則與人的痛苦。答案越簡單，往往越容易遺漏某個人。"
   },
-  youth:{
-    case:"CASE 05｜青春", title:"青春從來不只是青春",
-    scene:"考試、競爭、友情、嫉妒、喜歡與害怕被排除——大人眼中的小事，對年輕人可能就是整個世界。東野早期校園推理把犯罪放進青春裡，也讓我們看見成長最脆弱的一面。",
-    prompt:"面對一樁校園裡的祕密，你會先看什麼？",
-    choices:[
-      {id:"event",title:"表面的衝突",code:"EVENT",hint:"校園裡到底發生了什麼？",reply:"你先確認事件本身。只是校園裡的衝突很少突然出現，它常由許多沒被重視的小事逐步累積。"},
-      {id:"pressure",title:"同儕與壓力",code:"PRESSURE",hint:"誰在沉默中被推向角落？",reply:"你注意到群體的力量。青春裡最重的壓力，常不是來自敵人，而是來自最想被接納的那群人。"},
-      {id:"after",title:"長大後的代價",code:"AFTER",hint:"青春的選擇會留下多久？",reply:"你已經看向未來。當時只是一個選擇、一句話或一次沉默，卻可能成為多年後仍然無法放下的記憶。"}
+  "youth": {
+    "case": "CASE 05｜青春",
+    "title": "青春從來不只是青春",
+    "scene": "考試、競爭、友情、嫉妒、喜歡與害怕被排除——大人眼中的小事，對年輕人可能就是整個世界。東野早期校園推理把犯罪放進青春裡，也讓我們看見成長最脆弱的一面。",
+    "prompt": "面對一樁校園裡的祕密，你會先看什麼？",
+    "choices": [
+      {
+        "id": "event",
+        "title": "表面的衝突",
+        "code": "EVENT",
+        "hint": "校園裡到底發生了什麼？",
+        "reply": "你先確認事件本身。只是校園裡的衝突很少突然出現，它常由許多沒被重視的小事逐步累積。"
+      },
+      {
+        "id": "pressure",
+        "title": "同儕與壓力",
+        "code": "PRESSURE",
+        "hint": "誰在沉默中被推向角落？",
+        "reply": "你注意到群體的力量。青春裡最重的壓力，常不是來自敵人，而是來自最想被接納的那群人。"
+      },
+      {
+        "id": "after",
+        "title": "長大後的代價",
+        "code": "AFTER",
+        "hint": "青春的選擇會留下多久？",
+        "reply": "你已經看向未來。當時只是一個選擇、一句話或一次沉默，卻可能成為多年後仍然無法放下的記憶。"
+      }
     ],
-    books:[
-      {title:"放學後",surface:"看似平靜的校園為什麼接連出現危險？",real:"被忽略的壓力與秘密，如何一步步把人推過不可逆的界線？",more:"校園不是犯罪故事的背景板，而是壓力生成的現場。越熟悉的日常，越容易讓真正的求救被當成小事。"},
-      {title:"同級生",surface:"同學之間的死亡與祕密有什麼關聯？",real:"友情、誤解與沉默，會在青春裡留下多長的影子？",more:"少年少女不一定有成熟的語言說明自己，因此誤解往往比真相更快擴散。小說追查的也是一群人如何錯過彼此。"},
-      {title:"畢業",surface:"友情與競爭交錯的校園裡，誰藏著不能說的事？",real:"當共同青春走到分岔路口，我們真的了解最熟悉的朋友嗎？",more:"畢業象徵往前走，也意味著某段關係即將結束。案件因此不只是誰做了什麼，更是每個人如何面對即將失去的共同世界。"}
+    "books": [
+      {
+        "title": "放學後",
+        "surface": "看似平靜的校園為什麼接連出現危險？",
+        "real": "被忽略的壓力與秘密，如何一步步把人推過不可逆的界線？",
+        "more": "校園不是犯罪故事的背景板，而是壓力生成的現場。越熟悉的日常，越容易讓真正的求救被當成小事。"
+      },
+      {
+        "title": "同級生",
+        "surface": "同學之間的死亡與祕密有什麼關聯？",
+        "real": "友情、誤解與沉默，會在青春裡留下多長的影子？",
+        "more": "少年少女不一定有成熟的語言說明自己，因此誤解往往比真相更快擴散。小說追查的也是一群人如何錯過彼此。"
+      },
+      {
+        "title": "畢業",
+        "surface": "友情與競爭交錯的校園裡，誰藏著不能說的事？",
+        "real": "當共同青春走到分岔路口，我們真的了解最熟悉的朋友嗎？",
+        "more": "畢業象徵往前走，也意味著某段關係即將結束。案件因此不只是誰做了什麼，更是每個人如何面對即將失去的共同世界。"
+      }
     ],
-    closeQ:"青春時犯下的錯，應該被時間沖淡，還是一直被記得？",
-    verdicts:["應該給人成長與重新開始的機會。","有些傷害不會因為年輕就變得比較輕。"],
-    closeText:"成長不是把過去刪掉，而是學會帶著曾經的選擇繼續生活。青春之所以重要，正因為它會留下痕跡。"
+    "closeQ": "青春時犯下的錯，應該被時間沖淡，還是一直被記得？",
+    "verdicts": [
+      "應該給人成長與重新開始的機會。",
+      "有些傷害不會因為年輕就變得比較輕。"
+    ],
+    "closeText": "成長不是把過去刪掉，而是學會帶著曾經的選擇繼續生活。青春之所以重要，正因為它會留下痕跡。"
   },
-  hope:{
-    case:"CASE 06｜希望", title:"沒有命案，也可以是東野圭吾",
-    scene:"有些謎題沒有兇手，也不需要逮捕任何人。錯過、遺憾、善意與一句沒有送達的話，同樣可以成為需要被解開的秘密。最後一案，我們把推理從犯罪帶回人與人的連結。",
-    prompt:"如果沒有犯罪，你還會追查什麼？",
-    choices:[
-      {id:"mystery",title:"眼前的謎題",code:"MYSTERY",hint:"事情究竟出了什麼差錯？",reply:"你仍然從謎題開始。推理的樂趣沒有消失，只是答案不再指向兇手，而是指向一段人生裡被忽略的連結。"},
-      {id:"wish",title:"沒說出口的願望",code:"WISH",hint:"他真正想得到的是什麼？",reply:"你想理解人的願望。很多時候，人問出的問題只是表面；真正需要被回答的，是他不敢直接說出口的那一句。"},
-      {id:"hope",title:"重新連結的可能",code:"HOPE",hint:"人與人還能不能走回彼此？",reply:"你選擇把推理帶向希望。理解不能改寫已經發生的事，卻可能改變一個人接下來如何走。"}
+  "hope": {
+    "case": "CASE 06｜希望",
+    "title": "沒有命案，也可以是東野圭吾",
+    "scene": "有些謎題沒有兇手，也不需要逮捕任何人。錯過、遺憾、善意與一句沒有送達的話，同樣可以成為需要被解開的秘密。最後一案，我們把推理從犯罪帶回人與人的連結。",
+    "prompt": "如果沒有犯罪，你還會追查什麼？",
+    "choices": [
+      {
+        "id": "mystery",
+        "title": "眼前的謎題",
+        "code": "MYSTERY",
+        "hint": "事情究竟出了什麼差錯？",
+        "reply": "你仍然從謎題開始。推理的樂趣沒有消失，只是答案不再指向兇手，而是指向一段人生裡被忽略的連結。"
+      },
+      {
+        "id": "wish",
+        "title": "沒說出口的願望",
+        "code": "WISH",
+        "hint": "他真正想得到的是什麼？",
+        "reply": "你想理解人的願望。很多時候，人問出的問題只是表面；真正需要被回答的，是他不敢直接說出口的那一句。"
+      },
+      {
+        "id": "hope",
+        "title": "重新連結的可能",
+        "code": "HOPE",
+        "hint": "人與人還能不能走回彼此？",
+        "reply": "你選擇把推理帶向希望。理解不能改寫已經發生的事，卻可能改變一個人接下來如何走。"
+      }
     ],
-    books:[
-      {title:"解憂雜貨店",surface:"跨越時間的信件，為什麼會抵達陌生人手中？",real:"一句認真回覆，真的可能改變另一個人的人生嗎？",more:"故事的謎題最後都回到「有人願意聽」。解答不一定替人做決定，卻能讓一個孤單的人知道自己不是完全無人理解。"},
-      {title:"祈念之樹",surface:"人們為什麼把不能說的事交給一棵樹？",real:"當祕密不再只是隱瞞，它能不能成為理解彼此的入口？",more:"願望與祕密被保留下來，也等待另一個人有一天讀懂。推理因此變成一種靠近他人的方式。"},
-      {title:"時生",surface:"一場跨越時間的相遇，究竟想改變什麼？",real:"如果知道人生終點，我們是否仍會選擇同樣的愛與相遇？",more:"知道未來不一定能改變命運，但理解過去可能改變我們看待自己的人生。《時生》把答案留在選擇如何活下去。"}
+    "books": [
+      {
+        "title": "解憂雜貨店",
+        "surface": "跨越時間的信件，為什麼會抵達陌生人手中？",
+        "real": "一句認真回覆，真的可能改變另一個人的人生嗎？",
+        "more": "故事的謎題最後都回到「有人願意聽」。解答不一定替人做決定，卻能讓一個孤單的人知道自己不是完全無人理解。"
+      },
+      {
+        "title": "祈念之樹",
+        "surface": "人們為什麼把不能說的事交給一棵樹？",
+        "real": "當祕密不再只是隱瞞，它能不能成為理解彼此的入口？",
+        "more": "願望與祕密被保留下來，也等待另一個人有一天讀懂。推理因此變成一種靠近他人的方式。"
+      },
+      {
+        "title": "時生",
+        "surface": "一場跨越時間的相遇，究竟想改變什麼？",
+        "real": "如果知道人生終點，我們是否仍會選擇同樣的愛與相遇？",
+        "more": "知道未來不一定能改變命運，但理解過去可能改變我們看待自己的人生。《時生》把答案留在選擇如何活下去。"
+      }
     ],
-    closeQ:"推理真正重要的，是找到答案，還是因此更理解一個人？",
-    verdicts:["找到答案，理解才有可靠的起點。","理解一個人，有時比答案本身更重要。"],
-    closeText:"六個 CASE 走到最後，真相沒有消失；只是我們開始知道，答案之外還有人。這就是「真相之後」。"
+    "closeQ": "推理真正重要的，是找到答案，還是因此更理解一個人？",
+    "verdicts": [
+      "找到答案，理解才有可靠的起點。",
+      "理解一個人，有時比答案本身更重要。"
+    ],
+    "closeText": "六個 CASE 走到最後，真相沒有消失；只是我們開始知道，答案之外還有人。這就是「真相之後」。"
   }
-
 };
 
 const caseDataTranslations={
-  ja:{
-    reason:{
-      case:"CASE 01｜理性",title:"理性はすべてを解き明かせるのか？",
-      scene:"すべての証拠がひとつの答えを指している。だが、その真実自体が嘘より残酷だったとしたら？ 湯川学は数式、実験、論理を信じる。けれど東野圭吾は、答えが出たあとで問いをもう一度、人間へ返す。",
-      prompt:"あなたなら、どの手がかりから追いますか？",
-      choices:[
-        {id:"how",title:"犯行の手口",code:"HOW",hint:"何が、どう起きたのか？",reply:"あなたは「どうやって」を起点に選びました。科学は何が起きたかを証明できますが、人がなぜそこまでの代償を払おうとしたのかまでは、必ずしも説明できません。"},
-        {id:"why",title:"利害と因縁",code:"WHY",hint:"なぜ、そんなことをしたのか？",reply:"あなたはまず、人の理由を追います。動機があれば事件は理解しやすくなります。けれど「理解できること」と「許せること」は同じではありません。"},
-        {id:"after",title:"その後の代償",code:"AFTER",hint:"真実のあと、誰が代償を負うのか？",reply:"あなたは答えの先を見ています。謎が解けた瞬間から、本当に難しい問題が始まることがあります。"}
+  "ja": {
+    "reason": {
+      "case": "CASE 01｜理性",
+      "title": "理性はすべてを解き明かせるのか？",
+      "scene": "すべての証拠がひとつの解を指し示している。だが、その真実自体が嘘よりも残酷だったとしたら？ 湯川学は数式、実験、そして論理を信じる。しかし東野圭吾は、解が導き出されたあとで、問いをもう一度「人間」へと投げ返す。",
+      "prompt": "あなたなら、どの手がかりから追いますか？",
+      "choices": [
+        {
+          "id": "how",
+          "title": "犯行の手口",
+          "code": "HOW",
+          "hint": "何が、どう起きたのか？",
+          "reply": "あなたは「どう成し遂げたか」を起点に選びました。湯川学もここから着手します。しかし科学は何が起きたかを証明できても、人がなぜそこまでの代償を払おうとしたのかまでは答えられません。"
+        },
+        {
+          "id": "why",
+          "title": "利害と因縁",
+          "code": "WHY",
+          "hint": "なぜ、そんなことをしたのか？",
+          "reply": "あなたは人間の動機から追います。理由を知れば事件は腑に落ちるかもしれない。けれど「理解できること」と「許されること」は決して同じではありません。"
+        },
+        {
+          "id": "after",
+          "title": "その後の代償",
+          "code": "AFTER",
+          "hint": "真実のあと、誰が代償を背負うのか？",
+          "reply": "あなたの視線は答えのその先へ向いています。まさに本展が問いかけたい場所です。謎が解けたとき、本当に難しい問題が始まることがあります。"
+        }
       ],
-      books:[
-        {title:"容疑者Xの献身",surface:"完璧なアリバイは、どう成立したのか？",real:"犠牲が愛から生まれたなら、それを単純に犯罪と呼べるのか？",more:"石神の計算はほとんど隙がありません。しかし最後に残るのは数式ではなく、一人の人間が他者のためにどこまでできるのかという問いです。"},
-        {title:"聖女の救済",surface:"ほとんど不可能に見える犯罪は、どう実行されたのか？",real:"長い年月の待望と恨みが積み重なったとき、愛と復讐はまだ分けられるのか？",more:"科学は手口を再現できますが、長い関係のなかに蓄積した沈黙を縮めることはできません。"},
-        {title:"真夏の方程式",surface:"一つの死の背後には、どんな因果が隠れているのか？",real:"真実を明かすことで子どもが傷つくなら、それでも知ることが最善なのか？",more:"湯川は真相に近づきながら、知ることの責任にも向き合います。知ることと、それを口にすることは同じ選択ではありません。"}
+      "books": [
+        {
+          "title": "容疑者Xの献身",
+          "surface": "完璧なアリバイは、いかにして成立したのか？",
+          "real": "もし犠牲が愛から生まれたのなら、それを単純に「犯罪」と呼べるのか？",
+          "more": "石神の論理は完璧でした。しかし物語が突きつけるのは数式ではなく、「人は他者のためにどこまで己を捧げられるのか」という極限の愛です。"
+        },
+        {
+          "title": "聖女の救済",
+          "surface": "ほとんど不可能に見える犯罪は、どのように実行されたのか？",
+          "real": "長い年月の待ちと恨みが積み重なったとき、愛と復讐はまだ分けられるのか？",
+          "more": "科学はトリックを暴けても、歳月のなかで堆積した沈黙までは埋められません。東野は「完全犯罪」を濃密な情愛の歳月の証拠へと昇華させます。"
+        },
+        {
+          "title": "真夏の方程式",
+          "surface": "ある死の背後には、いかなる因縁が隠されていたのか？",
+          "real": "真実を暴くことが無垢な子どもを傷つけるなら、それでも知ることが最善なのか？",
+          "more": "湯川は真実に肉薄しながら、「知ることの責任」に向き合います。「知る」ことと「明かす」ことは、決して同義ではありません。"
+        }
       ],
-      closeQ:"理性は犯罪の方法を解けても、人間の選択まで解けるのか？",
-      verdicts:["できる。人の選択には、最終的に理由がある。","必ずしもそうではない。人間は数式ではない。"],
-      closeText:"真実が証明された瞬間から、人間性をめぐる問いが本当に始まるのかもしれません。"
+      "closeQ": "理性は犯罪のトリックを解けても、人間の選択の理由まで解き明かせるのか？",
+      "verdicts": [
+        "解ける。人の選択には、必ず論理的な理由がある。",
+        "解けない。人間は数式通りには動かない。"
+      ],
+      "closeText": "真実が証明された瞬間こそが、人間性をめぐる真の問いが幕を開ける場所なのかもしれません。"
     },
-    after:{
-      case:"CASE 02｜余波",title:"死のあとに、残されるのは誰か？",
-      scene:"事件には終結があっても、喪失まで終わるわけではありません。加賀恭一郎が追うのは犯人だけではなく、一つの死によって変えられた人々――遺族、家族、そして語られなかった秘密です。",
-      prompt:"すでに起きてしまった死を前に、あなたはまず何を見ますか？",
-      choices:[
-        {id:"trace",title:"最後の足取り",code:"TRACE",hint:"亡くなる前に、何があったのか？",reply:"あなたはまず出来事の軌跡を組み立てます。手がかりは死の瞬間へ近づけてくれます。けれど加賀は、その瞬間のあと誰の人生が変わったのかを見つめます。"},
-        {id:"secret",title:"語られなかった秘密",code:"SECRET",hint:"誰が守り、誰が隠しているのか？",reply:"あなたは沈黙に気づきました。家族の秘密は、最も近い人を守るために隠されることがあります。だからこそ、その「守る」が傷つける行為へ変わることもあります。"},
-        {id:"remain",title:"残された人々",code:"AFTER",hint:"真実のあと、人はどう生き続けるのか？",reply:"あなたは事件の余波そのものを見ています。残された人にとって、事件の解決は終止符ではなく、もう一度生き方を学び直す時間の始まりです。"}
+    "after": {
+      "case": "CASE 02｜余波",
+      "title": "死のあとに、残されるのは誰か？",
+      "scene": "事件は解決を迎えても、喪失が終わるわけではない。加賀恭一郎が追うのは犯人だけではなく、ひとつの死によって人生を一変させられた人々――遺族、家族、そして胸に秘められた沈黙です。",
+      "prompt": "すでに起きてしまった死を前に、あなたは何を最初に見つめますか？",
+      "choices": [
+        {
+          "id": "trace",
+          "title": "最後の足取り",
+          "code": "TRACE",
+          "hint": "亡くなる直前、何があったのか？",
+          "reply": "あなたはまず出来事の軌跡をたどります。手がかりは死の瞬間へ導いてくれます。しかし加賀が立ち止まって見つめるのは、その瞬間を境に誰の人生が変わってしまったのかです。"
+        },
+        {
+          "id": "secret",
+          "title": "語られなかった秘密",
+          "code": "SECRET",
+          "hint": "誰が守り、誰が隠しているのか？",
+          "reply": "あなたは沈黙に目を向けました。家族の嘘は他人を欺くためではなく、最も愛する人を守るためにつかれることがあります。だからこそ、「守る」ことが時に傷つけることへ変わるのです。"
+        },
+        {
+          "id": "remain",
+          "title": "残された人々",
+          "code": "AFTER",
+          "hint": "真実が明かされた後、人はどう生き続けるのか？",
+          "reply": "あなたは事件の余波を直接見据えています。残された遺族にとって、事件の解決は終わりではなく、背負った悲しみとともに生き直す旅の始まりです。"
+        }
       ],
-      books:[
-        {title:"新参者",surface:"日本橋の人間関係のなかで、どの手がかりが真相へつながるのか？",real:"犯人を見つけること以上に、事件で変わった人々が互いを理解し直すことのほうが大切なのではないか？",more:"加賀は「新参者」として町に入り、普通の人々が抱える秘密を見つめます。破案以上に、これからも生きていく人々を気にかけています。"},
-        {title:"赤い指",surface:"なぜ一つの家族が、そろって犯罪を隠そうとするのか？",real:"家族を守ることが傷害を隠すことへ変わったとき、愛と共犯の距離はどれほど残るのか？",more:"息苦しいのは事件そのものより、家族が沈黙によって誤りを延命させていくことです。"},
-        {title:"麒麟の翼",surface:"死者が残した最後の行動は、何を示そうとしていたのか？",real:"一つの死が、家族にとって互いを理解し直す最後の機会になり得るのか？",more:"手がかりを追うことは、遅れて届く理解でもあります。死は元に戻せませんが、真実が残された人の記憶の仕方を変えることはあります。"}
+      "books": [
+        {
+          "title": "新参者",
+          "surface": "日本橋の路地と人間模様のなかで、どの手がかりが真相へ繋がるのか？",
+          "real": "犯人を挙げること以上に、事件で傷ついた人々が互いを理解し直すことこそが肝要ではないか？",
+          "more": "加賀は一人の「新参者」として下町に溶け込み、市井の人々が抱える小さな嘘を解きほぐします。彼が何より案じるのは、明日も生きていかなければならない人々の心です。"
+        },
+        {
+          "title": "赤い指",
+          "surface": "なぜ一つの家族が、共謀して罪を隠蔽しようとしたのか？",
+          "real": "家族を守ることが罪の隠蔽と化したとき、「愛」と「共犯」の境界はどこにあるのか？",
+          "more": "胸を締め付けるのは事件の手口ではなく、家族が沈黙によって過ちを重ねていく冷酷さです。東野は「語らぬことを選んだ」全員に倫理的責任を問います。"
+        },
+        {
+          "title": "麒麟の翼",
+          "surface": "瀕死の被害者が日本橋へ歩き続けた最後の行動は、何を伝えようとしていたのか？",
+          "real": "ひとつの死は、家族が真の絆を取り戻すための「最後の祈り」となり得るのか？",
+          "more": "足跡をたどる旅は、遅すぎた対話のやり直しでもあります。死は覆せなくとも、真実の光は残された者が互いをどう記憶し愛するかを塗り替えてくれます。"
+        }
       ],
-      closeQ:"事件の解決は、喪失によって生まれた傷を軽くできるのか？",
-      verdicts:["できる。真実を知ることで、人は本当に前へ進める。","できない。真実よりも長く残る余波もある。"],
-      closeText:"事件には終結の日がありますが、喪失にはありません。真実の価値とは、痛みを消すことではなく、それとどう共に生きるかを知ることなのかもしれません。"
+      "closeQ": "事件の解決は捜査を終わらせても、喪失が残した傷口を癒すことができるのか？",
+      "verdicts": [
+        "癒せる。真実を知ってこそ、人は前を向いて歩き出せる。",
+        "癒せない。真実よりも長く、深く残り続ける痛みがある。"
+      ],
+      "closeText": "事件には終結の日があっても、喪失に終わりはありません。真実の価値とは苦痛を消し去ることではなく、それを受け止めて共に生きていく術を知ることなのです。"
     },
-    love:{
-      case:"CASE 03｜愛",title:"愛は、犯罪の理由になり得るのか？",
-      scene:"守ること、犠牲、独占、支配――それらは時に「愛」という名で語られます。愛する人のために一線を越えたと言う者を、私たちは理解しているのか、それとも行為の言い訳を探しているのか。",
-      prompt:"愛と犯罪が絡み合うとき、あなたは何から追いますか？",
-      choices:[
-        {id:"act",title:"越えてしまった行為",code:"ACT",hint:"実際に何をしたのか？",reply:"あなたは行為と感情を切り分けます。どれほど強い感情でも、傷つけた責任を自動的に消すことはできません。"},
-        {id:"why",title:"愛という理由",code:"WHY",hint:"誰のためだと言っているのか？",reply:"あなたはまず動機を理解しようとします。理解は人物を立体的にしますが、そのあとでも善悪をはっきり判断できるのかという難しい問いが残ります。"},
-        {id:"boundary",title:"守ることと支配の境界",code:"BOUNDARY",hint:"愛はどこから傷つける行為に変わるのか？",reply:"あなたは境界を探しています。「あなたのため」が別の支配へ変わる瞬間を、東野は何度も描きます。"}
+    "love": {
+      "case": "CASE 03｜愛",
+      "title": "愛は、犯罪の理由になり得るのか？",
+      "scene": "献身、犠牲、執着、支配――それらはすべて「愛」の名のもとに語られます。愛する者のために一線を越えたと主張するとき、私たちはその動機を理解しているのか、それとも罪への言い訳を与えているのか。",
+      "prompt": "愛と罪が縺れ合うとき、あなたは何から調べ始めますか？",
+      "choices": [
+        {
+          "id": "act",
+          "title": "越えてしまった行為",
+          "code": "ACT",
+          "hint": "実際に何を行ってしまったのか？",
+          "reply": "あなたはまず行為と感情を厳格に切り分けます。どれほど切実な情愛であっても、他者を傷つけた罪の責任を免除することはできません。"
+        },
+        {
+          "id": "why",
+          "title": "愛という動機",
+          "code": "WHY",
+          "hint": "誰のための一線だったのか？",
+          "reply": "あなたはまず情愛の動機を理解しようとします。動機への共感は人間を多面的に見せますが、同時に「理解したあと、善悪をどう裁くのか」という重い葛藤を突きつけます。"
+        },
+        {
+          "id": "boundary",
+          "title": "守ることと支配の境界",
+          "code": "BOUNDARY",
+          "hint": "愛はどこで害悪へと変質するのか？",
+          "reply": "あなたはその境界線を見極めようとしています。東野作品は、庇護が支配へと暗転する危うさを暴き、「あなたのため」という言葉が帯びる暴力性を描き出します。"
+        }
       ],
-      books:[
-        {title:"白夜行",surface:"なぜ二人の運命は、長い年月を同じ事件に縛られ続けるのか？",real:"互いを守りながら、互いを閉じ込めてもいる。闇の中でしか存在できない愛は、光へ向かえるのか？",more:"物語は感情を明言せず、その沈黙自体を最大の手がかりにします。この関係は救いなのか、それとも共に沈むことなのか。"},
-        {title:"秘密",surface:"身体と魂が一致しなくなったとき、家族はどう向き合うのか？",real:"見慣れた身体の中に別の大切な人がいるとき、愛しているのは誰なのか？",more:"『秘密』は推理の方向を、身元と関係そのものへ向けます。難しいのは超常現象ではなく、喪失と新しい選択のあいだで愛をどう定義するかです。"},
-        {title:"幻夜",surface:"一つの関係のなかで、誰が誰を利用しているのか？",real:"愛が少しずつ支配や依存へ変わるとき、そこに本物の感情は残るのか？",more:"人物たちは互いに近づきながら、同時に互いを道具として扱います。愛は人を救いも、飲み込みもします。"}
+      "books": [
+        {
+          "title": "白夜行",
+          "surface": "なぜ二人の運命は、19年もの歳月をひとつの未解決事件に縛られ続けるのか？",
+          "real": "互いを守り合いながら、互いを縛り付ける魂。暗闇の中でしか息づけない愛は、果たして太陽の下へ歩み出せるのか？",
+          "more": "二人の言葉や情愛を直接語らず、張り詰めた沈黙そのものを最大の証拠として提示します。この絆は究極の救済なのか、それとも終わりなき共倒れなのか。"
+        },
+        {
+          "title": "秘密",
+          "surface": "娘の肉体に宿った妻の魂。家族はこの奇妙な現実とどう向き合うべきか？",
+          "real": "見慣れた肉体の奥に最愛の魂が宿るとき、人が本当に愛しているのは姿か、それとも心か？",
+          "more": "ミステリーの筆致を「自己の正体」と「愛のあり方」へと向けた傑作。不可思議な現象の先で、人は別離と再選択のなか愛をいかに定義するのかを問います。"
+        },
+        {
+          "title": "幻夜",
+          "surface": "欲望渦巻く男女の関係において、操っているのはどちらなのか？",
+          "real": "愛が支配と冷徹な依存に成り果てたとき、そこになお真実の情愛は息づいているのか？",
+          "more": "惹かれ合いながらも互いを野望の道具として消費していく男女。『幻夜』は愛の純粋幻想を打ち砕き、人を救うと同時に破滅へと呑み込む業を描きます。"
+        }
       ],
-      closeQ:"「愛ゆえに犯罪を犯した」という理由を理解することで、その人への判断は変わるか？",
-      verdicts:["変わる。動機によって責任の重さは違って見える。","変わらない。理解することと許すことは別だ。"],
-      closeText:"愛は行為を説明できても、その行為を正当化できるとは限りません。難しいのは、どこまで理解し、どこまで許すのかということです。"
+      "closeQ": "「愛ゆえの凶行」という動機を知ることで、その人物に対するあなたの裁きは変わるか？",
+      "verdicts": [
+        "変わる。動機の切実さは、罪の重みと意味を変える。",
+        "変わらない。理由を理解することと、免罪することは別だ。"
+      ],
+      "closeText": "愛は動機を説明できても、行為を正当化することはできません。真に重いのは、私たちがどこまで理解し、どこで許しを留めるかという境界線です。"
     },
-    justice:{
-      case:"CASE 04｜正義",title:"社会が犯罪者を生み出すとき",
-      scene:"法律は有罪か無罪かを決めます。しかし正義が判決の瞬間に完成するとは限りません。少年法、死刑、テクノロジーによる監視、被害者の傷、社会的偏見は、「誰が責任を負うべきか」という問いを複雑にします。",
-      prompt:"制度と個人の痛みが衝突するとき、あなたはまず何を信じますか？",
-      choices:[
-        {id:"law",title:"法の判断",code:"LAW",hint:"制度は罪と罰をどう定義するのか？",reply:"あなたはまず制度を守ろうとします。法律は誰もが共有できる基準でなければなりませんが、その尺度では見えない痛みもあります。"},
-        {id:"hurt",title:"被害者の痛み",code:"HURT",hint:"判決は、本当に誰に応えているのか？",reply:"あなたはまず傷ついた人を見ます。手続きが終わっても痛みが残るとき、「正義は完了した」と言い切ることは難しくなります。"},
-        {id:"system",title:"社会の責任",code:"SYSTEM",hint:"犯罪へ向かう条件を作ったのは誰か？",reply:"あなたは視野を広げます。個人は行為に責任を負いますが、制度や環境、技術も選択肢を静かに形づくっているかもしれません。"}
+    "justice": {
+      "case": "CASE 04｜正義",
+      "title": "社会が犯罪者を生み出すとき",
+      "scene": "法は有罪か無罪かを宣告します。しかし正義がその判決の瞬間に完結するとは限りません。少年法、死刑制度、監視社会、被害者遺族のトラウマ、そして世論の偏見――「誰が責任を負うべきか」という問いは、事件そのものよりも遥かに深く複雑です。",
+      "prompt": "制度と個人の痛みが衝突するとき、あなたは何を拠り所にしますか？",
+      "choices": [
+        {
+          "id": "law",
+          "title": "法の裁き",
+          "code": "LAW",
+          "hint": "法制度は罪と罰をどう定義するのか？",
+          "reply": "あなたはまず規範と制度を重んじます。法は万人が共有する尺度であるべきですが、その画一的な基準からは零れ落ちてしまう個人の悲痛も存在します。"
+        },
+        {
+          "id": "hurt",
+          "title": "被害者の痛み",
+          "code": "HURT",
+          "hint": "判決は、真に誰の痛みに応えているのか？",
+          "reply": "あなたは傷ついた魂に寄り添います。司法手続きが滞りなく終わっても当事者の痛みが癒えぬとき、「正義は成された」と胸を張って言えるでしょうか。"
+        },
+        {
+          "id": "system",
+          "title": "社会の構造的責任",
+          "code": "SYSTEM",
+          "hint": "誰が犯罪へ向かう条件をつくったのか？",
+          "reply": "あなたは視野を構造全体へと広げます。個人の責任は免れませんが、格差、偏見、制度の歪みといった社会的土壌が、その選択を強要した可能性も無視できません。"
+        }
       ],
-      books:[
-        {title:"さまよう刃",surface:"法律が悲劇を防げないとき、父親に何ができるのか？",real:"制度が被害者家族の痛みを静められないとき、復讐は理解され得るのか？",more:"法律の必要性と不足を同時に見せる物語です。被害者の痛みに近づくほど、「正義」を一つの答えだけで処理することは難しくなります。"},
-        {title:"虚ろな十字架",surface:"刑罰は、本当に次の犯罪を防げるのか？",real:"判決と処罰が終わったあと、罪は本当に消えるのか？",more:"処罰、悔悟、償い、喪失――どの言葉も、それだけで正義を完成させることはできません。"},
-        {title:"プラチナデータ",surface:"DNAと巨大データベースは、犯罪を完全に見逃さなくできるのか？",real:"安全の名のもとに技術が個人情報を握るとき、自由とプライバシーはどこまで残るのか？",more:"どれほど信頼できるシステムも人が設計します。技術に人を判断する力を与えるなら、その仕組み自体も監視される必要があります。"}
+      "books": [
+        {
+          "title": "さまよう刃",
+          "surface": "法が少年犯罪の凶行から娘を守れなかったとき、父親に何ができるのか？",
+          "real": "法制度が遺族の絶望に寄り添えないとき、私刑（復讐）は倫理的に理解され得るのか？",
+          "more": "法の絶対的な必要性と、個人の救済における限界を同時に突きつける問題作。被害者の痛みに肉薄するほど、「正義」を単純な二元論で語ることは不可能になります。"
+        },
+        {
+          "title": "虚ろな十字架",
+          "surface": "厳罰や死刑は、真に次の凶行を抑止できるのか？",
+          "real": "判決が下され刑が執行されたとき、犯した罪と心の傷は本当に消滅するのか？",
+          "more": "死刑存廃の議論を抽象論から生身の人生へ引き戻す意欲作。懲罰、真の悔悟、償い、そして埋まらぬ喪失感――いかなる言葉も、単独で正義を満たすことはできません。"
+        },
+        {
+          "title": "プラチナデータ",
+          "surface": "DNAと国家規模のデータベースは、犯罪を根絶し得るのか？",
+          "real": "「安全」の名のもとに管理社会が個人を統制するとき、尊厳と自由はどこへ追いやられるのか？",
+          "more": "どれほど高度なシステムも人間が構築する以上、完全ではあり得ません。アルゴリズムが人間を裁く力を得たとき、監視されるべきは権力そのものです。"
+        }
       ],
-      closeQ:"法律の答えが傷を癒せないなら、個人は自分の正義を探す権利を持つのか？",
-      verdicts:["場合によってはある。制度が機能しないこともある。","ない。正義を一人ひとりが勝手に定義することはできない。"],
-      closeText:"正義が難しいのは、ルールと人の痛みを同時に見なければならないからです。答えが単純であるほど、誰かを見落としている可能性があります。"
+      "closeQ": "法が下した判決が傷を癒せないとき、個人が独自の「正義」を追求することは許されるか？",
+      "verdicts": [
+        "あり得る。制度が機能不全に陥る現実がある以上、否定し切れない。",
+        "許されない。私的制裁を認めれば社会の秩序は崩壊する。"
+      ],
+      "closeText": "正義の探求が困難を極めるのは、客観的ルールと主観的な痛みの両方を背負わねばならないからです。結論を単純化するほど、誰かの悲鳴を見落とすことになります。"
     },
-    youth:{
-      case:"CASE 05｜青春",title:"青春は、ただの青春ではない",
-      scene:"試験、競争、友情、嫉妬、恋、仲間外れへの恐れ――大人には小さく見えることが、若者にとっては世界のすべてになることがあります。東野の初期学園ミステリーは、犯罪を青春のただ中に置き、成長の脆さを見せます。",
-      prompt:"学校で起きた一つの秘密を前に、あなたはまず何を見ますか？",
-      choices:[
-        {id:"event",title:"目の前の衝突",code:"EVENT",hint:"学校で実際に何が起きたのか？",reply:"あなたはまず出来事そのものを確かめます。学校の衝突は突然ではなく、見過ごされてきた小さな出来事の積み重ねかもしれません。"},
-        {id:"pressure",title:"仲間と圧力",code:"PRESSURE",hint:"誰が沈黙の中で追い詰められているのか？",reply:"あなたは集団の力に目を向けます。青春で最も重い圧力は、敵ではなく、最も受け入れてほしい人々から生まれることがあります。"},
-        {id:"after",title:"大人になってからの代償",code:"AFTER",hint:"青春の選択は、どれほど長く残るのか？",reply:"あなたは未来を見ています。一つの選択、一言、一度の沈黙が、何年後まで消えない記憶になることがあります。"}
+    "youth": {
+      "case": "CASE 05｜青春",
+      "title": "青春は、ただの青春ではない",
+      "scene": "受験、競争、友情、嫉妬、淡い恋心、そして仲間外れへの恐怖――大人には瑣末に見えることが、若者にとっては世界の崩壊を意味します。東野の初期学園ミステリーは、青春の閉塞感のなかに犯罪の芽を見出し、成長がはらむ脆さを浮き彫りにします。",
+      "prompt": "学校で起きた一つの秘密を前に、あなたは何から調べますか？",
+      "choices": [
+        {
+          "id": "event",
+          "title": "表面化する衝突",
+          "code": "EVENT",
+          "hint": "校内で実際に何が起きたのか？",
+          "reply": "あなたはまず出来事の事実関係を押さえます。しかし学校での事件が突発的に起きることは稀です。見過ごされてきた無数の小さな歪みが臨界点に達した結果なのです。"
+        },
+        {
+          "id": "pressure",
+          "title": "同調圧力と孤立",
+          "code": "PRESSURE",
+          "hint": "誰が沈黙のなかで追い詰められていたのか？",
+          "reply": "あなたは集団心理の重圧に着目しました。青春期において最も残酷な圧力は、敵意からではなく「仲間に受け入れられたい」という切望から生まれます。"
+        },
+        {
+          "id": "after",
+          "title": "大人になってからの代償",
+          "code": "AFTER",
+          "hint": "あの日の選択は、どれほど長く人生に影を落とすのか？",
+          "reply": "あなたの視線はすでに遠い未来へと向いています。当時は些細に思えた一言や一度の沈黙が、大人になったあとも一生拭えない悔恨として刻まれることがあります。"
+        }
       ],
-      books:[
-        {title:"放課後",surface:"平穏に見える学校で、なぜ危険が次々に起こるのか？",real:"見過ごされた圧力や秘密は、どう人を後戻りできない境界へ押しやるのか？",more:"学校は犯罪物語の背景ではなく、圧力が生まれる現場です。身近な日常ほど、本当の助けを求める声が小さなこととして見落とされやすくなります。"},
-        {title:"同級生",surface:"同級生の死と秘密には、どんなつながりがあるのか？",real:"友情、誤解、沈黙は、青春にどれほど長い影を残すのか？",more:"若者には自分を説明する言葉が足りないことがあります。そのため誤解は真実より速く広がります。"},
-        {title:"卒業",surface:"友情と競争が交錯する学校で、誰が言えない秘密を抱えているのか？",real:"同じ青春が分かれ道に来たとき、私たちは本当に一番近い友人を理解しているのか？",more:"卒業は前へ進むことの象徴であると同時に、一つの関係が終わることでもあります。"}
+      "books": [
+        {
+          "title": "放課後",
+          "surface": "平穏を装う学校で、なぜ教師を狙う殺意が連鎖するのか？",
+          "real": "大人に見過ごされた少女たちの繊細な傷が、いかにして不可逆の凶行へと暴発したのか？",
+          "more": "校舎は単なるミステリーの舞台装置ではなく、歪んだ狂気が醸成される密室そのもの。ありふれた日常に隠されたSOSほど、簡単に見過ごされてしまいます。"
+        },
+        {
+          "title": "同級生",
+          "surface": "同級生の不可解な死の裏に、どんな秘密が隠されていたのか？",
+          "real": "友情、すれ違い、そして不信の沈黙は、青春の記憶にどれほど暗い影を落とし続けるのか？",
+          "more": "若者は自己を表現する成熟した言葉を持たないからこそ、誤解は真実よりも速く増殖します。本作が暴くのは、若き魂たちがすれ違い、断絶していく切なさです。"
+        },
+        {
+          "title": "卒業",
+          "surface": "巣立ちを控えた仲間たちのなかで、誰が胸に秘めた毒を隠しているのか？",
+          "real": "青春の分水嶺に立ったとき、私たちは最も親しかった友の「素顔」を本当に知っていたのか？",
+          "more": "卒業は未来への旅立ちであると同時に、共有したモラトリアムの終焉を告げます。事件は犯人当てを超え、喪失ゆく青春の共同体にどう別れを告げるかという通過儀礼になります。"
+        }
       ],
-      closeQ:"青春期に犯した過ちは、時間とともに薄れてよいのか。それともずっと記憶されるべきなのか？",
-      verdicts:["成長し、やり直す機会を与えるべきだ。","若かったからといって、傷つけたことが軽くなるわけではない。"],
-      closeText:"成長とは過去を消すことではなく、かつての選択を抱えながら生き続けることです。青春が重要なのは、それが痕跡を残すからです。"
+      "closeQ": "若気の至りで犯した過ちは、時とともに許されるべきか、それとも生涯背負い続けるべきか？",
+      "verdicts": [
+        "やり直す機会を与えるべきだ。人は成長し変わることができる。",
+        "忘れられるべきではない。若さゆえの残酷さが奪った傷は消えない。"
+      ],
+      "closeText": "大人になることは、過去を消去することではなく、自らの選択の痕跡を背負って生き抜くことです。青春が痛切なのは、消えない爪痕を残すからに他なりません。"
     },
-    hope:{
-      case:"CASE 06｜希望",title:"殺人事件がなくても、東野圭吾",
-      scene:"犯人のいない謎もあります。誰かを逮捕する必要もありません。すれ違い、後悔、善意、届かなかった一言――それらも解かなければならない秘密になり得ます。最後のCASEでは、推理を犯罪から人と人とのつながりへ戻します。",
-      prompt:"犯罪がなくても、あなたは何を追いますか？",
-      choices:[
-        {id:"mystery",title:"目の前の謎",code:"MYSTERY",hint:"何が、どこで食い違ったのか？",reply:"あなたはやはり謎から始めます。答えは犯人ではなく、一つの人生のなかで見落とされていたつながりへ向かいます。"},
-        {id:"wish",title:"言えなかった願い",code:"WISH",hint:"本当に望んでいたものは何か？",reply:"あなたは人の願いを理解しようとします。口にした問いの奥には、直接言えなかった本当の一言が隠れていることがあります。"},
-        {id:"hope",title:"つながり直す可能性",code:"HOPE",hint:"人と人は、もう一度近づけるのか？",reply:"あなたは推理を希望へ向けます。理解しても過去は変えられませんが、その人がこれからどう歩くかを変えることはできます。"}
+    "hope": {
+      "case": "CASE 06｜希望",
+      "title": "殺人事件がなくても、東野圭吾",
+      "scene": "誰も血を流さず、手錠も必要としない謎があります。すれ違い、悔恨、秘められた善意、そして届かなかった言葉――それらもまた、解き明かされるべき愛おしい秘密です。最後のCASEでは、推理の光を罪から「人との温かな絆」へと戻します。",
+      "prompt": "犯罪がない物語で、あなたは何を解き明かしたいですか？",
+      "choices": [
+        {
+          "id": "mystery",
+          "title": "目の前の謎解き",
+          "code": "MYSTERY",
+          "hint": "どこで歯車が食い違ってしまったのか？",
+          "reply": "あなたはまずパズルの謎から入ります。推理の妙味はそのままに、解き明かされる先は犯人ではなく、人生のなかで見落とされていた奇跡のような縁です。"
+        },
+        {
+          "id": "wish",
+          "title": "胸に秘めた願い",
+          "code": "WISH",
+          "hint": "本当に望んでいたものは何か？",
+          "reply": "あなたは人の本音に耳を澄ませます。言葉にされた悩みは表層に過ぎず、真に救いを求めているのは、口に出せなかった切なる一言であると知っているからです。"
+        },
+        {
+          "id": "hope",
+          "title": "再生への希望",
+          "code": "HOPE",
+          "hint": "人と人は、再び巡り合えるのか？",
+          "reply": "あなたは推理の先にある希望を選びました。過去を書き換えることは叶わなくても、真の理解は明日へと踏み出す勇気を与えてくれます。"
+        }
       ],
-      books:[
-        {title:"ナミヤ雑貨店の奇蹟",surface:"時を越える手紙は、なぜ見知らぬ人へ届くのか？",real:"誰かが本気で返した一通の返事は、別の人の人生を本当に変えられるのか？",more:"物語の謎は最後に「誰かが耳を傾けること」へ戻ります。答えは決断を代わりにしてくれませんが、孤独な人に理解される可能性を伝えます。"},
-        {title:"クスノキの番人",surface:"人々はなぜ、言えないことを一本の木に託すのか？",real:"秘密が単なる隠蔽ではなくなったとき、それは互いを理解する入口になり得るのか？",more:"願いと秘密は残され、いつか誰かに読み解かれるのを待ちます。推理は他者へ近づく方法になります。"},
-        {title:"時生",surface:"時を越えた出会いは、何を変えようとしているのか？",real:"人生の終わりを知っていても、私たちは同じ愛や出会いを選ぶのか？",more:"未来を知ることが運命を変えるとは限りません。しかし過去を理解することで、自分の人生の見方は変えられます。"}
+      "books": [
+        {
+          "title": "ナミヤ雑貨店の奇蹟",
+          "surface": "時空を超える相談の手紙は、なぜ見知らぬ若者たちへと届いたのか？",
+          "real": "真摯に紡がれた一通の返信は、見知らぬ他者の絶望した運命を本当に救えるのか？",
+          "more": "すべての奇蹟の核心には「誰かが真剣に耳を傾けてくれた」という事実があります。答えは他人の決断を代行できなくとも、孤独な魂に「独りではない」という確信を灯します。"
+        },
+        {
+          "title": "クスノキの番人",
+          "surface": "人々はなぜ、言葉にできない想いをクスノキの巨木へと託すのか？",
+          "real": "秘密が欺瞞ではなく「不器用な愛の結晶」となったとき、それは他者を理解する扉になり得るのか？",
+          "more": "祈りと想いは時を超えて保管され、いつか誰かが受け止めてくれる日を静かに待ちます。推理とは、他者の心に寄り添うための最も優しい行為なのです。"
+        },
+        {
+          "title": "時生",
+          "surface": "未来からやってきた息子との邂逅は、青年の何を救おうとしたのか？",
+          "real": "過酷な別れが運命づけられていると知っていても、私たちは同じ命を、同じ愛を選べるだろうか？",
+          "more": "未来を知ることは運命を変えられずとも、過去の愛を理解することは生きる誇りを与えてくれます。『時生』は「生まれてきてよかった」という肯定の光を投げかけます。"
+        }
       ],
-      closeQ:"推理で本当に大切なのは、答えを見つけることか。それとも、その人をより理解することか？",
-      verdicts:["答えを見つけること。理解には確かな出発点が必要だ。","人を理解することのほうが、答えそのものより大切な場合もある。"],
-      closeText:"6つのCASEを終えても、真実が消えるわけではありません。ただ私たちは、答えの外側にも人がいることを知り始めます。それが『真実のその先』です。"
+      "closeQ": "ミステリーにおいて真に尊いのは、論理的な解を見出すことか、それとも誰かを深く理解することか？",
+      "verdicts": [
+        "解を見出すこと。揺るぎない事実があってこそ、真の理解が始まる。",
+        "人を理解すること。理屈の正しさよりも、心を通わせることこそが救いになる。"
+      ],
+      "closeText": "6つのCASEを巡り終えた今、真実が色褪せることはありません。ただ私たちは、論理の答えの奥深くに「人間」が息づいていることを知りました。それこそが『真実のその先』です。"
     }
   },
-  en:{
-    reason:{
-      case:"CASE 01｜Reason",title:"Can reason explain everything?",
-      scene:"Every piece of evidence points to the same answer. But what if the truth itself is crueler than the lie? Manabu Yukawa trusts formulas, experiments, and logic. Higashino, however, often returns the question to the human being only after the answer has been found.",
-      prompt:"Which clue would you investigate first?",
-      choices:[
-        {id:"how",title:"The method",code:"HOW",hint:"How did it happen?",reply:"You begin with the question of how. Science can prove what happened, but it cannot always explain why someone was willing to pay such a price."},
-        {id:"why",title:"Interests and grudges",code:"WHY",hint:"Why did they do it?",reply:"You begin with motive. A motive can make a case understandable, but “understandable” and “forgivable” are never the same thing."},
-        {id:"after",title:"The cost afterward",code:"AFTER",hint:"After the truth, who bears the consequences?",reply:"You look beyond the answer. Once the puzzle is solved, the hardest questions may only be beginning."}
+  "en": {
+    "reason": {
+      "case": "CASE 01｜Reason",
+      "title": "Can Reason Explain Everything?",
+      "scene": "Every piece of evidence points to the same answer. But what if the truth itself is crueler than the lie? Manabu Yukawa trusts formulas, experiments, and logic. Higashino, however, returns the question to the human being once the answer is found.",
+      "prompt": "Which clue would you investigate first?",
+      "choices": [
+        {
+          "id": "how",
+          "title": "The Method",
+          "code": "HOW",
+          "hint": "How did it happen?",
+          "reply": "You begin with the question of “how.” Yukawa would start here too. Yet while science can prove what occurred, it cannot always explain why someone was willing to pay such an immense price."
+        },
+        {
+          "id": "why",
+          "title": "Interests & Grudges",
+          "code": "WHY",
+          "hint": "Why did they do it?",
+          "reply": "You trace the human motive first. Motives make actions understandable—yet being “understandable” and being “forgivable” are never the same."
+        },
+        {
+          "id": "after",
+          "title": "The Cost Afterward",
+          "code": "AFTER",
+          "hint": "After the truth is revealed, who bears the consequences?",
+          "reply": "You look beyond the final answer. This is precisely what this exhibition explores: once the mystery is unraveled, the hardest questions are often only just beginning."
+        }
       ],
-      books:[
-        {title:"The Devotion of Suspect X",surface:"How was a seemingly perfect alibi constructed?",real:"If sacrifice is born from love, can it still be called simply a crime?",more:"Ishigami’s calculations are nearly flawless, but what remains is not the formula. It is the question of how far one person can go for another."},
-        {title:"Salvation of a Saint",surface:"How could an almost impossible crime have been carried out?",real:"When years of waiting and resentment accumulate, can love and revenge still be separated?",more:"Science can reconstruct the method, but it cannot shorten the silence that builds over years in a relationship."},
-        {title:"A Midsummer’s Equation",surface:"What chain of causes lies behind a death?",real:"If revealing the truth will hurt a child, is knowing still the best choice?",more:"As Yukawa approaches the truth, he also confronts the responsibility that comes with knowledge. Knowing and telling are not the same choice."}
+      "books": [
+        {
+          "title": "The Devotion of Suspect X",
+          "surface": "How was a seemingly flawless alibi constructed?",
+          "real": "If self-sacrifice stems from pure devotion, can it still be defined simply as a crime?",
+          "more": "Ishigami’s calculations are nearly flawless. Yet what the novel leaves behind is not a formula, but the question of how far one person can go for another."
+        },
+        {
+          "title": "Salvation of a Saint",
+          "surface": "How could an almost impossible murder be carried out?",
+          "real": "When devotion and quiet despair accumulate over years, can love and vengeance still be told apart?",
+          "more": "Science can reconstruct the trick, but it cannot bridge years of silent endurance. Higashino turns an “impossible crime” into living proof of emotional time."
+        },
+        {
+          "title": "A Midsummer’s Equation",
+          "surface": "What chain of causes lies behind a death?",
+          "real": "If revealing the truth would hurt a child, is knowing still the best choice?",
+          "more": "As Yukawa uncovers the truth, he confronts the weight of knowledge: knowing a truth and speaking it aloud are two very different choices."
+        }
       ],
-      closeQ:"Reason may explain how a crime was committed—but can it explain a human choice?",
-      verdicts:["Yes. Human choices ultimately have reasons.","Not always. People are not formulas."],
-      closeText:"The moment the truth is proven may be exactly when the real questions about humanity begin."
+      "closeQ": "Reason may solve the mechanics of a crime—but can it ever unravel human choice?",
+      "verdicts": [
+        "Yes. Every human choice ultimately has a reason.",
+        "Not always. People are not formulas."
+      ],
+      "closeText": "The moment the truth is proven may well be the exact moment the deepest questions of humanity begin."
     },
-    after:{
-      case:"CASE 02｜Aftermath",title:"After death, who is left behind?",
-      scene:"A case may be closed, but loss does not end with it. Kyoichiro Kaga investigates more than the culprit. He looks at the people changed by a death: bereaved families, relatives, and the secrets that were never spoken.",
-      prompt:"When a death has already happened, where do you look first?",
-      choices:[
-        {id:"trace",title:"Final movements",code:"TRACE",hint:"What happened before the victim died?",reply:"You begin by reconstructing the path of events. Clues can bring you closer to the moment of death, but Kaga often asks whose life was changed after it."},
-        {id:"secret",title:"The unspoken secret",code:"SECRET",hint:"Who is protecting whom—and who is hiding something?",reply:"You notice the silence. Family secrets are often kept to protect the people closest to us. That is also how protection can quietly become harm."},
-        {id:"remain",title:"Those left behind",code:"AFTER",hint:"After the truth, how do people keep living?",reply:"You look directly at the aftermath. For those who remain, solving the case is not a period. It is the beginning of learning how to live again."}
+    "after": {
+      "case": "CASE 02｜Aftermath",
+      "title": "Who Remains After Death?",
+      "scene": "A case may be closed, but loss does not end with it. Kyoichiro Kaga investigates more than the culprit: he also looks at those changed by a death—bereaved families, loved ones, and the secrets left unspoken.",
+      "prompt": "Faced with a death that has already occurred, where do you look first?",
+      "choices": [
+        {
+          "id": "trace",
+          "title": "Final Footsteps",
+          "code": "TRACE",
+          "hint": "What did the victim experience before dying?",
+          "reply": "You reconstruct the sequence of events first. Clues lead you closer to the moment of death, but Kaga always stops to ask: whose life was irrevocably altered after that moment?"
+        },
+        {
+          "id": "secret",
+          "title": "The Unspoken Secrets",
+          "code": "SECRET",
+          "hint": "Who is protecting whom, and what is hidden?",
+          "reply": "You focus on the silence. Family secrets are rarely kept to deceive strangers; they are formed to protect loved ones. And in doing so, protection can quietly turn into harm."
+        },
+        {
+          "id": "remain",
+          "title": "Those Left Behind",
+          "code": "AFTER",
+          "hint": "After the truth emerges, how do people go on living?",
+          "reply": "You look directly at the aftermath. For those left behind, solving the case is not an ending, but the beginning of learning how to live again."
+        }
       ],
-      books:[
-        {title:"Newcomer",surface:"Which clue within the relationships of Nihonbashi leads to the truth?",real:"Could helping people changed by the case understand one another matter more than simply finding the culprit?",more:"Kaga enters the neighborhood as a newcomer and sees the secrets of ordinary lives. Beyond solving the crime, he cares about the people who still have to go on living."},
-        {title:"A Red Finger",surface:"Why would an entire family work together to conceal a crime?",real:"When protecting family becomes hiding harm, how much distance remains between love and complicity?",more:"What suffocates is not only the case itself, but the way silence allows a family’s mistake to continue."},
-        {title:"Wings of the Kirin",surface:"What was the victim trying to point to through his final actions?",real:"Can a death become a family’s last chance to understand one another again?",more:"Following the clues also becomes an act of delayed understanding. Death cannot be reversed, but truth can change how those who remain remember one another."}
+      "books": [
+        {
+          "title": "Newcomer",
+          "surface": "Amid the intricate human tapestry of Nihonbashi, which thread leads to the truth?",
+          "real": "Beyond catching the killer, might healing broken ties and restoring mutual understanding matter even more?",
+          "more": "Kaga walks the district as a “newcomer,” quietly unraveling the tender secrets of ordinary people. Beyond solving the case, his deepest care is for those who must carry on."
+        },
+        {
+          "title": "The Red Finger",
+          "surface": "Why would a family conspire to conceal a crime?",
+          "real": "When sheltering family transforms into concealing cruelty, how thin is the line between love and complicity?",
+          "more": "What is truly suffocating is not just the murder, but how family silence perpetuates moral decay. Higashino places responsibility firmly upon every individual who chose not to speak."
+        },
+        {
+          "title": "The Wings of the Kirin",
+          "surface": "What message was the dying victim desperately trying to convey with his final steps?",
+          "real": "Can a tragedy become a family’s last chance to truly understand each other?",
+          "more": "Retracing the victim's steps becomes an act of delayed reconciliation. Death is irreversible, yet the truth can transform how the living remember and honor one another."
+        }
       ],
-      closeQ:"A solved case may end the investigation—but can it lessen the wounds caused by loss?",
-      verdicts:["Yes. Knowing the truth can help people truly move forward.","No. Some aftermaths last longer than the truth itself."],
-      closeText:"Cases have closing dates. Loss does not. The value of truth may not be to erase pain, but to help people learn how to live with it."
+      "closeQ": "Solving a crime closes the case—but can it ever heal the wounds left by loss?",
+      "verdicts": [
+        "Yes. Knowing the truth can help people truly move forward.",
+        "No. Some aftermaths last longer than the truth itself."
+      ],
+      "closeText": "A police file has a closing date; grief has none. Perhaps the value of truth is not to erase agony, but to give us the strength to live alongside it."
     },
-    love:{
-      case:"CASE 03｜Love",title:"Can love ever justify a crime?",
-      scene:"Protection, sacrifice, possession, control—each can be spoken in the name of love. When someone says they crossed a line for a person they loved, are we trying to understand the reason, or searching for an excuse for the act?",
-      prompt:"When love and crime become entangled, what do you investigate first?",
-      choices:[
-        {id:"act",title:"The act that crossed the line",code:"ACT",hint:"What did they actually do?",reply:"You separate the act from the emotion. No matter how powerful the feeling, it does not automatically erase responsibility for harm."},
-        {id:"why",title:"Love as a motive",code:"WHY",hint:"Who do they say they did it for?",reply:"You are willing to understand the motive first. Understanding gives a character depth, but it also creates a harder question: once we understand, can we still judge right and wrong clearly?"},
-        {id:"boundary",title:"Care or control?",code:"BOUNDARY",hint:"When does love become harm?",reply:"You search for the boundary. Higashino often places care and possession only one step apart, showing how “I’m doing this for you” can become another form of control."}
+    "love": {
+      "case": "CASE 03｜Love",
+      "title": "Can Love Justify Crime?",
+      "scene": "Protection, sacrifice, possession, control—all can be spoken in the name of love. When someone says they crossed a line for a loved one, are we trying to understand the reason, or simply looking for an excuse?",
+      "prompt": "When love and crime intertwine, what do you look into first?",
+      "choices": [
+        {
+          "id": "act",
+          "title": "Crossing the Line",
+          "code": "ACT",
+          "hint": "What was actually done?",
+          "reply": "You strictly separate the act from the emotion. No intensity of feeling can ever absolve the moral and legal responsibility for inflicting harm."
+        },
+        {
+          "id": "why",
+          "title": "Love as a Motive",
+          "code": "WHY",
+          "hint": "For whose sake do they claim it was done?",
+          "reply": "You choose to understand the motive first. While empathy brings depth to a character, it also forces a daunting question: once we understand, can we still judge right from wrong without flinching?"
+        },
+        {
+          "id": "boundary",
+          "title": "Protection vs. Control",
+          "code": "BOUNDARY",
+          "hint": "When does love become harm?",
+          "reply": "You seek the crucial boundary. Higashino excels at showing how narrow the wall between devotion and possession is—and how easily “for your own good” becomes another form of control."
+        }
       ],
-      books:[
-        {title:"Journey Under the Midnight Sun",surface:"Why do two lives remain bound to the same case for so many years?",real:"They protect each other, yet also trap each other. Can a love that exists only in darkness ever reach the light?",more:"The novel refuses to explain the emotion directly, making silence itself the largest clue. Readers must decide whether this relationship is salvation or mutual descent."},
-        {title:"Secret",surface:"How should a family respond when body and identity no longer align?",real:"When a familiar body contains another familiar person, who is it that love is really loving?",more:"Secret turns the mystery toward identity and relationship. The hardest question is not the supernatural event, but how people define love between loss and a new choice."},
-        {title:"Phantom Night",surface:"Within a relationship, who is using whom?",real:"When love gradually becomes manipulation and dependence, can genuine feeling still remain?",more:"The characters move closer while also becoming tools for one another. Love can save, and it can consume."}
+      "books": [
+        {
+          "title": "Journey Under the Midnight Sun",
+          "surface": "Why are two lives tethered to a single unsolved crime across nineteen long years?",
+          "real": "Protecting each other while locking each other in darkness—can a bond conceived in shadow ever walk beneath the sun?",
+          "more": "The novel never spells out their feelings, turning cold silence into the ultimate clue. Readers are left to judge: is this connection a salvation, or mutual ruin?"
+        },
+        {
+          "title": "Secret (Himitsu)",
+          "surface": "When a daughter’s body houses a wife’s soul, how does a family confront reality?",
+          "real": "When a familiar form contains another beloved spirit, what—or whom—are we truly loving?",
+          "more": "Secret turns mystery into an mystery about identity and relationships. Beyond the supernatural premise lies a heart-wrenching dilemma: how we define devotion between profound loss and letting go."
+        },
+        {
+          "title": "Phantom Night",
+          "surface": "In a relationship fueled by ambition, who is manipulating whom?",
+          "real": "When passion degenerates into control and dependence, can genuine affection ever survive?",
+          "more": "Drawn together yet utilizing each other as instruments, the characters in Phantom Night strip love of innocence, exposing a force that can elevate or consume us."
+        }
       ],
-      closeQ:"Would understanding why someone committed a crime “for love” change your judgement of them?",
-      verdicts:["Yes. Motive changes the weight of responsibility.","No. Understanding is not the same as forgiveness."],
-      closeText:"Love can explain an action without defending it. The hardest question is how far we are willing to understand—and how far we are willing to forgive."
+      "closeQ": "Does knowing a crime was committed out of love change your moral verdict on the perpetrator?",
+      "verdicts": [
+        "Yes. Motive changes how we weigh responsibility.",
+        "No. Understanding is not the same as forgiveness."
+      ],
+      "closeText": "Love can illuminate why an act occurred, but can never justify the wrongdoing. The real challenge is determining where our empathy ends and where accountability must stand."
     },
-    justice:{
-      case:"CASE 04｜Justice",title:"When society creates a criminal",
-      scene:"Law can pronounce guilt or innocence, but justice does not necessarily end at the verdict. Juvenile law, capital punishment, technological surveillance, victim trauma, and social prejudice all make “Who is responsible?” more complicated than the case itself.",
-      prompt:"When institutions and personal pain collide, what do you trust first?",
-      choices:[
-        {id:"law",title:"The legal judgement",code:"LAW",hint:"How does the system define guilt and punishment?",reply:"You begin by preserving the system. Law must provide standards everyone can share, yet its measures may still fail to see some forms of pain in full."},
-        {id:"hurt",title:"The victim’s pain",code:"HURT",hint:"Who does the judgement actually answer to?",reply:"You look first at the person who was hurt. When the procedure is complete but the pain remains, the claim that “justice is done” becomes much harder to make."},
-        {id:"system",title:"Society’s responsibility",code:"SYSTEM",hint:"Who created the conditions that led toward crime?",reply:"You pull the camera back. Individuals remain responsible for what they do, but institutions, environments, and technologies may quietly shape which choices are available."}
+    "justice": {
+      "case": "CASE 04｜Justice",
+      "title": "When Society Creates Criminals",
+      "scene": "The law can determine guilt or innocence, but justice does not necessarily end with the verdict. Juvenile law, capital punishment, technological surveillance, victim trauma, and social prejudice all make the question of responsibility more complex than the case itself.",
+      "prompt": "When institutions and personal anguish collide, where do you place your trust?",
+      "choices": [
+        {
+          "id": "law",
+          "title": "Legal Judgement",
+          "code": "LAW",
+          "hint": "How does the system define crime and punishment?",
+          "reply": "You uphold the legal framework first. The law must provide universal standards, even if its rigid boundaries sometimes fail to acknowledge the full depth of individual agony."
+        },
+        {
+          "id": "hurt",
+          "title": "The Victim's Pain",
+          "code": "HURT",
+          "hint": "Whose agony does the verdict actually answer?",
+          "reply": "You prioritize those who were shattered. When all procedures conclude yet raw suffering remains, declaring that “justice is served” becomes hollow and uneasy."
+        },
+        {
+          "id": "system",
+          "title": "Society’s Responsibility",
+          "code": "SYSTEM",
+          "hint": "Who created the conditions that bred the crime?",
+          "reply": "You zoom out to the broader system. While individuals must answer for their acts, structural injustice and institutional design often quietly dictate the choices left to them."
+        }
       ],
-      books:[
-        {title:"The Hovering Blade",surface:"When the law cannot prevent tragedy, what can a father still do?",real:"When institutions cannot soothe a victim family’s pain, can revenge ever be understood?",more:"The novel makes us see both the necessity and insufficiency of law. The closer we move toward the victim’s pain, the harder it becomes to reduce justice to a single answer."},
-        {title:"Hollow Cross",surface:"Can punishment truly prevent the next crime?",real:"After judgement and punishment are complete, does guilt really disappear?",more:"Punishment, remorse, compensation, and loss—none can complete justice by itself."},
-        {title:"Platinum Data",surface:"Can DNA and massive databases make crime impossible to hide?",real:"When technology holds everyone’s data in the name of safety, how much freedom and privacy remain?",more:"Even the most trusted system is designed by people. When technology is given the power to judge human beings, the system itself also needs oversight."}
+      "books": [
+        {
+          "title": "The Hovering Blade",
+          "surface": "When the law fails to protect a child or deliver justice, what recourse does a father have?",
+          "real": "When the legal system fails to bring peace to grieving parents, can revenge ever be understood?",
+          "more": "Higashino exposes both the necessity of statutory law and its tragic inadequacy. The closer we look at a victim’s agony, the more impossible it becomes to reduce “justice” to a single formula."
+        },
+        {
+          "title": "Hollow Cross",
+          "surface": "Can severe punishment truly deter future tragedies?",
+          "real": "Once a sentence is served or an execution carried out, does guilt ever truly vanish?",
+          "more": "Bringing capital punishment debates back to tangible human lives: between punishment, repentance, restitution, and eternal loss, no single word can deliver complete justice."
+        },
+        {
+          "title": "Platinum Data",
+          "surface": "Can DNA and large-scale databases make crime impossible to hide?",
+          "real": "When technology tracks every citizen in the name of safety, what space remains for human dignity and privacy?",
+          "more": "Even the most immaculate system is built by fallible people. When algorithms are granted authority over human guilt, the system itself requires the most rigorous oversight."
+        }
       ],
-      closeQ:"If the law’s answer cannot heal the harm, does an individual have the right to pursue a personal justice?",
-      verdicts:["Sometimes. Institutions can fail.","No. Justice cannot be privately defined by each individual."],
-      closeText:"Justice is difficult because it must face rules and human pain at the same time. The simpler the answer, the easier it is to leave someone out."
+      "closeQ": "If the legal system fails to heal suffering, does an individual ever have the right to claim their own justice?",
+      "verdicts": [
+        "Sometimes, yes. Institutional systems are not infallible.",
+        "No. Justice cannot devolve into personal definitions of justice."
+      ],
+      "closeText": "Justice remains profoundly challenging because it must honor both shared laws and subjective human grief. The simpler the answer seems, the more likely someone has been overlooked."
     },
-    youth:{
-      case:"CASE 05｜Youth",title:"Youth is never just youth",
-      scene:"Exams, competition, friendship, jealousy, attraction, and fear of exclusion—things that look small to adults can become an entire world to the young. Higashino’s early school mysteries place crime inside adolescence and reveal how fragile growing up can be.",
-      prompt:"Faced with a secret at school, what do you look at first?",
-      choices:[
-        {id:"event",title:"The visible conflict",code:"EVENT",hint:"What actually happened at school?",reply:"You begin with the event itself. But school conflicts rarely appear from nowhere; they are often built from many small things no one took seriously enough."},
-        {id:"pressure",title:"Peers and pressure",code:"PRESSURE",hint:"Who is being pushed into a corner in silence?",reply:"You notice the force of the group. The heaviest pressure in youth often comes not from enemies, but from the people whose acceptance matters most."},
-        {id:"after",title:"The cost of growing up",code:"AFTER",hint:"How long can a youthful choice remain?",reply:"You are already looking into the future. One choice, one sentence, or one silence can become a memory that refuses to disappear years later."}
+    "youth": {
+      "case": "CASE 05｜Youth",
+      "title": "Youth Is Never Just Youth",
+      "scene": "Exams, rivalry, friendships, jealousy, fragile crushes, and the dread of being ostracized—what adults dismiss as trivial is often an adolescent’s entire world. Higashino’s campus mysteries embed crime into youth, exposing the acute vulnerability of growing up.",
+      "prompt": "Faced with a secret at school, what do you examine first?",
+      "choices": [
+        {
+          "id": "event",
+          "title": "Visible Conflict",
+          "code": "EVENT",
+          "hint": "What actually occurred on campus?",
+          "reply": "You investigate the incident itself. Yet school conflicts rarely ignite out of nothing; they are usually the culmination of countless minor grievances ignored along the way."
+        },
+        {
+          "id": "pressure",
+          "title": "Peers & Pressure",
+          "code": "PRESSURE",
+          "hint": "Who was being silently cornered in the group?",
+          "reply": "You hone in on group dynamics. In youth, the heaviest cruelty often originates not from open enemies, but from the desperate urge to belong to one's peers."
+        },
+        {
+          "id": "after",
+          "title": "The Long-Term Cost",
+          "code": "AFTER",
+          "hint": "How long will the choices made in youth cast their shadow?",
+          "reply": "You are already looking far into adulthood. A hasty choice, a callous phrase, or a moment of cowardice in youth can solidify into a memory that can remain for years."
+        }
       ],
-      books:[
-        {title:"After School",surface:"Why does danger keep appearing in a school that seems peaceful?",real:"How do ignored pressures and secrets push someone across an irreversible line?",more:"The school is not merely the backdrop of the crime; it is where pressure is produced. The more familiar daily life feels, the easier a real cry for help is to dismiss."},
-        {title:"Classmates",surface:"How are a classmate’s death and the hidden secrets connected?",real:"How long can friendship, misunderstanding, and silence cast a shadow over youth?",more:"Young people may not yet have the language to explain themselves, so misunderstanding can spread faster than truth."},
-        {title:"Graduation",surface:"In a school shaped by friendship and competition, who is hiding something they cannot say?",real:"When a shared youth reaches a crossroads, do we really understand our closest friends?",more:"Graduation means moving forward, but also the ending of a shared world. The case becomes more than who did what."}
+      "books": [
+        {
+          "title": "After School (Hokago)",
+          "surface": "Why does lethal danger repeatedly threaten teachers in a seemingly serene school?",
+          "real": "How do dismissed adolescent wounds and hidden secrets drive young souls across an irreversible line?",
+          "more": "The campus is not mere background scenery; it is a pressure cooker. The more mundane the daily routine appears, the easier it is for genuine cries for help to go unnoticed."
+        },
+        {
+          "title": "Classmates (Dokyusei)",
+          "surface": "What dark truth binds a student's sudden death to the school's faculty?",
+          "real": "How long a shadow do friendship, misunderstanding, and silence cast over our formative years?",
+          "more": "Adolescents rarely have the fully formed emotional vocabulary to explain themselves; thus misunderstandings travel faster than truth. This story traces how easily young lives miss one another."
+        },
+        {
+          "title": "Graduation (Sotsugyo)",
+          "surface": "Among close friends on the brink of graduation, who harbors a secret too difficult to speak?",
+          "real": "When a shared youth reaches its crossroads, did we ever truly know the friends closest to us?",
+          "more": "Graduation marks a step forward, but also the end of a shared world. The investigation turns into a question regarding how to let go of youth."
+        }
       ],
-      closeQ:"Should mistakes made in youth fade with time, or remain remembered?",
-      verdicts:["People should be given the chance to grow and begin again.","Some harm does not become lighter simply because someone was young."],
-      closeText:"Growing up does not mean deleting the past. It means continuing to live while carrying the choices once made. Youth matters precisely because it leaves traces."
+      "closeQ": "Should errors made in youth fade with time, or remain remain remembered?",
+      "verdicts": [
+        "People should be given the chance to grow and begin again.",
+        "Some harm does not become lighter simply because someone was young."
+      ],
+      "closeText": "Maturity is not erasing the past, but learning to walk forward bearing the weight of our past choices. Youth matters profoundly precisely because it leaves traces."
     },
-    hope:{
-      case:"CASE 06｜Hope",title:"Higashino without a murder",
-      scene:"Some mysteries have no killer and require no arrest. Missed connections, regret, kindness, and words that never arrived can all become secrets that still need to be solved. In the final case, mystery returns from crime to the possibility of human connection.",
-      prompt:"If there is no crime, what would you still investigate?",
-      choices:[
-        {id:"mystery",title:"The mystery in front of you",code:"MYSTERY",hint:"What went wrong?",reply:"You still begin with the puzzle. The answer no longer points to a culprit; it points to a connection that had been overlooked in someone’s life."},
-        {id:"wish",title:"The unspoken wish",code:"WISH",hint:"What did they truly want?",reply:"You want to understand the person’s wish. Often the question someone asks is only the surface; what truly needs an answer is the sentence they were too afraid to say directly."},
-        {id:"hope",title:"The possibility of reconnection",code:"HOPE",hint:"Can people find their way back to each other?",reply:"You choose to let the mystery lead toward hope. Understanding cannot rewrite what happened, but it may change how someone walks forward from here."}
+    "hope": {
+      "case": "CASE 06｜Hope",
+      "title": "Higashino Beyond Murder Mysteries",
+      "scene": "Some mysteries have no killer and require no arrest. Missed connections, regret, kindness, and words that never arrived can all become secrets that still need to be solved. In this final case, mystery returns from crime to human connection.",
+      "prompt": "If there is no crime, what would you still investigate?",
+      "choices": [
+        {
+          "id": "mystery",
+          "title": "The Puzzle at Hand",
+          "code": "MYSTERY",
+          "hint": "What went wrong?",
+          "reply": "You start with the thrill of the puzzle itself. The intellectual joy remains intact, but the answer leads not to a culprit, but to an overlooked connection in someone’s journey."
+        },
+        {
+          "id": "wish",
+          "title": "Unspoken Wishes",
+          "code": "WISH",
+          "hint": "What did they truly want?",
+          "reply": "You seek to understand a person's deepest longing. Often what is voiced is merely the surface; what truly yearns for an answer is the fragile plea too terrifying to utter aloud."
+        },
+        {
+          "id": "hope",
+          "title": "The Possibility of Reconnection",
+          "code": "HOPE",
+          "hint": "Can people find their way back to one another?",
+          "reply": "You guide the power of mystery toward hope. While empathy cannot alter the past, it possesses the immense power to illuminate a person’s path forward."
+        }
       ],
-      books:[
-        {title:"The Miracles of the Namiya General Store",surface:"Why do letters cross time and reach strangers?",real:"Can one sincere reply truly change another person’s life?",more:"Every mystery eventually returns to the fact that someone was willing to listen. An answer cannot decide for another person, but it can make someone feel less alone."},
-        {title:"The Camphorwood Custodian",surface:"Why do people entrust what they cannot say to a tree?",real:"When a secret is no longer only concealment, can it become an entrance to understanding?",more:"Wishes and secrets are preserved, waiting for someone to understand them. Mystery becomes a way of moving closer to another person."},
-        {title:"Tokio",surface:"What is a meeting across time trying to change?",real:"If we knew the end of a life, would we still choose the same love and encounters?",more:"Knowing the future does not necessarily change fate, but understanding the past can change how we see our own lives."}
+      "books": [
+        {
+          "title": "The Miracles of the Namiya General Store",
+          "surface": "How do letters bridging across decades find their way into the hands of lost strangers?",
+          "real": "Can a single, heartfelt reply truly alter the trajectory of a struggling life?",
+          "more": "Every magical connection boils down to one truth: someone cared enough to listen. Advice cannot make decisions for others, but it assures a lonely heart that it is deeply heard."
+        },
+        {
+          "title": "The Camphorwood Custodian",
+          "surface": "Why do people entrust their most unspeakable thoughts to an camphor tree?",
+          "real": "When a secret ceases to be concealment and becomes a message of devotion, can it unlock profound mutual understanding?",
+          "more": "Hopes and memories are safeguarded, waiting for someone with love to decipher them. Here, deductive inquiry becomes an act of moving closer to another soul."
+        },
+        {
+          "title": "Tokio",
+          "surface": "What was a meeting across time truly seeking to transform?",
+          "real": "If we knew the end of a life from the start, would we still choose to love and meet again?",
+          "more": "Foresight cannot always divert destiny, but understanding past love can redefine our existence. Tokio leaves us with the transcendent courage to choose life with joy."
+        }
       ],
-      closeQ:"What matters more in mystery: finding the answer, or understanding a person more deeply because of it?",
-      verdicts:["Finding the answer. Understanding needs a reliable starting point.","Sometimes understanding a person matters more than the answer itself."],
-      closeText:"After six CASES, the truth has not disappeared. We have simply begun to see that there are people beyond the answer. That is what lies Beyond the Truth."
+      "closeQ": "In mystery, what matters more: securing the answer, or achieving deeper understanding of a human being?",
+      "verdicts": [
+        "Finding the answer: firm truth is the only sound foundation for understanding.",
+        "Understanding a person: connecting hearts is often far more vital than the cold puzzle itself."
+      ],
+      "closeText": "Having traversed all six cases, the truth does not fade away. Rather, we have learned to see the living souls who breathe beyond the answers. That is the essence of “Beyond the Truth.”"
     }
   }
 };
@@ -1351,50 +2127,221 @@ function getCaseData(key){
 }
 
 const reportTranslations={
-  "zh-Hant":{
-    kicker:"${rt.kicker}",
-    profiles:{
-      mixed:{name:"線索與人性的調查者",desc:"你不願意只用一種方式理解真相。你會追查線索，也會理解動機；你在乎事情如何發生，同時也會把目光留給那些承受後果的人。對你而言，推理不是在「理性」與「人性」之間二選一，而是在兩者之間反覆確認：答案是否完整，又是否遺漏了某個人的處境。"},
-      A:{name:"理性的追跡者",desc:"你總是先問：「事情究竟是怎麼發生的？」面對複雜的人性，你不急著下結論，而是希望先找到足夠的證據、還原事件的脈絡。對你而言，理解一個人之前，首先要讓事實站得住腳。但走完六個 CASE，你也發現：真相能證明發生了什麼，卻未必能替人的選擇找到唯一答案。"},
-      B:{name:"人心的追問者",desc:"你很少滿足於知道誰做了什麼。你真正想追查的，是一個人為何沉默、為何守護、為何跨越界線，又為何在某個瞬間做出那個選擇。對你而言，理解動機並不等於原諒，而是拒絕把任何人簡化成「好人」或「壞人」。"},
-      C:{name:"真相之後的觀測者",desc:"當別人還在尋找答案，你的目光已經停在答案之後。你在意誰受了傷、誰被留下、誰必須承擔後果，以及一個已經發生的選擇會留下多久。"}
+  "zh-Hant": {
+    "kicker": "INVESTIGATION REPORT｜最終調查報告",
+    "axisTitle": "你的調查傾向",
+    "axisA": "線索與事實",
+    "axisB": "人物與動機",
+    "axisC": "餘波與價值",
+    "judgementTitle": "你的結案判斷",
+    "truthDimension": "真相觀｜答案 ↔ 理解",
+    "aftermathDimension": "餘波觀｜重新開始 ↔ 承認傷痕",
+    "justiceDimension": "正義觀｜情境判斷 ↔ 原則界線",
+    "closing": "六個案件已全數完成。真相並未褪色，而你已學會看見答案背後那一個個鮮活而複雜的人。",
+    "profiles": {
+      "mixed": {
+        "name": "線索與人性的調查者",
+        "desc": "你不願意只用單一維度理解真相。你會縝密推敲線索，也會深刻體會動機；你在乎事件如何發生，同時把目光留給承受後果的人。對你而言，推理從不是在「理性」與「人性」之間二選一，而是在兩者之間反覆省思：答案是否完整，又是否遺漏了某個人的處境。"
+      },
+      "A": {
+        "name": "理性的追跡者",
+        "desc": "你總是先問：「事情究竟是怎麼發生的？」面對複雜的人性，你不急著過早下結論，而是希望先找到足夠的證據、精準還原事件的脈絡。對你而言，在同理一個人之前，首先要讓事實站得住腳。但走完六個案件，你也體會到：真相能證明發生了什麼，卻未必能替人的選擇給出唯一答案。"
+      },
+      "B": {
+        "name": "人心的追問者",
+        "desc": "你很少滿足於僅僅知道誰做了什麼。你真正想追查的，是一個人為何沉默、為何守護、為何跨越界線，又為何在某個瞬間做出那個選擇。對你而言，理解動機並不等於原諒，而是拒絕把任何一個人簡化為標籤式的「好人」或「壞人」。"
+      },
+      "C": {
+        "name": "真相之後的觀測者",
+        "desc": "當別人還在尋找兇手與手法，你的目光早已停在答案之後。你在意誰受了傷、誰被留下、誰必須承擔後果，以及一個已經發生的選擇會留下多長遠的餘波。對你而言，案件的結尾從不是正義的終點，而是生者如何面對創傷的起點。"
+      }
     },
-    axisTitle:"${rt.axisTitle}",axisA:"${rt.axisA}",axisB:"${rt.axisB}",axisC:"${rt.axisC}",judgementTitle:"${rt.judgementTitle}",
-    truthDimension:"${rt.truthDimension}",aftermathDimension:"${rt.aftermathDimension}",justiceDimension:"${rt.justiceDimension}",
-    truth:{left:{name:"答案取向",desc:"你傾向相信，理解應先建立在可以被說明、驗證與確認的基礎上。"},mid:{name:"平衡取向",desc:"你同時重視可靠的答案與人的複雜性。"},right:{name:"理解取向",desc:"你接受有些人的選擇無法被公式完整解釋。"}},
-    aftermath:{left:{name:"修復取向",desc:"你相信真相、成長與重新開始具有力量。"},mid:{name:"並存取向",desc:"你同時相信人可以重新開始，也知道有些傷痕不會因此消失。"},right:{name:"餘波取向",desc:"你特別在意事件留下的長期後果。"}},
-    justice:{left:{name:"情境取向",desc:"你願意讓動機、處境與制度是否失靈進入判斷。"},mid:{name:"權衡取向",desc:"你傾向在理解情境與守住共同規則之間持續權衡。"},right:{name:"原則取向",desc:"你相信理解不能自動取消責任，正義也需要共同遵守的界線。"}},
-    closing:"${rt.closing}"
+    "truth": {
+      "left": {
+        "name": "答案取向",
+        "desc": "你堅信一切理解都必須建立在可被檢驗、驗證與確認的客觀事實之上。"
+      },
+      "mid": {
+        "name": "平衡取向",
+        "desc": "你同時重視客觀事實的嚴謹度與幽微複雜的人性溫度。"
+      },
+      "right": {
+        "name": "理解取向",
+        "desc": "你深知人的許多終極抉擇無法被單純的邏輯公式完整框限。"
+      }
+    },
+    "aftermath": {
+      "left": {
+        "name": "修復取向",
+        "desc": "你深信真相的揭曉具備療癒的力量，能引領人重獲新生、勇往直前。"
+      },
+      "mid": {
+        "name": "並存取向",
+        "desc": "你相信人可以重新開始，但也體認到有些傷痕將相伴一生。"
+      },
+      "right": {
+        "name": "餘波取向",
+        "desc": "你特別敏銳於重大事件在人心深處留下的長遠震盪與無法逆轉的代價。"
+      }
+    },
+    "justice": {
+      "left": {
+        "name": "情境取向",
+        "desc": "你願意將個體處境、深層動機與制度失靈納入正義的評判天平。"
+      },
+      "mid": {
+        "name": "權衡取向",
+        "desc": "你持續在同理個體苦衷與捍衛群體法治原則之間尋求最嚴謹的平衡。"
+      },
+      "right": {
+        "name": "原則取向",
+        "desc": "你深信理解動機不等於免除罪責，捍衛公共界線是維繫正義不可妥協的基石。"
+      }
+    }
   },
-  ja:{
-    kicker:"INVESTIGATION REPORT｜最終調査レポート",
-    profiles:{
-      mixed:{name:"手がかりと人間性の調査者",desc:"あなたは一つの方法だけで真実を理解しようとはしません。手がかり、動機、出来事の結果を同時に見つめます。"},
-      A:{name:"理性の追跡者",desc:"あなたはまず「何が、どう起きたのか？」と問い、証拠と事実から出来事を再構成しようとします。"},
-      B:{name:"心を問い続ける人",desc:"あなたは誰が何をしたかだけでなく、なぜその選択をしたのかを追い続けます。"},
-      C:{name:"真実のその先を見つめる人",desc:"あなたの視線は答えのその先にあります。誰が傷つき、誰が残され、何が長く残るのかを見つめます。"}
+  "ja": {
+    "kicker": "INVESTIGATION REPORT｜最終調査レポート",
+    "axisTitle": "あなたの調査傾向",
+    "axisA": "手がかりと事実",
+    "axisB": "人物と動機",
+    "axisC": "余波と価値",
+    "judgementTitle": "あなたの最終判断",
+    "truthDimension": "真実観｜答え ↔ 理解",
+    "aftermathDimension": "余波観｜再出発 ↔ 傷痕を認める",
+    "justiceDimension": "正義観｜状況判断 ↔ 原則と境界",
+    "closing": "6つのCASEが完了しました。真実は揺るぎなく存在し、あなたは解の向こう側にある複雑で愛おしい人間性を見出しました。",
+    "profiles": {
+      "mixed": {
+        "name": "手がかりと人間性の調査者",
+        "desc": "あなたは決して一面的な視点だけで真実を決めつけません。緻密に証拠を検証しながらも動機に寄り添い、因果関係のみならず、重荷を背負い続ける人々の痛みに眼差しを向けます。あなたにとって推理とは「論理」と「情愛」の二者択一ではなく、その狭間で誰かの尊厳を見落としていないかを問い続ける旅なのです。"
+      },
+      "A": {
+        "name": "理性の追跡者",
+        "desc": "あなたの最初の問いは常に「いかにして起きたのか」です。複雑怪奇な人間模様を前に安易な予断を排し、客観的証拠に基づき出来事の構造を再構築します。人を理解する前提として事実の厳密さを重んじるあなたですが、6つの事件を経て「論理は事実を証明できても、人間の選択に唯一の解を与えるとは限らない」という深淵にも触れました。"
+      },
+      "B": {
+        "name": "心を問い続ける探求者",
+        "desc": "あなたは「誰が何をしたか」という表層的な事実だけでは満足しません。なぜ沈黙を選び、誰のために一線を越え、その刹那にその選択に至ったのかを問い続けます。あなたにとって動機の追及とは免罪のためではなく、いかなる人間も単純な「善人」「悪人」のラベルに還元することを拒絶する誠実さなのです。"
+      },
+      "C": {
+        "name": "真実のその先を見つめる観測者",
+        "desc": "人々がトリックや犯人当てに熱中しているとき、あなたの視線はすでに「解答のその後」へと注がれています。誰が傷を負い、誰が取り残され、一度下された決断がどれほど永く人生を揺るがし続けるのか。あなたにとって結審とは幕引きではなく、残された生者が悲しみと向き合い始める出発点なのです。"
+      }
     },
-    axisTitle:"あなたの調査傾向",axisA:"手がかりと事実",axisB:"人物と動機",axisC:"余波と価値",judgementTitle:"あなたの最終判断",
-    truthDimension:"真実観｜答え ↔ 理解",aftermathDimension:"余波観｜再出発 ↔ 傷痕を認める",justiceDimension:"正義観｜状況判断 ↔ 原則と境界",
-    truth:{left:{name:"答え重視",desc:"理解は、説明・検証・確認できる基盤から始まるべきだと考えます。"},mid:{name:"バランス重視",desc:"確かな答えと、人の複雑さの両方を重視します。"},right:{name:"理解重視",desc:"人の選択には数式で完全に説明できないものもあると受け止めます。"}},
-    aftermath:{left:{name:"修復重視",desc:"真実、成長、再出発の力を信じます。"},mid:{name:"共存重視",desc:"再出発と、消えない傷痕の両方を受け止めます。"},right:{name:"余波重視",desc:"出来事が残す長期的な影響を特に重視します。"}},
-    justice:{left:{name:"状況重視",desc:"動機、状況、制度の失敗を判断に含めます。"},mid:{name:"衡量重視",desc:"状況を理解することと共通のルールを守ることを慎重に衡量します。"},right:{name:"原則重視",desc:"理解しても責任が自動的に消えるわけではないと考えます。"}},
-    closing:"6つのCASEが完了しました。真実は消えていません。ただあなたは、答えの外側にも人がいることを見つけ始めました。"
+    "truth": {
+      "left": {
+        "name": "答え重視",
+        "desc": "あらゆる理解は、検証可能で客観的な事実の土台の上に築かれるべきだと確信しています。"
+      },
+      "mid": {
+        "name": "バランス重視",
+        "desc": "厳密な事実の解明と、容易には割り切れない人間の多面性を等しく重んじます。"
+      },
+      "right": {
+        "name": "理解重視",
+        "desc": "人間の極限の選択には、論理や数式だけでは決して汲み尽くせない情愛があると捉えます。"
+      }
+    },
+    "aftermath": {
+      "left": {
+        "name": "修復重視",
+        "desc": "真実の受容と心の成長こそが再生の力となり、前を向く契機になると信じています。"
+      },
+      "mid": {
+        "name": "共存重視",
+        "desc": "再出発の希望を抱きつつも、消え去ることのない傷痕とどう共生していくかを見つめます。"
+      },
+      "right": {
+        "name": "余波重視",
+        "desc": "ひとつの事件が個人の生に刻みつける不可逆の代償と、永続する心の余震を深く受け止めます。"
+      }
+    },
+    "justice": {
+      "left": {
+        "name": "状況重視",
+        "desc": "犯行動機、追い詰められた境遇、社会制度の不備を総合的に判断へ反映させます。"
+      },
+      "mid": {
+        "name": "衡量重視",
+        "desc": "個人の苦悩への共感と、社会の法秩序の維持との間で常に誠実に衡量し続けます。"
+      },
+      "right": {
+        "name": "原則重視",
+        "desc": "共感がいかに深くとも罪責は消えず、共有された社会規範の遵守こそが正義の砦であると考えます。"
+      }
+    }
   },
-  en:{
-    kicker:"INVESTIGATION REPORT｜Final Investigation Report",
-    profiles:{
-      mixed:{name:"The Evidence-and-Humanity Investigator",desc:"You refuse to understand truth through only one lens. You follow evidence, motives, and the people who must live with the consequences."},
-      A:{name:"The Rational Tracker",desc:"Your first question is usually: “What actually happened?” You want evidence strong enough to reconstruct events before reaching a judgement."},
-      B:{name:"The Motive Seeker",desc:"Knowing who did what is rarely enough. You keep asking why a person stayed silent, protected someone, crossed a line, or made that choice."},
-      C:{name:"The Observer Beyond the Truth",desc:"Your attention moves beyond the answer. You care about who was hurt, who was left behind, and how long the consequences remain."}
+  "en": {
+    "kicker": "INVESTIGATION REPORT｜Final Investigation Report",
+    "axisTitle": "Your Investigation Tendencies",
+    "axisA": "Clues & Facts",
+    "axisB": "People & Motives",
+    "axisC": "Aftermath & Values",
+    "judgementTitle": "Your Final Judgements",
+    "truthDimension": "View of Truth｜Answer ↔ Understanding",
+    "aftermathDimension": "View of Aftermath｜Starting Over ↔ Acknowledging Scars",
+    "justiceDimension": "View of Justice｜Context ↔ Principles",
+    "closing": "All six cases are complete. The truth stands clear, and you have learned to see the complex, living human beings beyond the verdict.",
+    "profiles": {
+      "mixed": {
+        "name": "The Evidence-and-Humanity Investigator",
+        "desc": "You refuse to reduce truth to a single perspective. You examine physical clues rigorously while listening closely to internal motives; you follow how events unfolded while keeping your gaze on those left carrying the burden. For you, deduction is not a rigid choice between logic and empathy, but a continuous inquiry into whether anyone’s human condition was overlooked."
+      },
+      "A": {
+        "name": "The Rational Tracker",
+        "desc": "Your foundational question is always: “How did this happen?” Faced with intricate human affairs, you suspend hasty moralizing and seek objective evidence to reconstruct reality. For you, empathy must be grounded on solid facts. Yet after six cases, you also realize that while logic proves what occurred, it cannot always supply a singular formula for human choice."
+      },
+      "B": {
+        "name": "The Motive Seeker",
+        "desc": "You are rarely satisfied merely knowing who did what. You relentlessly investigate why someone chose silence, why they crossed an unforgivable boundary, and what drove their critical choice. To you, seeking motive is never about easy pardoning, but about refusing to reduce any living soul to a superficial label of “good” or “evil.”"
+      },
+      "C": {
+        "name": "The Aftermath Observer",
+        "desc": "While others are fixated on unmasking culprits and mechanics, your attention is already cast upon what happens after. You focus on who was wounded, who was left behind, and how far-reaching the ripples of a single decision truly are. For you, closure is never the end of justice, but the dawn of healing for the living."
+      }
     },
-    axisTitle:"Your Investigation Tendencies",axisA:"Evidence & facts",axisB:"People & motives",axisC:"Aftermath & values",judgementTitle:"Your Final Judgements",
-    truthDimension:"View of Truth｜Answer ↔ Understanding",aftermathDimension:"View of Aftermath｜Starting Over ↔ Acknowledging Scars",justiceDimension:"View of Justice｜Context ↔ Principles",
-    truth:{left:{name:"Answer-oriented",desc:"You believe understanding should begin with what can be explained, verified, and confirmed."},mid:{name:"Balanced",desc:"You value both reliable answers and human complexity."},right:{name:"Understanding-oriented",desc:"You accept that some human choices cannot be fully explained by formulas."}},
-    aftermath:{left:{name:"Repair-oriented",desc:"You believe in the power of truth, growth, and beginning again."},mid:{name:"Coexistence-oriented",desc:"You believe people can begin again while recognizing that some wounds remain."},right:{name:"Aftermath-oriented",desc:"You pay particular attention to the long-term consequences of events."}},
-    justice:{left:{name:"Context-oriented",desc:"You allow motive, circumstance, and institutional failure to enter your judgement."},mid:{name:"Balancing-oriented",desc:"You balance understanding context with preserving shared rules."},right:{name:"Principle-oriented",desc:"You believe understanding does not automatically cancel responsibility."}},
-    closing:"Your six cases are complete. The truth has not disappeared; you have simply begun to see the people who remain beyond the answer."
+    "truth": {
+      "left": {
+        "name": "Answer-oriented",
+        "desc": "You believe all meaningful empathy must rest upon verifiable and objective facts."
+      },
+      "mid": {
+        "name": "Balanced",
+        "desc": "You value both empirical rigor and the intricate nuances of the human heart."
+      },
+      "right": {
+        "name": "Understanding-oriented",
+        "desc": "You understand that critical human choices often transcend pure logical formulations."
+      }
+    },
+    "aftermath": {
+      "left": {
+        "name": "Repair-oriented",
+        "desc": "You believe confronting the truth fosters growth and empowers people to begin anew."
+      },
+      "mid": {
+        "name": "Coexistence-oriented",
+        "desc": "You embrace the power of starting over while acknowledging that some scars remain for life."
+      },
+      "right": {
+        "name": "Aftermath-oriented",
+        "desc": "You remain keenly attuned to the irreversible fallout and enduring tremors left in a soul."
+      }
+    },
+    "justice": {
+      "left": {
+        "name": "Context-oriented",
+        "desc": "You incorporate personal desperation, systemic flaws, and psychological context into justice."
+      },
+      "mid": {
+        "name": "Balancing-oriented",
+        "desc": "You continuously weigh compassionate context against universal legal integrity."
+      },
+      "right": {
+        "name": "Principle-oriented",
+        "desc": "You hold that empathy never cancels guilt, and common legal boundaries remain essential to justice."
+      }
+    }
   }
 };
 
