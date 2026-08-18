@@ -68,20 +68,8 @@ button{font:inherit;color:inherit}
 }
 .panel.open{display:block}
 .close{
-  position:fixed;
-  top:calc(4vh + 14px);
-  right:calc(4vw + 14px);
-  z-index:60;
-  float:none;
-  border:0;
-  background:#2c2722;
-  color:#fff;
-  border-radius:14px;
-  min-height:58px;
-  padding:12px 22px;
-  font-size:22px;
-  cursor:pointer;
-  box-shadow:0 10px 28px rgba(0,0,0,.22);
+  position:sticky;top:0;float:right;border:0;background:#2c2722;color:#fff;border-radius:14px;
+  min-height:58px;padding:12px 22px;font-size:22px;cursor:pointer
 }
 .panel-kicker{color:var(--red);font-weight:700;letter-spacing:.08em;font-size:22px}
 .panel h2{font-size:clamp(46px,4vw,84px);margin:.2em 0 .25em}
@@ -92,6 +80,7 @@ button{font:inherit;color:inherit}
 .book p{font-size:18px;line-height:1.55;margin-bottom:0;color:var(--muted)}
 
 .status{position:absolute;left:50%;bottom:1.1vh;transform:translateX(-50%);z-index:3;color:#fff;font-size:clamp(15px,.9vw,20px);text-shadow:0 1px 3px rgba(0,0,0,.55)}
+.version-tag{opacity:.35;font-size:.8em;font-family:Arial,sans-serif;white-space:nowrap}
 
 @media (max-width:1000px){
   .hero{max-width:60vw}
@@ -383,15 +372,14 @@ button{font:inherit;color:inherit}
 
   .panel.case-mode{padding:18px 15px 36px}
   .close{
-    position:fixed;
-    top:14px;
-    right:14px;
-    z-index:60;
+    position:sticky;
+    top:0;
+    z-index:20;
     min-height:48px;
     padding:9px 14px;
     border-radius:12px;
     font-size:15px;
-    margin:0;
+    margin-bottom:8px;
   }
 
   .case-shell{max-width:none;padding-bottom:10px}
@@ -486,7 +474,7 @@ button{font:inherit;color:inherit}
   .close{
     float:none;
     display:block;
-    margin-left:0;
+    margin-left:auto;
   }
 }
 
@@ -804,7 +792,7 @@ html[lang="en"] .case strong{
     <div id="panelContent"></div>
   </section>
 
-  <div class="status" id="idleStatus" data-i18n="common.idleStatus">觸控螢幕模式：60 秒未操作將自動回到首頁</div>
+  <div class="status"><span id="idleStatus" data-i18n="common.idleStatus">觸控螢幕模式：60 秒未操作將自動回到首頁</span><span class="version-tag"> · v1.0.0</span></div>
 
   <div class="confirm-modal" id="restartConfirm" aria-hidden="true">
     <div class="confirm-card">
