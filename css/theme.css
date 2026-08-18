@@ -223,3 +223,58 @@ body.page-universe .footer-note{
   color:var(--theme-muted);
   margin:0;
 }
+
+
+/* ===== 展場筆電／低高度桌面最佳化 =====
+   目的：避免 1366×768、Windows 顯示縮放等環境下，
+   英文首頁 Hero 過高而把底部導覽按鈕擠出畫面。
+   一般 900px 以上高度的桌機不受影響。
+*/
+@media (max-height:850px) and (min-width:769px){
+
+  body.page-home .app{
+    padding-top:2vh;
+    padding-bottom:1.4vh;
+    gap:1vh;
+  }
+
+  /* 英文主標在低高度螢幕縮小，盡量維持單行 */
+  html[lang="en"] body.page-home .hero{
+    max-width:58vw;
+  }
+
+  html[lang="en"] body.page-home .title{
+    font-size:clamp(48px,4.7vw,68px);
+    line-height:1.04;
+    margin:.06em 0 .05em;
+    white-space:nowrap;
+  }
+
+  html[lang="en"] body.page-home .subtitle{
+    font-size:clamp(24px,2vw,31px);
+    line-height:1.12;
+    letter-spacing:.045em;
+    margin-bottom:.28em;
+  }
+
+  html[lang="en"] body.page-home .tagline{
+    font-size:clamp(16px,1.05vw,20px);
+    line-height:1.45;
+    max-width:760px;
+  }
+
+  /* CASE 區與底部功能列稍微收緊，確保完整露出 */
+  body.page-home .case-grid{
+    gap:1vh 1.1vw;
+  }
+
+  body.page-home .case{
+    min-height:13.4vh;
+    padding-top:1.35vh;
+    padding-bottom:1.25vh;
+  }
+
+  body.page-home .footer button{
+    min-height:6.5vh;
+  }
+}
