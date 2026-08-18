@@ -2515,6 +2515,15 @@ function chooseVerdict(i,btn){
   updateHomeProgress();
   updateNextButton();
 
+  // 只有使用者實際點選「結案判斷」時，輔助把新出現的判斷結果與下一步帶進視野。
+  // 不放在 restoreCaseState()，避免重開已完成案件時自動跳動。
+  setTimeout(()=>{
+    res.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+  },180);
+
   if(caseOrder.every(k=>progress[k]?.done)) renderReport();
 }
 function goNextCase(){
