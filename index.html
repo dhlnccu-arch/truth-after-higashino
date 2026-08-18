@@ -68,8 +68,19 @@ button{font:inherit;color:inherit}
 }
 .panel.open{display:block}
 .close{
-  position:sticky;top:0;float:right;border:0;background:#2c2722;color:#fff;border-radius:14px;
-  min-height:58px;padding:12px 22px;font-size:22px;cursor:pointer
+  position:fixed;
+  top:calc(4vh + 18px);
+  right:calc(4vw + 18px);
+  z-index:999;
+  float:none;
+  border:0;
+  background:#2c2722;
+  color:#fff;
+  border-radius:14px;
+  min-height:58px;
+  padding:12px 22px;
+  font-size:22px;
+  cursor:pointer;
 }
 .panel-kicker{color:var(--red);font-weight:700;letter-spacing:.08em;font-size:22px}
 .panel h2{font-size:clamp(46px,4vw,84px);margin:.2em 0 .25em}
@@ -792,7 +803,7 @@ html[lang="en"] .case strong{
     <div id="panelContent"></div>
   </section>
 
-  <div class="status"><span id="idleStatus" data-i18n="common.idleStatus">觸控螢幕模式：60 秒未操作將自動回到首頁</span><span class="version-tag"> · v1.2.0</span></div>
+  <div class="status"><span id="idleStatus" data-i18n="common.idleStatus">觸控螢幕模式：60 秒未操作將自動回到首頁</span><span class="version-tag"> · v1.2.1</span></div>
 
   <div class="confirm-modal" id="restartConfirm" aria-hidden="true">
     <div class="confirm-card">
