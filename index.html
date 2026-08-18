@@ -791,11 +791,11 @@ html[lang="en"] .case strong{
     <div id="panelContent"></div>
   </section>
 
-  <div class="status">觸控螢幕模式：60 秒未操作將自動回到首頁</div>
+  <div class="status" id="idleStatus" data-i18n="common.idleStatus">觸控螢幕模式：60 秒未操作將自動回到首頁</div>
 
   <div class="confirm-modal" id="restartConfirm" aria-hidden="true">
     <div class="confirm-card">
-      <div class="confirm-kicker">重新展開調查</div>
+      <div class="confirm-kicker" data-i18n="common.restartKicker">重新展開調查</div>
       <h3 data-i18n="common.restartTitle">要清空目前的調查進度嗎？</h3>
       <p data-i18n="common.restartBody">清空後，六大案件的選擇與判斷都會重新開始，你可以自由探索不同的可能。</p>
       <div class="confirm-actions">
@@ -818,12 +818,10 @@ html[lang="en"] .case strong{
    2. localStorage truthAfterLang
    3. 預設繁體中文
    第二階段會把六大 CASE 與最終報告全文移入這個翻譯架構。
+   LANGUAGE_CONFIG / normalizeLang / resolveInitialLanguage / withCurrentLang /
+   formatText / updateLangButtons 已統一移到 common.js，四個頁面共用同一份，
+   避免各頁各自複製、久了行為漂移不一致。
    ============================================================ */
-const LANGUAGE_CONFIG={
-  "zh-Hant":{query:"zh",label:"繁中"},
-  "ja":{query:"ja",label:"日本語"},
-  "en":{query:"en",label:"EN"}
-};
 
 const i18n={
   "zh-Hant": {
@@ -864,7 +862,10 @@ const i18n={
       "confirmRestart": "確定重新開始",
       "freshToast": "目前就是全新的調查，歡迎開始！",
       "restartedToast": "已重新展開調查，歡迎探索不同的可能。",
-      "filmPlaceholder": "正式版可放映片單、日期、原著作品、預告與映後提問。"
+      "filmPlaceholder": "正式版可放映片單、日期、原著作品、預告與映後提問。",
+      "completedBadge": "✓ 已完成",
+      "idleStatus": "觸控螢幕模式：60 秒未操作將自動回到首頁",
+      "restartKicker": "重新展開調查"
     },
     "cases": {
       "reason": {
@@ -937,7 +938,10 @@ const i18n={
       "confirmRestart": "最初からやり直す",
       "freshToast": "現在は初期状態です。いつでも調査を開始できます。",
       "restartedToast": "調査をリセットしました。新たな視点で真相を探ってみましょう。",
-      "filmPlaceholder": "正式版では上映作品、日程、原作小説、予告編、上映後の問いかけ等を掲載します。"
+      "filmPlaceholder": "正式版では上映作品、日程、原作小説、予告編、上映後の問いかけ等を掲載します。",
+      "completedBadge": "✓ 完了",
+      "idleStatus": "タッチスクリーンモード：60秒間操作がない場合、自動的にホーム画面へ戻ります。",
+      "restartKicker": "調査を再開する"
     },
     "cases": {
       "reason": {
@@ -1010,7 +1014,10 @@ const i18n={
       "confirmRestart": "Confirm Restart",
       "freshToast": "You are on a fresh investigation. Begin whenever you are ready!",
       "restartedToast": "Investigation reset. Explore a new path forward.",
-      "filmPlaceholder": "The final version will feature screening schedules, source novels, trailers, and post-screening discussion prompts."
+      "filmPlaceholder": "The final version will feature screening schedules, source novels, trailers, and post-screening discussion prompts.",
+      "completedBadge": "✓ Completed",
+      "idleStatus": "Touchscreen mode: after 60 seconds of inactivity, the page will automatically return to the home screen.",
+      "restartKicker": "Restart the Investigation"
     },
     "cases": {
       "reason": {
@@ -1047,15 +1054,6 @@ const i18n={
   }
 };
 
-function normalizeLang(value){
-  if(!value) return null;
-  const v=value.toLowerCase();
-  if(v==="zh" || v==="zh-tw" || v==="zh-hant") return "zh-Hant";
-  if(v==="ja" || v==="jp") return "ja";
-  if(v==="en" || v.startsWith("en-")) return "en";
-  return null;
-}
-
 function getNested(obj,path){
   return path.split(".").reduce((cur,key)=>cur && cur[key]!==undefined ? cur[key] : undefined,obj);
 }
@@ -1064,24 +1062,7 @@ function t(path,lang=currentLang){
   return getNested(i18n[lang],path) ?? getNested(i18n["zh-Hant"],path) ?? path;
 }
 
-function formatText(template,values={}){
-  return String(template).replace(/\{(\w+)\}/g,(m,key)=>values[key] ?? m);
-}
-
-function resolveInitialLanguage(){
-  const params=new URLSearchParams(window.location.search);
-  return normalizeLang(params.get("lang"))
-    || normalizeLang(localStorage.getItem("truthAfterLang"))
-    || "zh-Hant";
-}
-
 let currentLang=resolveInitialLanguage();
-
-function updateLanguageButtons(){
-  document.querySelectorAll("[data-lang]").forEach(btn=>{
-    btn.setAttribute("aria-pressed",String(btn.dataset.lang===currentLang));
-  });
-}
 
 function applyStaticTranslations(){
   document.documentElement.lang=currentLang;
@@ -1090,7 +1071,7 @@ function applyStaticTranslations(){
     el.textContent=t(el.dataset.i18n);
   });
 
-  updateLanguageButtons();
+  updateLangButtons(currentLang);
   updateHomeProgress();
 }
 
@@ -2358,11 +2339,7 @@ function updateHomeProgress(){
   const doneCount=caseOrder.filter(k=>progress[k]?.done).length;
   const progressEl=document.getElementById("homeProgress");
   if(progressEl){
-    if(currentLang==="en"){
-      progressEl.textContent=`${t("common.progressPrefix")} ${doneCount} ${t("common.progressSuffix")}`;
-    }else{
-      progressEl.textContent=`${t("common.progressPrefix")} ${doneCount} ${t("common.progressSuffix")}`;
-    }
+    progressEl.textContent=`${t("common.progressPrefix")} ${doneCount} ${t("common.progressSuffix")}`;
   }
 
   document.querySelectorAll("[data-case]").forEach(btn=>{
@@ -2377,7 +2354,7 @@ function updateHomeProgress(){
         badge.className="case-complete-badge";
         btn.appendChild(badge);
       }
-      badge.textContent="✓ 已完成";
+      badge.textContent=t("common.completedBadge");
     }else if(badge){
       badge.remove();
     }
@@ -2474,7 +2451,7 @@ function restoreCaseState(key){
     if(closeout) closeout.classList.add("show");
   }
 
-  if(saved.verdict===0 || saved.verdict===1){
+  if(Number.isInteger(saved.verdict)){
     const c=getCaseData(key);
     document.querySelectorAll(".verdict-btn").forEach((b,i)=>
       b.classList.toggle("selected",i===saved.verdict)
@@ -2628,41 +2605,41 @@ function renderReport(){
 
   el.innerHTML=`
     <div class="report-card">
-      <div class="report-kicker">INVESTIGATION REPORT｜最終調查報告</div>
+      <div class="report-kicker">${rt.kicker}</div>
       <h3>${profile}</h3>
 
       <div class="report-summary">
         <div class="report-profile-copy">${desc}</div>
 
         <div class="report-axis-box">
-          <div class="report-axis-title">你的調查傾向</div>
+          <div class="report-axis-title">${rt.axisTitle}</div>
 
           <div class="report-axis-row">
-            <div class="report-axis-label">線索與事實</div>
+            <div class="report-axis-label">${rt.axisA}</div>
             <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.A)}%"></div></div>
             <div class="report-axis-score">${scores.A}</div>
           </div>
 
           <div class="report-axis-row">
-            <div class="report-axis-label">人物與動機</div>
+            <div class="report-axis-label">${rt.axisB}</div>
             <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.B)}%"></div></div>
             <div class="report-axis-score">${scores.B}</div>
           </div>
 
           <div class="report-axis-row">
-            <div class="report-axis-label">餘波與價值</div>
+            <div class="report-axis-label">${rt.axisC}</div>
             <div class="report-axis-track"><div class="report-axis-fill" style="width:${pct(scores.C)}%"></div></div>
             <div class="report-axis-score">${scores.C}</div>
           </div>
         </div>
 
         <div class="report-judgement">
-          <div class="report-judgement-title">你的結案判斷</div>
+          <div class="report-judgement-title">${rt.judgementTitle}</div>
 
           <div class="judgement-grid">
             <div class="judgement-item">
               <div class="judgement-item-head">
-                <div class="judgement-dimension">真相觀｜答案 ↔ 理解</div>
+                <div class="judgement-dimension">${rt.truthDimension}</div>
                 <div class="judgement-result">${truthView.name}</div>
               </div>
               <p>${truthView.desc}</p>
@@ -2670,7 +2647,7 @@ function renderReport(){
 
             <div class="judgement-item">
               <div class="judgement-item-head">
-                <div class="judgement-dimension">餘波觀｜重新開始 ↔ 承認傷痕</div>
+                <div class="judgement-dimension">${rt.aftermathDimension}</div>
                 <div class="judgement-result">${aftermathView.name}</div>
               </div>
               <p>${aftermathView.desc}</p>
@@ -2678,7 +2655,7 @@ function renderReport(){
 
             <div class="judgement-item">
               <div class="judgement-item-head">
-                <div class="judgement-dimension">正義觀｜情境判斷 ↔ 原則界線</div>
+                <div class="judgement-dimension">${rt.justiceDimension}</div>
                 <div class="judgement-result">${justiceView.name}</div>
               </div>
               <p>${justiceView.desc}</p>
@@ -2687,7 +2664,7 @@ function renderReport(){
         </div>
 
         <div class="report-closing">
-          你的六件案件已完成。真相沒有消失，只是你開始看見，答案之外還有人。
+          ${rt.closing}
         </div>
       </div>
     </div>`;
@@ -2729,28 +2706,19 @@ restartConfirm.addEventListener("click",e=>{if(e.target===restartConfirm) closeR
 
 
 
-function withCurrentLang(path){
-  const url=new URL(path,window.location.href);
-  url.searchParams.set("lang",LANGUAGE_CONFIG[currentLang].query);
-  return `${url.pathname.split("/").pop()}${url.search}`;
-}
-
 document.querySelectorAll("[data-case]").forEach(btn=>btn.addEventListener("click",()=>openCaseByKey(btn.dataset.case)));
-document.querySelectorAll("[data-action]").forEach(btn=>btn.addEventListener("click",()=>{const action=btn.dataset.action;if(action==="books"){window.location.href=withCurrentLang("book-list.html");return;}if(action==="film"){openPanel(`<h2>${t("nav.film")}</h2><p>${t("common.filmPlaceholder")}</p>`);}}));
-document.getElementById("universeBtn").addEventListener("click",()=>window.location.href=withCurrentLang("works-universe.html"));
-document.getElementById("quizBtn").addEventListener("click",()=>window.location.href=withCurrentLang("reader-quiz.html"));
+document.querySelectorAll("[data-action]").forEach(btn=>btn.addEventListener("click",()=>{const action=btn.dataset.action;if(action==="books"){window.location.href=withCurrentLang("book-list.html",currentLang);return;}if(action==="film"){openPanel(`<h2>${t("nav.film")}</h2><p>${t("common.filmPlaceholder")}</p>`);}}));
+document.getElementById("universeBtn").addEventListener("click",()=>window.location.href=withCurrentLang("works-universe.html",currentLang));
+document.getElementById("quizBtn").addEventListener("click",()=>window.location.href=withCurrentLang("reader-quiz.html",currentLang));
 document.getElementById("closeBtn").addEventListener("click",closePanel);
 
 const params=new URLSearchParams(window.location.search); const requestedCase=params.get("case"); if(requestedCase)setTimeout(()=>openCaseByKey(requestedCase),120);
 // 展場 kiosk 才啟用閒置重置；手機是個人裝置，保留 localStorage 進度，不自動打斷閱讀。
-const isMobileDevice=window.matchMedia("(max-width:768px)").matches;
-
-if(!isMobileDevice){
-  createIdleTimer(()=>closePanel());
-  // Tier 2：完全沒有任何操作達 3 分鐘，才視為訪客已離開，
-  // 清空調查進度，讓下一位展場訪客從頭開始。
-  createIdleTimer(()=>{resetProgress();updateHomeProgress();},180000);
-}
+// （現在統一用 common.js 的 createKioskIdleTimer 判斷，四頁行為一致。）
+createKioskIdleTimer(()=>closePanel());
+// Tier 2：完全沒有任何操作達 3 分鐘，才視為訪客已離開，
+// 清空調查進度，讓下一位展場訪客從頭開始。
+createKioskIdleTimer(()=>{resetProgress();updateHomeProgress();},180000);
 
 
 // ===== 首頁打字機 + CASE 依序淡入 =====
