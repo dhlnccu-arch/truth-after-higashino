@@ -300,3 +300,20 @@ body.page-universe .footer-note{
     pointer-events:none;
   }
 }
+
+
+/* ===== 英文首頁版面微調 ===== */
+html[lang="en"] body.page-home .title{
+  margin-top:.40em;
+}
+
+html[lang="en"] body.page-home .subtitle{
+  font-size:clamp(26px,1.9vw,34px);
+  letter-spacing:.035em;
+  white-space:nowrap;
+  margin-top:0.5em;
+}
+
+html[lang="en"] body.page-home .tagline{
+  margin-top:0.5em;
+}
