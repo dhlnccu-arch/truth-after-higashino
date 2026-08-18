@@ -277,3 +277,26 @@ body.page-universe .footer-note{
   }
 }
 
+
+
+/* ===== 英文首頁：Touchscreen 提示固定單行置底 =====
+   避免英文提示換成兩行後覆蓋底部四個功能按鈕。
+*/
+@media (min-width:769px){
+  html[lang="en"] body.page-home .footer{
+    padding-bottom:24px;
+  }
+
+  html[lang="en"] body.page-home .status{
+    left:50%;
+    bottom:4px;
+    transform:translateX(-50%);
+    width:max-content;
+    max-width:calc(100vw - 32px);
+    white-space:nowrap;
+    text-align:center;
+    font-size:clamp(11px,.72vw,14px);
+    line-height:1.1;
+    pointer-events:none;
+  }
+}
