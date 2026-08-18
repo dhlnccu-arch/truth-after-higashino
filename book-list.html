@@ -418,13 +418,13 @@ function render(){
                     data-catalog-title="${esc(wrapBookTitle(b.titleZh,"zh-Hant"))}"
                     data-catalog-qr="${esc(b.qrZh)}"
                     data-catalog-url="${esc(b.catalogZh)}"
-                    data-catalog-edition="${esc(u.catalogZh).replace(" ", "<br>")}">${esc(u.catalogZh).replace(" ", "<br>")}</button>
+                    data-catalog-edition="${esc(u.catalogZh)}">${esc(u.catalogZh).replace(" ", "<br>")}</button>
                   ${b.catalogJp?`
                   <button class="jp"
                     data-catalog-title="${esc(wrapBookTitle(b.titleJa||b.labelJp||b.titleZh,"ja"))}"
                     data-catalog-qr="${esc(b.qrJp)}"
                     data-catalog-url="${esc(b.catalogJp)}"
-                    data-catalog-edition="${esc(u.catalogJp).replace(" ", "<br>")}">${esc(u.catalogJp).replace(" ", "<br>")}</button>`:""}
+                    data-catalog-edition="${esc(u.catalogJp)}">${esc(u.catalogJp).replace(" ", "<br>")}</button>`:""}
                 </div>
               `}
             </article>`;
